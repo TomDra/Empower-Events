@@ -1,14 +1,23 @@
-project_name: Project Name
+project_name: ParaEvents
 
 project_description: |
   Short description (100 words) about the web app proposed and developed. You can provide a brief overview of the project here, including which UN's SDGs this project is tackling.
 
-  Line breaks are permitted.
+  Events page for members of the charity.
+
+  Allow the members to give feedback on each event, in the form of text or speech.
+  Possible email the members that have registed their interest a day before reminding them.
+
+  Send list of members registed their intrest to the event leader.
+  Send follow up email after asking for feedback.
+
 
 group_members:
-  - Member 1
-  - Member 2
-  - Member 3
-  - Member 4
+  - Thomas Draper
+  - Omar Houchou
+  - Miles Legood
+  - Samuel Ivuerah
+  - Nishita Chandani
+  - Youssef Fayad
 
 group_image: team.jpg
