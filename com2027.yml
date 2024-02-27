@@ -1,4 +1,4 @@
-project_name: ParaEvents
+project_name: Empower Events
 
 project_description: |
   Short description (100 words) about the web app proposed and developed. You can provide a brief overview of the project here, including which UN's SDGs this project is tackling.
@@ -19,5 +19,6 @@ group_members:
   - Samuel Ivuerah
   - Nishita Chandani
   - Youssef Fayad
+  - Matthew Dawson
 
 group_image: team.jpg
