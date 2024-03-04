@@ -5,11 +5,12 @@ Running
 --------------
 
 To run the server:
+
 You need python and nodejs installed
 
-pip install Django
-pip install djangorestframework django-cors-headers
-npm install axios
+- ``pip install Django``
+- ``pip install djangorestframework django-cors-headers``
+- ``npm install axios``
 
 (Add to this list as each package is added)
 
@@ -17,13 +18,13 @@ npm install axios
 Roles/ Specialitys
 ---------------
 
-Thomas - Backend
-Miles - Frontend
-Omar - Full Stack
-Mat - Backend
-Nishita - Frontend
-Yossef - Frontend
-Sam - Backend
+- Thomas - Backend
+- Miles - Frontend
+- Omar - Full Stack
+- Mat - Backend
+- Nishita - Frontend
+- Yossef - Frontend
+- Sam - Backend
 
 
 
