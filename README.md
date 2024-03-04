@@ -1,7 +1,31 @@
 Welcome to your repo for COM2027, Group 19!
 =====================================================
 
-Feel free to change this README.
+Running
+--------------
+
+To run the server:
+You need python and nodejs installed
+
+pip install Django
+pip install djangorestframework django-cors-headers
+npm install axios
+
+(Add to this list as each package is added)
+
+
+Roles/ Specialitys
+---------------
+
+Thomas - Backend
+Miles - Frontend
+Omar - Full Stack
+Mat - Backend
+Nishita - Frontend
+Yossef - Frontend
+Sam - Backend
+
+
 
 Getting started
 ---------------
