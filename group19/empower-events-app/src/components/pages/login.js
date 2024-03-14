@@ -1,24 +1,28 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+//TODO: Change username and password to email and password
 // Define the Login component
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  
   // function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     // Send a POST request to the server
     try {
       const response = await axios.post('http://localhost:8000/api/auth/login/', {
-        email,
-        password,
+        //TODO: Change username and password to email and password
+        username: username,
+        password: password,
       });
 
       // Log success
       console.log('Login successful:', response.data);
+      setCurrentUser(true);
     } catch (error) {
       // Log failure
       console.error('Login failed:', error.message);
@@ -30,11 +34,11 @@ const Login = () => {
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">Email:</label>
+          <label htmlFor="email">Username:</label>
           <input
             type="text"
             id="email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
