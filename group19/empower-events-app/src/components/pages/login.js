@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.withCredentials = true;
+
 //TODO: Change username and password to email and password
 // Define the Login component
 const Login = () => {
