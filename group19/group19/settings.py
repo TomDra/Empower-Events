@@ -127,6 +127,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # FOR DJANGO-REACT
 CORS_ALLOW_CREDENTIALS = True
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
