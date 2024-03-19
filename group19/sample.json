@@ -11,7 +11,13 @@
 		"password": "password456",
 		"email": "jane@example.com",
 		"disabilities": ["deaf", "wheelchair user"]
-	  }
+	  },
+	  {
+		"username": "alex_taylor",
+		"password": "password789",
+		"email": "alex@example.com",
+		"disabilities": ["blind"]
+	  }	  
 	],
 	"charities": [
 	  {
@@ -50,7 +56,16 @@
 		  "age_group": "Teens",
 		  "compatible_disabilities": ["blind"],
 		  "charity": "Charity B"
-		}	  
+		},
+		{
+			"description": "Music Therapy Session",
+			"latitude": 51.5074,
+			"longitude": -0.1278,
+			"age_group": "Teens",
+			"compatible_disabilities": ["deaf", "wheelchair user"],
+			"charity": "Charity A"
+		  }
+		  
 	],
 	"age_groups": [
 	  {
@@ -62,6 +77,25 @@
 		"age_range_lower": 11,
 		"age_range_higher": 18,
 		"group_title": "Teens"
+	  },
+	  {
+		"age_range_lower": 19,
+		"age_range_higher": 60,
+		"group_title": "Adults"
 	  }
-	]
+	  
+	],
+	"calendar_events": [
+		{
+		  "activity_description": "Outdoor Sports Event",
+		  "time": "2024-04-15T10:00:00Z",
+		  "activity_leader_name": "John Doe"
+		},
+		{
+		  "activity_description": "Art Workshop",
+		  "time": "2024-04-20T14:00:00Z",
+		  "activity_leader_name": "John Doe"
+		}
+	  ]
+	
 }

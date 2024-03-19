@@ -1,6 +1,6 @@
 import json
 from django.core.management.base import BaseCommand
-from myapi.models import User, Charity, ActivityLeader, Activity, AgeGroup
+from myapi.models import User, Charity, ActivityLeader, Activity, AgeGroup, Calendar
 
 class Command(BaseCommand):
 	help = 'Seeds the database with sample data'
@@ -26,10 +26,6 @@ class Command(BaseCommand):
 			else:
 				print(f"User with username '{username}' already exists. Skipping creation.")
 
-		# Seed Charities
-		# Seed Charities
-		# Seed Charities
-		# Seed Charities
 		# Seed Charities
 		charity_objs = {}
 		for charity_data in data['charities']:
@@ -103,9 +99,32 @@ class Command(BaseCommand):
 				charity=charity
 			)
 
+			# If the activity was just created, or if you want to update existing entries,
+			# set the compatible_disabilities field.
+			if created or True:  # Change or True to a condition if you only want to update sometimes
+				activity.set_compatible_disabilities(activity_data['compatible_disabilities'])
+				activity.save()
+
 			# If the activity was just created, print a message
 			if created:
 				print(f"Activity '{activity.description}' created.")
 
+		
+		# Seed Calendar Events
+		for event_data in data['calendar_events']:
+			# Retrieve the associated activity and activity leader
+			activity = Activity.objects.get(description=event_data['activity_description'])
+			activity_leader = ActivityLeader.objects.get(name=event_data['activity_leader_name'])
+
+			# Create the calendar event
+			event, created = Calendar.objects.get_or_create(
+				activity=activity,
+				time=event_data['time'],
+				activity_leader=activity_leader
+			)
+
+			# If the event was just created, print a message
+			if created:
+				print(f"Calendar event for '{activity.description}' at {event.time} created.")
 
 		self.stdout.write(self.style.SUCCESS('Database seeded successfully'))
