@@ -3,3 +3,6 @@ PDD: https://docs.google.com/document/d/1of8vS2L40AbwhkFTWYa-HS7QY6G9CE6oaQG0aYN
 questions to ask: https://docs.google.com/document/d/1w8wOSzox_D95aYCYz3_mimDP2Kqenr93jKTCv7b1ggQ/edit?usp=sharing
 
 Project Pitch powerpoint: https://docs.google.com/presentation/d/1KIPtBR4LzO_aAGDmSFlK4xXC4JYaMQ9FWduPnqlTeB8/edit?usp=sharing
+
+Django REST Framework documentation (API): https://docs.google.com/document/d/1WnpBMjxiZPRY9VoUVdg5BcNjiIqXunb_EEfHd6NIaR0/edit?usp=sharing
+
