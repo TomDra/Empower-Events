@@ -1,0 +1,117 @@
+{
+	"users": [
+	  {
+		"username": "john_doe",
+		"password": "password123",
+		"email": "john@example.com",
+		"disabilities": ["blind"]
+	  },
+	  {
+		"username": "jane_smith",
+		"password": "password456",
+		"email": "jane@example.com",
+		"disabilities": ["deaf", "wheelchair user"]
+	  },
+	  {
+		"username": "alex_taylor",
+		"password": "password789",
+		"email": "alex@example.com",
+		"disabilities": ["blind"]
+	  }	  
+	],
+	"charities": [
+	  {
+		"charity_name": "Charity A",
+		"email": "charitya@example.com",
+		"user": "john_doe",
+		"password": "charityAPassword123"
+	  },
+	  {
+		"charity_name": "Charity B",
+		"email": "charityb@example.com",
+		"user": "jane_smith",
+		"password": "charityBPassword123"
+	  }
+	],
+	"activity_leaders": [
+	  {
+		"user": "john_doe",
+		"name": "John Doe",
+		"birth_date": "1990-05-15T08:00:00Z",
+		"charity": "Charity A",
+		"email": "john_leader@example.com"
+	  }
+	],
+	"activities": [
+		{
+		  "description": "Outdoor Sports Event",
+		  "latitude": 40.7128,
+		  "longitude": -74.0060,
+		  "age_group": "Kids",
+		  "compatible_disabilities": ["deaf"],
+		  "charity": "Charity A"
+		},
+		{
+		  "description": "Art Workshop",
+		  "latitude": 34.0522,
+		  "longitude": -118.2437,
+		  "age_group": "Teens",
+		  "compatible_disabilities": ["blind"],
+		  "charity": "Charity B"
+		},
+		{
+			"description": "Music Therapy Session",
+			"latitude": 51.5074,
+			"longitude": -0.1278,
+			"age_group": "Teens",
+			"compatible_disabilities": ["deaf", "wheelchair user"],
+			"charity": "Charity A"
+		  }
+		  
+	],
+	"age_groups": [
+	  {
+		"age_range_lower": 5,
+		"age_range_higher": 10,
+		"group_title": "Kids"
+	  },
+	  {
+		"age_range_lower": 11,
+		"age_range_higher": 18,
+		"group_title": "Teens"
+	  },
+	  {
+		"age_range_lower": 19,
+		"age_range_higher": 60,
+		"group_title": "Adults"
+	  }
+	  
+	],
+	"calendar_events": [
+		{
+		  "activity_description": "Outdoor Sports Event",
+		  "time": "2024-04-15T10:00:00Z",
+		  "activity_leader_name": "John Doe"
+		},
+		{
+		  "activity_description": "Art Workshop",
+		  "time": "2024-04-20T14:00:00Z",
+		  "activity_leader_name": "John Doe"
+		}
+	  ],
+	  "feedback_entries": [
+		{
+		  "user": "john_doe",
+		  "calendar_event_description": "Outdoor Sports Event",
+		  "activity_feedback_text": "Great event, very well organized!",
+		  "leader_feedback_text": "The leader was very knowledgeable and engaging."
+		},
+		{
+		  "user": "jane_smith",
+		  "calendar_event_description": "Art Workshop",
+		  "activity_feedback_text": "Loved the creativity involved.",
+		  "leader_feedback_text": "Inspirational leader, made the session fun."
+		}
+	  ]
+	
+}
