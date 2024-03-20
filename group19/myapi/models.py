@@ -65,9 +65,13 @@ class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     calendar_event = models.ForeignKey('Calendar', on_delete=models.CASCADE)
-    feedback_text = models.CharField(max_length=500, blank=True, null=True)
-    feedback_audio = models.BinaryField(blank=True, null=True)
-    feedback_question_answers = models.TextField(blank=True, null=True)  # Store JSON as a string
+    activity_feedback_text = models.CharField(max_length=500, blank=True, null=True)
+    activity_feedback_audio = models.BinaryField(blank=True, null=True)
+    activity_feedback_question_answers = models.TextField(blank=True, null=True)  # Store JSON as a string
+    leader_feedback_text = models.CharField(max_length=500, blank=True, null=True)
+    leader_feedback_audio = models.BinaryField(blank=True, null=True)
+    leader_feedback_question_answers = models.TextField(blank=True, null=True)  # Store JSON as a string
+
 
     def set_feedback_question_answers(self, data):
         self.feedback_question_answers = json.dumps(data)

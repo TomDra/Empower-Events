@@ -98,6 +98,20 @@
 		  "time": "2024-04-20T14:00:00Z",
 		  "activity_leader_name": "John Doe"
 		}
+	  ],
+	  "feedback_entries": [
+		{
+		  "user": "john_doe",
+		  "calendar_event_description": "Outdoor Sports Event",
+		  "activity_feedback_text": "Great event, very well organized!",
+		  "leader_feedback_text": "The leader was very knowledgeable and engaging."
+		},
+		{
+		  "user": "jane_smith",
+		  "calendar_event_description": "Art Workshop",
+		  "activity_feedback_text": "Loved the creativity involved.",
+		  "leader_feedback_text": "Inspirational leader, made the session fun."
+		}
 	  ]
 	
 }

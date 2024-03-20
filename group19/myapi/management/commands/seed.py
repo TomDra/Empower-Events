@@ -1,6 +1,6 @@
 import json
 from django.core.management.base import BaseCommand
-from myapi.models import User, Charity, ActivityLeader, Activity, AgeGroup, Calendar
+from myapi.models import User, Charity, ActivityLeader, Activity, AgeGroup, Calendar, Feedback
 
 class Command(BaseCommand):
 	help = 'Seeds the database with sample data'
@@ -142,4 +142,38 @@ class Command(BaseCommand):
 			else:
 				print(f"Activity Leader '{leader_data['name']}' already exists. Skipping creation.")
 				
+		# Seed Feedback
+		for feedback_data in data.get('feedback_entries', []):
+			# Find the user by username
+			try:
+				user = User.objects.get(username=feedback_data['user'])
+			except User.DoesNotExist:
+				print(f"User '{feedback_data['user']}' not found. Skipping feedback entry.")
+				continue
+
+			# Find the calendar event by description (this assumes you have a way to uniquely identify events by description)
+			try:
+				calendar_event = Calendar.objects.get(activity__description=feedback_data['calendar_event_description'])
+			except Calendar.DoesNotExist:
+				print(f"Calendar event '{feedback_data['calendar_event_description']}' not found. Skipping feedback entry.")
+				continue
+
+			# Create or update the feedback entry
+			feedback, created = Feedback.objects.update_or_create(
+				user=user,
+				calendar_event=calendar_event,
+				defaults={
+					'activity_feedback_text': feedback_data.get('activity_feedback_text'),
+					'leader_feedback_text': feedback_data.get('leader_feedback_text'),
+					'activity_feedback_question_answers': json.dumps(feedback_data.get('activity_feedback_question_answers', '')),
+					'leader_feedback_question_answers': json.dumps(feedback_data.get('leader_feedback_question_answers', ''))
+					# Omitting audio fields for simplicity; include them as needed
+				}
+			)
+
+			if created:
+				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' created.")
+			else:
+				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' updated.")
+
 		self.stdout.write(self.style.SUCCESS('Database seeded successfully'))
