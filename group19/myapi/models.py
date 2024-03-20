@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import json
 
 class User(AbstractUser):
@@ -18,11 +19,48 @@ class ActivityLeader(models.Model):
     charity = models.ForeignKey('Charity', on_delete=models.CASCADE)
     email = models.EmailField(max_length=255)
 
-class Charity(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    charity_name = models.CharField(max_length=50)
-    email = models.EmailField(max_length=255)
+class CharityManager(BaseUserManager):
+    def create_charity(self, charity_name, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        charity = self.model(charity_name=charity_name, email=email, **extra_fields)
+        charity.set_password(password)
+        charity.save(using=self._db)
+        return charity
 
+class Charity(AbstractBaseUser, PermissionsMixin):
+    charity_name = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    USERNAME_FIELD = 'charity_name'
+    REQUIRED_FIELDS = ['email']
+
+    objects = CharityManager()
+
+    # Specify related_name for groups and user_permissions to avoid clashes
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
+        related_name="charity_groups_set",
+        related_query_name="charity",
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_name="charity_user_permissions_set",
+        related_query_name="charity",
+    )
+
+    def __str__(self):
+        return self.charity_name
+    
 class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

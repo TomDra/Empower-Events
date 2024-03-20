@@ -27,48 +27,23 @@ class Command(BaseCommand):
 				print(f"User with username '{username}' already exists. Skipping creation.")
 
 		# Seed Charities
+# Seed Charities
 		charity_objs = {}
 		for charity_data in data['charities']:
-			# Find or create the user associated with the charity
-			user, created = User.objects.get_or_create(
-				username=charity_data['charity_name'].lower(),
-				defaults={'email': charity_data['email']}
-			)
-
-			# If the user was just created, print a message
-			if created:
-				print(f"User '{user.username}' created.")
-
-			# Check if a Charity with the same user already exists
-			charity, charity_created = Charity.objects.get_or_create(
-				user=user,
+			charity, created = Charity.objects.get_or_create(
 				charity_name=charity_data['charity_name'],
 				email=charity_data['email']
 			)
-
-			# If the charity was just created, print a message
-			if charity_created:
-				print(f"Charity '{charity.charity_name}' created.")
-
-			# Store the charity object in the dictionary
-			charity_objs[charity_data['charity_name']] = charity
-
-		# Seed Activity Leaders
-		for leader_data in data['activity_leaders']:
-			user = User.objects.get(username=leader_data['user'])
-			charity = charity_objs[leader_data['charity']]
-			
-			# Check if an ActivityLeader with the same user already exists
-			if not ActivityLeader.objects.filter(user=user).exists():
-				ActivityLeader.objects.create(
-					user=user,
-					name=leader_data['name'],
-					birth_date=leader_data['birth_date'],
-					charity=charity,
-					email=leader_data['email']
-				)
+			if created:
+				charity.set_password(charity_data['password'])  # Set the password for the charity
+				charity.save()
+				self.stdout.write(f"Charity '{charity.charity_name}' created.")
 			else:
-				print(f"Activity Leader for user '{user.username}' already exists. Skipping creation.")
+				self.stdout.write(f"Charity '{charity.charity_name}' already exists. Skipping creation.")
+
+			# Use the charity name from the data as the key to ensure it matches when accessed later.
+			# This assumes that the 'charity_name' in your JSON is unique and used consistently.
+			charity_objs[charity_data['charity_name']] = charity
 
 		# Seed Age Groups
 		for age_group_data in data['age_groups']:
@@ -112,9 +87,19 @@ class Command(BaseCommand):
 		
 		# Seed Calendar Events
 		for event_data in data['calendar_events']:
-			# Retrieve the associated activity and activity leader
-			activity = Activity.objects.get(description=event_data['activity_description'])
-			activity_leader = ActivityLeader.objects.get(name=event_data['activity_leader_name'])
+			# Ensure the Activity exists
+			try:
+				activity = Activity.objects.get(description=event_data['activity_description'])
+			except Activity.DoesNotExist:
+				print(f"Activity '{event_data['activity_description']}' not found. Skipping calendar event creation.")
+				continue
+
+			# Ensure the ActivityLeader exists
+			try:
+				activity_leader = ActivityLeader.objects.get(name=event_data['activity_leader_name'])
+			except ActivityLeader.DoesNotExist:
+				print(f"Activity Leader '{event_data['activity_leader_name']}' not found. Skipping calendar event creation.")
+				continue
 
 			# Create the calendar event
 			event, created = Calendar.objects.get_or_create(
@@ -123,8 +108,38 @@ class Command(BaseCommand):
 				activity_leader=activity_leader
 			)
 
-			# If the event was just created, print a message
 			if created:
 				print(f"Calendar event for '{activity.description}' at {event.time} created.")
 
+		# Seed Activity Leaders
+		for leader_data in data['activity_leaders']:
+			# Retrieve the user associated with this leader
+			try:
+				user = User.objects.get(username=leader_data['user'])
+			except User.DoesNotExist:
+				print(f"User '{leader_data['user']}' not found. Skipping activity leader creation.")
+				continue
+
+			# Retrieve the charity associated with this leader using charity_objs
+			charity = charity_objs.get(leader_data['charity'])
+			if charity is None:
+				print(f"Charity '{leader_data['charity']}' not found. Skipping activity leader creation.")
+				continue
+
+			# Create the activity leader if they don't already exist
+			activity_leader, created = ActivityLeader.objects.get_or_create(
+				user=user,
+				defaults={
+					'name': leader_data['name'],
+					'birth_date': leader_data['birth_date'],
+					'charity': charity,
+					'email': leader_data['email']
+				}
+			)
+
+			if created:
+				print(f"Activity Leader '{leader_data['name']}' created.")
+			else:
+				print(f"Activity Leader '{leader_data['name']}' already exists. Skipping creation.")
+				
 		self.stdout.write(self.style.SUCCESS('Database seeded successfully'))

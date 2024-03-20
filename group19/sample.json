@@ -23,12 +23,14 @@
 	  {
 		"charity_name": "Charity A",
 		"email": "charitya@example.com",
-		"user": "john_doe" 
+		"user": "john_doe",
+		"password": "charityAPassword123"
 	  },
 	  {
 		"charity_name": "Charity B",
 		"email": "charityb@example.com",
-		"user": "jane_smith"  
+		"user": "jane_smith",
+		"password": "charityBPassword123"
 	  }
 	],
 	"activity_leaders": [
