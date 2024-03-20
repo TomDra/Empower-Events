@@ -123,12 +123,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-<<<<<<< HEAD
+
 
 # In your settings.py
 AUTH_USER_MODEL = 'myapi.User'
-||||||| 7c82184
-=======
+
 
 # FOR DJANGO-REACT
 CORS_ALLOW_CREDENTIALS = True
@@ -145,4 +144,4 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
 }
->>>>>>> trunk
+
