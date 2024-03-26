@@ -1,61 +1,79 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Button, TextField, Typography, Container, Box } from "@mui/material";
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.withCredentials = true;
 
-//TODO: Change username and password to email and password
-// Define the Login component
 const Login = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   
-  // function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Send a POST request to the server
     try {
-      const response = await axios.post('http://localhost:8000/api/auth/login/', {
-        //TODO: Change username and password to email and password
-        username: username,
-        password: password,
+      const response = await axios.post('http://localhost:3000/api/auth/login/', { //may god strike you down, you wrote 8000
+        username,
+        password,
       });
-
-      // Log success
       console.log('Login successful:', response.data);
       setCurrentUser(true);
     } catch (error) {
-      // Log failure
       console.error('Login failed:', error.message);
     }
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Username:</label>
-          <input
-            type="text"
-            id="email"
+    <Container maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
             type="password"
             id="password"
+            autoComplete="current-password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign In
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 
