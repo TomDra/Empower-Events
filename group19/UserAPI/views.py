@@ -104,6 +104,8 @@ class UserRegister(APIView):
             UsernameBusinessValidator.validate(data['username'])
             EmailBusinessValidator.validate(data['email'])
             PasswordBusinessValidator.validate(data['password'])
+        except KeyError:
+            return Response('Username, email, and password are required.', status=status.HTTP_400_BAD_REQUEST)
         except ValidationError as e:
             return Response(e.messages, status=status.HTTP_400_BAD_REQUEST)
         except APIException:

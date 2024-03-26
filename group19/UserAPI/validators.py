@@ -18,7 +18,7 @@ class UsernameValidator:
         username = username.strip()
 
         if not username:
-            raise ValidationError('Username cannot be empty.')
+            raise ValidationError('Username field cannot be empty.')
         return True
 
 
@@ -38,7 +38,7 @@ class EmailValidator:
         email = email.strip()
 
         if not email:
-            raise ValidationError('Email cannot be empty.')
+            raise ValidationError('Email field cannot be empty.')
         return True
 
 
@@ -58,5 +58,5 @@ class PasswordValidator:
         password = password.strip()
 
         if not password:
-            raise ValidationError('Password cannot be empty.')
+            raise ValidationError('Password field cannot be empty.')
         return True

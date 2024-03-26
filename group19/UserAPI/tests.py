@@ -209,3 +209,20 @@ class UserRegistrationTest(UserAPITest):
         user_data = {'username': 'NewUser', 'password': 'Password123', 'email': 'newuser@email.com'}
         response = self.post_request('register', user_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    # Test registration with empty fields
+    def test_registration_empty_fields(self):
+        """
+        Test that a user cannot register with empty fields.
+        """
+        user_data = {'username': '', 'password': '', 'email': ''}
+        response = self.post_request('register', user_data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    # Test registration with malformed json
+    def test_registration_malformed_json(self):
+        """
+        Test that a user cannot register with malformed json.
+        """
+        response = self.post_request('register', {})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
