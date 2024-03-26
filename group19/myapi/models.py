@@ -3,8 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import json
 
+
 class User(AbstractUser):
     disabilities = models.TextField(blank=True, null=True)  # Store JSON as a string
+    email = models.EmailField(unique=True)
 
     def set_disabilities(self, data):
         self.disabilities = json.dumps(data)
@@ -12,12 +14,14 @@ class User(AbstractUser):
     def get_disabilities(self):
         return json.loads(self.disabilities) if self.disabilities else None
 
+
 class ActivityLeader(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     name = models.CharField(max_length=30)
     birth_date = models.DateTimeField()
     charity = models.ForeignKey('Charity', on_delete=models.CASCADE)
     email = models.EmailField(max_length=255)
+
 
 class CharityManager(BaseUserManager):
     def create_charity(self, charity_name, email, password=None, **extra_fields):
@@ -28,6 +32,7 @@ class CharityManager(BaseUserManager):
         charity.set_password(password)
         charity.save(using=self._db)
         return charity
+
 
 class Charity(AbstractBaseUser, PermissionsMixin):
     charity_name = models.CharField(max_length=50, unique=True)
@@ -60,7 +65,8 @@ class Charity(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.charity_name
-    
+
+
 class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -72,18 +78,19 @@ class Feedback(models.Model):
     leader_feedback_audio = models.BinaryField(blank=True, null=True)
     leader_feedback_question_answers = models.TextField(blank=True, null=True)  # Store JSON as a string
 
-
     def set_feedback_question_answers(self, data):
         self.feedback_question_answers = json.dumps(data)
 
     def get_feedback_question_answers(self):
         return json.loads(self.feedback_question_answers) if self.feedback_question_answers else None
 
+
 class Calendar(models.Model):
     event_id = models.AutoField(primary_key=True)
     activity = models.ForeignKey('Activity', on_delete=models.CASCADE)
     time = models.DateTimeField()
     activity_leader = models.ForeignKey(ActivityLeader, on_delete=models.CASCADE)
+
 
 class Activity(models.Model):
     activity_id = models.AutoField(primary_key=True)
@@ -99,6 +106,7 @@ class Activity(models.Model):
 
     def get_compatible_disabilities(self):
         return json.loads(self.compatible_disabilities) if self.compatible_disabilities else None
+
 
 class AgeGroup(models.Model):
     age_group_id = models.AutoField(primary_key=True)
