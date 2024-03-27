@@ -1,34 +1,65 @@
 # Importing necessary libraries/modules from Django
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
-# Getting the User model from Django
-User = get_user_model()
 
-
-def validate_username(data):
+class UsernameValidator:
     """
-    A function to validate the username field.
-
-    :param data: A dictionary containing the username field.
-    :return: True if the username is not empty.
+    A class to validate the username field.
     """
-    username = data['username'].strip()
 
-    if not username:
-        raise ValidationError('Username field cannot be empty.')
-    return True
+    @classmethod
+    def validate(cls, username):
+        """
+        A method to validate the username field.
+
+        :param username: The username to be validated.
+        :return: True if the username is valid.
+        """
+
+        username = username.strip()
+
+        if not username:
+            raise ValidationError('Username field cannot be empty.')
+        return True
 
 
-def validate_password(data):
+class EmailValidator:
     """
-    A function to validate the password field.
-
-    :param data: A dictionary containing the password field.
-    :return: True if the password is not empty.
+    A class to validate the email field.
     """
-    password = data['password'].strip()
 
-    if not password:
-        raise ValidationError('Password field cannot be empty.')
-    return True
+    @classmethod
+    def validate(cls, email):
+        """
+        A method to validate the email field.
+
+        :param email: The email to be validated.
+        :return: True if the email is valid.
+        """
+
+        email = email.strip()
+
+        if not email:
+            raise ValidationError('Email field cannot be empty.')
+        return True
+
+
+class PasswordValidator:
+    """
+    A class to validate the password field.
+    """
+
+    @classmethod
+    def validate(cls, password):
+        """
+        A method to validate the password field.
+
+        :param password: The password to be validated.
+        :return: True if the password is valid.
+        """
+
+        password = password.strip()
+
+        if not password:
+            raise ValidationError('Password field cannot be empty.')
+        return True
