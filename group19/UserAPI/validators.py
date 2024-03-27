@@ -6,6 +6,7 @@ class UsernameValidator:
     """
     A class to validate the username field.
     """
+
     @classmethod
     def validate(cls, username):
         """
@@ -26,6 +27,7 @@ class EmailValidator:
     """
     A class to validate the email field.
     """
+
     @classmethod
     def validate(cls, email):
         """
@@ -46,6 +48,7 @@ class PasswordValidator:
     """
     A class to validate the password field.
     """
+
     @classmethod
     def validate(cls, password):
         """

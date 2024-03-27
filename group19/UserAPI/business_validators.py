@@ -1,12 +1,13 @@
 # Importing necessary libraries/modules from Django, validators, and re (regular expressions).
+import re
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-import re
 
-from .validators import UsernameValidator as BaseUsernameValidator
 from .validators import PasswordValidator as BaseEmailValidator
 from .validators import PasswordValidator as BasePasswordValidator
+from .validators import UsernameValidator as BaseUsernameValidator
 
 # Getting the User model from Django
 User = get_user_model()
@@ -16,6 +17,7 @@ class UsernameBusinessValidator(BaseUsernameValidator):
     """
     A class to validate the username field using business rules/logic.
     """
+
     @classmethod
     def validate(cls, username):
         """
@@ -39,6 +41,7 @@ class EmailBusinessValidator(BaseEmailValidator):
     """
     A class to validate the email field using business rules/logic.
     """
+
     @classmethod
     def validate(cls, email):
         """
@@ -61,6 +64,7 @@ class PasswordBusinessValidator(BasePasswordValidator):
     """
     A class to validate the password field using business rules/logic.
     """
+
     @classmethod
     def validate(cls, password):
         """

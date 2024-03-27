@@ -1,5 +1,5 @@
 # Importing necessary libraries/modules from Django and rest_framework
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 
 # Getting the User model from Django
@@ -55,6 +55,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     UserRegisterSerializer class is a subclass of ModelSerializer that serializes the User model.
     It contains all fields from the expected User model.
     """
+
     class Meta:
         model = User
         fields = '__all__'
