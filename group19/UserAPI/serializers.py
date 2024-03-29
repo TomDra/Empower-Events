@@ -50,6 +50,7 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Incorrect username or password.')
 
 
+
 class UserRegisterSerializer(serializers.ModelSerializer):
     """
     UserRegisterSerializer class is a subclass of ModelSerializer that serializes the User model.
