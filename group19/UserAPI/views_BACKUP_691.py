@@ -80,6 +80,7 @@ class UserLogout(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
+<<<<<<< HEAD
 class UserRegister(APIView):
     """
     UserRegister class is a subclass of APIView. It is used to register a new user.
@@ -128,6 +129,8 @@ class UserRegister(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+=======
+>>>>>>> refs/remotes/origin/5-make-home-page
 class UserView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
     authentication_classes = (SessionAuthentication,)
@@ -135,4 +138,7 @@ class UserView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/5-make-home-page
