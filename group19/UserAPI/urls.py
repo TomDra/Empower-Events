@@ -5,9 +5,6 @@ from . import views
 urlpatterns = [
     path('login/', views.UserLogin.as_view(), name='login'),
     path('logout/', views.UserLogout.as_view(), name='logout'),
-<<<<<<< HEAD
-    path('register/', views.UserRegister.as_view(), name='register')
-=======
->>>>>>> refs/remotes/origin/5-make-home-page
+    path('register/', views.UserRegister.as_view(), name='register'),
     path('user', views.UserView.as_view(), name='user'),
 ]
