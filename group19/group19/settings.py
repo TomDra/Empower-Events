@@ -31,8 +31,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'rest_framework',  # FOR DJANGO-REACT
     'corsheaders',  # FOR DJANGO-REACT
-    'myapi',  # FOR DJANGO-REACT (maybe remove)
-    'UserAPI.apps.UserapiConfig',  # FOR DJANGO-REACT
+    'myapi',  # FOR DJANGO-REACT
+    'UserAPI.apps.UserapiConfig',  # FOR DRF API
+    'EventsAPI.apps.EventsapiConfig',  # FOR DRF API
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
