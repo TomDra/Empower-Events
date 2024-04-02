@@ -48,7 +48,7 @@ class UserLoginSerializer(serializers.Serializer):
             return user
         else:
             raise serializers.ValidationError('Incorrect username or password.')
-<<<<<<< HEAD
+
 
 
 
@@ -82,6 +82,4 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**credentials)
         user.save()
         return user
-=======
-        
->>>>>>> refs/remotes/origin/5-make-home-page
+

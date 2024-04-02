@@ -6,14 +6,10 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
-
-<<<<<<< HEAD
 from .business_validators import UsernameBusinessValidator, PasswordBusinessValidator, EmailBusinessValidator
 from .serializers import UserLoginSerializer, UserRegisterSerializer, UserSerializer
 #from .validators import UsernameValidator, PasswordValidator
-=======
 from .serializers import UserLoginSerializer, UserSerializer
->>>>>>> refs/remotes/origin/5-make-home-page
 from .validators import *
 
 
