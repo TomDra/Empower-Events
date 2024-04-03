@@ -5,6 +5,7 @@ import HelloWorld from "./HelloWorld";
 import Login from "./components/pages/login";
 import SignUp from "./components/pages/signup"; // Ensure this path matches where your SignUp component is located
 import HomePage from "./components/pages/homePage";
+import Events from "./components/pages/events";
 import "./App.css";
 import { useEffect, useState } from "react";
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/test" element={<HomePage />} />
+          <Route path="/events" element={<Events />} />
         </Routes>
       </BrowserRouter>
     </div>
