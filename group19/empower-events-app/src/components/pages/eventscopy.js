@@ -1,36 +1,26 @@
 import React from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-
-
+import data from "./data.json";
 
 const Events = () => {
-  const [response, setResponse] = useState([]);
-  const { isLoaded } = useLoadScript({    
-    googleMapsApiKey: '***REMOVED***',
-    });
+  //   try {
+  //     axios.get("http://localhost:8000/api/events/").then((response) => {
+  //       const data = response.data;
+  //     });
+  //   } catch (error) {
+  //     console.log("Error:", error);
+  //   }
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  // Get json with questions set by charity about event
-  const getData = async () => {
-    try {
-      response = await axios.get("/api/events/");
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error getting events:", error);
-    }
-  };
+  function createMapUrl(latitude, longitude) {
+    return `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
+  }
 
   return (
     <div className="Events">
       <div className="justify-content-center mt-5">
         <h1 className="text-center">Events</h1>
       </div>
-      {response.map((response) => {
+      {data.map((data) => {
         return (
           <div className="container px-4">
             <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
@@ -46,19 +36,15 @@ const Events = () => {
                       loading="lazy"
                       referrerpolicy="no-referrer-when-downgrade"
                       pointer-events="none"
+                      src={createMapUrl(data.latitude, data.longitude)}
                     ></iframe>
-                    <GoogleMap>
-                      zoom={9}
-                      center={{ lat: response.latitude, lng: response.longitude }}
-                      mapContainerClassName='map-container'
-                    </GoogleMap>
                   </div>
                 </div>
                 <div className="col-md-auto">
                   <div className="card-body">
-                    <h2 className="card-title">{response.description}</h2>
-                    <p className="card-text">Age group: {response.age_group}</p>
-                    <p className="card-text">Date: {response.date}</p>
+                    <h2 className="card-title">{data.description}</h2>
+                    <p className="card-text">Age group: {data.age_group}</p>
+                    <p className="card-text">Date: {data.date}</p>
                     <a href="#" className="btn btn-primary">
                       View More
                     </a>
