@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HelloWorld from "./HelloWorld";
 import Login from "./components/pages/login";
 import "./App.css";
-import { useEffect, useState } from "react";
+import EventDetailPage from "./components/pages/eventdetails"; // Import the EventDetailPage component
 
 function App() {
 
@@ -13,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HelloWorld />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/events/:eventId" element={<EventDetailPage />} />
         </Routes>
       </BrowserRouter>
     </div>
