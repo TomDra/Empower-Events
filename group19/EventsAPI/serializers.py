@@ -3,6 +3,7 @@ from rest_framework import serializers
 from myapi.models import Calendar, Activity, ActivityLeader
 
 
+# TODO: Adjust the serializers to return more information about the models.
 class ActivitySerializer(serializers.ModelSerializer):
     """
     ActivitySerializer class is a subclass of ModelSerializer that serializes the Activity model.

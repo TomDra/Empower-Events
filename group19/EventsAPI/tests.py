@@ -52,13 +52,17 @@ class EventsAPITest(TestCase):
                                                  activity_leader=self.activity_leader2)
 
 
-class EventsUpcomingListTest(EventsAPITest):
+class UpcomingEventsListTest(EventsAPITest):
     # Test upcoming events list
-    def test_get_upcoming_events(self):
+    def test_get_paginated_events_count_2(self):
+        """
+        Test that the upcoming events list is paginated and contains two events.
+        """
         # Log in a user.
         self.client.force_authenticate(user=self.user1)
 
-        response = self.client.get(reverse('upcoming_events'))
+        # GET the events list
+        response = self.client.get(reverse('list_events_upcoming'), {'page': 1})
 
         # Print the JSON response
         print(json.dumps(response.data, indent=4))
@@ -67,13 +71,22 @@ class EventsUpcomingListTest(EventsAPITest):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Check that the response contains the correct number of events
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data['results']), 2)
 
-        # Check that the response contains the correct events by checking the data.
-        self.assertEqual(response.data[0]['event_id'], self.calendar1.event_id)
-        self.assertEqual(response.data[0]['activity']['activity_id'], self.activity1.activity_id)
-        self.assertEqual(response.data[0]['activity_leader']['name'], self.activity_leader1.name)
+        # Checking count, next, previous, and results keys in the response.
+        self.assertEqual(response.data['count'], 2)
+        # Two events fit into one page, so there should be no next or previous pages.
+        self.assertIsNone(response.data['next'])
+        self.assertIsNone(response.data['previous'])
 
-        self.assertEqual(response.data[1]['event_id'], self.calendar2.event_id)
-        self.assertEqual(response.data[1]['activity']['activity_id'], self.activity2.activity_id)
-        self.assertEqual(response.data[1]['activity_leader']['name'], self.activity_leader2.name)
+        # Check the first event in the list
+        # TODO: Make it extensive.
+        event1 = response.data['results'][0]
+        self.assertEqual(event1['activity']['description'], 'Test Activity 1')
+        self.assertEqual(event1['activity_leader']['name'], 'Test Leader 1')
+
+        # Check the second event in the list
+        # TODO: Make it extensive.
+        event2 = response.data['results'][1]
+        self.assertEqual(event2['activity']['description'], 'Test Activity 2')
+        self.assertEqual(event2['activity_leader']['name'], 'Test Leader 2')
