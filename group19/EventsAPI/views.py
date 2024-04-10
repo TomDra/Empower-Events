@@ -8,7 +8,7 @@ from myapi.models import Calendar
 
 class UpcomingEventsList(generics.ListAPIView):
     """
-    EventsList class is a subclass of ListAPIView. It is used to list upcoming events in pages.
+    UpcomingEventsList class is a subclass of ListAPIView. It is used to list upcoming events in pages.
     It contains the following methods:
     - get_queryset (get): A method to get the queryset of upcoming events.
     """
