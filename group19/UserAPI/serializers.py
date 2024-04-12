@@ -50,6 +50,8 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Incorrect username or password.')
 
 
+
+
 class UserRegisterSerializer(serializers.ModelSerializer):
     """
     UserRegisterSerializer class is a subclass of ModelSerializer that serializes the User model.
@@ -80,3 +82,4 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**credentials)
         user.save()
         return user
+

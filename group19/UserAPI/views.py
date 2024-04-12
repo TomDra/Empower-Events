@@ -5,10 +5,12 @@ from rest_framework import permissions, status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.authentication import SessionAuthentication
 from .business_validators import UsernameBusinessValidator, PasswordBusinessValidator, EmailBusinessValidator
-from .serializers import UserLoginSerializer, UserRegisterSerializer
-from .validators import UsernameValidator, PasswordValidator
+from .serializers import UserLoginSerializer, UserRegisterSerializer, UserSerializer
+#from .validators import UsernameValidator, PasswordValidator
+from .serializers import UserLoginSerializer, UserSerializer
+from .validators import *
 
 
 class UserLogin(APIView):
@@ -120,3 +122,13 @@ class UserRegister(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (SessionAuthentication,)
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response({'user': serializer.data}, status=status.HTTP_200_OK)
+
