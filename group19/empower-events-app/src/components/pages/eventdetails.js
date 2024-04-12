@@ -1,30 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const EventDetailPage = () => {
-  const { eventId } = useParams(); // Get the event ID from the route parameters
+  const { eventId } = useParams();
   const [event, setEvent] = useState(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/events/${eventId}/`) // Adjust the URL as needed
+    fetch(`http://localhost:8000/api/events/${eventId}/`)
       .then(response => response.json())
       .then(data => setEvent(data))
       .catch(error => console.error('Error fetching event details:', error));
   }, [eventId]);
 
   if (!event) {
-    return <div>Loading...</div>; // Loading state
+    return <div>Loading...</div>;
   }
 
-  // Format and display event details here
+  const containerStyle = {
+    width: '400px',
+    height: '300px'
+  };
+
+  const center = {
+    lat: event.latitude,  
+    lng: event.longitude
+  };
+
   return (
     <div className="event-detail-container">
-      <h1>{event.activity_name}</h1>
-      <p>Date: {new Date(event.time).toLocaleString()}</p>
-      {/* Add more event details here */}
+      <h1>{event.description}</h1>
       <img src={event.image || 'defaultImagePath.jpg'} alt="Event Cover" />
-      <p>{event.description}</p>
-      {/* ADD map maybe contact aswell */}
+      <p><strong>Charity:</strong> {event.charity_name}</p>
+      <p><strong>Compatible Disabilities:</strong> {event.compatible_disabilities.join(", ")}</p>
+      <LoadScript googleMapsApiKey="ASK MILES FOR GOOGLE MAPS API">  
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={10}
+        >
+          <Marker position={center} />
+        </GoogleMap>
+      </LoadScript>
     </div>
   );
 };
