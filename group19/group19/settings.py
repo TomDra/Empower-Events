@@ -122,10 +122,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # In your settings.py
 AUTH_USER_MODEL = 'myapi.User'
-
 
 # FOR DJANGO-REACT
 CORS_ALLOW_CREDENTIALS = True
@@ -142,4 +140,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '1000/hour',  # TODO: Change this to 5/minute in production
+    }
 }
