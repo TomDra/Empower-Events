@@ -1,82 +1,105 @@
 import React, { useEffect, useState } from "react";
+// Importing necessary modules and components from React and Material-UI
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Button, TextField, Typography, Container, Box } from "@mui/material";
 
-//TODO: Change username and password to email and password
-// Define the Login component
+// Setting Axios defaults for CSRF protection and enabling credentials
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.withCredentials = true;
+
+
+// Defining the Login component
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+
+  // Initializing state variables using the useState hook
+  const [currentUser, setCurrentUser] = useState(null); // To track the current user
+  const [username, setUsername] = useState(""); // To store the entered username
+  const [password, setPassword] = useState(""); // To store the entered password
   const navigate = useNavigate();
 
-  // function to handle form submission
+  // Handling form submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
+    
     // Send a POST request to the server
+    e.preventDefault(); // Preventing default form submission behavior
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/login/",
-        {
-          //TODO: Change username and password to email and password
-          username: username,
-          password: password,
-        }
-      );
-
+      // Sending a POST request to the backend API for login
+      const response = await axios.post('http://localhost:8000/login/', {
+        username, // Sending username entered by the user
+        password, // Sending password entered by the user
+      });
       // Log success
-      console.log("Login successful:", response.data);
+      console.log('Login successful:', response.data); // Logging successful login response
+      setCurrentUser(true); // Setting currentUser to true upon successful login
       // Redirect to the home page
       navigate("/");
     } catch (error) {
       // Log failure
-      console.error("Login failed:", error.message);
+      console.error('Login failed:', error.message); // Logging error message if login fails
       alert("Login failed. Please try again.");
     }
   };
 
+  // Rendering the login form
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-4">
-          <div className="card">
-            <div className="card-body">
-              <form onSubmit={(e) => handleSubmit(e)}>
-                <h1>Login</h1>
-                <div className="form-group mt-3">
-                  <label>Username</label>
-                  <input
-                    type="username"
-                    className="form-control mt-1"
-                    placeholder="Enter username"
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="form-group mt-3 mb-2">
-                  <label>Password</label>
-                  <input
-                    type="password"
-                    className="form-control mt-1"
-                    placeholder="Enter password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <a href="/signup">Sign Up instead</a>
-                <div className="form-group mt-2"></div>
-                <div className="d-grid gap-2 mt-3">
-                  <button type="submit" className="btn btn-primary">
-                    Log In
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {/* Username input field */}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+            autoFocus
+            value={username}
+            onChange={(e) => setUsername(e.target.value)} // Handling username input change
+          />
+          {/* Password input field */}
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} // Handling password input change
+          />
+          {/* Submit button */}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign In
+          </Button>
+        </Box>
+        <a href="/signup">Sign Up instead</a>
+      </Box>
+    </Container>
   );
 };
 
+
+// Exporting the Login component as the default export
 export default Login;
