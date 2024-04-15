@@ -3,6 +3,7 @@ import axios from "axios";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import HelloWorld from "./HelloWorld";
 import Login from "./components/pages/login";
+import SignUp from "./components/pages/signup"; // Ensure this path matches where your SignUp component is located
 import HomePage from "./components/pages/homePage";
 import "./App.css";
 import { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<SignUp />} />
           <Route path="/test" element={<HomePage />} />
         </Routes>
       </BrowserRouter>
