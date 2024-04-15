@@ -1,7 +1,6 @@
 # Importing necessary libraries/modules from Django and rest_framework
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
-from django.contrib.auth.models import User  # If not using a custom user model
 
 # Getting the User model from Django
 User = get_user_model()
@@ -49,13 +48,3 @@ class UserLoginSerializer(serializers.Serializer):
             return user
         else:
             raise serializers.ValidationError('Incorrect username or password.')
-
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)

@@ -18,7 +18,7 @@ const Login = () => {
     
     // Send a POST request to the server
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login/', { // miles why did you write 8000 wasted 9 hours of my life
+      const response = await axios.post('http://localhost:8000/api/auth/login/', {
         //TODO: Change username and password to email and password
         username: username,
         password: password,
