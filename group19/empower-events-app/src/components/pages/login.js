@@ -27,7 +27,7 @@ const Login = () => {
     e.preventDefault(); // Preventing default form submission behavior
     try {
       // Sending a POST request to the backend API for login
-      const response = await axios.post('http://localhost:8000/login/', {
+      const response = await axios.post('http://localhost:8000/api/auth/login/', {
         username, // Sending username entered by the user
         password, // Sending password entered by the user
       });
@@ -94,7 +94,7 @@ const Login = () => {
             Sign In
           </Button>
         </Box>
-        <a href="/signup">Sign Up instead</a>
+        <a href="/register">Sign Up instead</a>
       </Box>
     </Container>
   );

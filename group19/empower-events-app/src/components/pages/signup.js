@@ -88,6 +88,7 @@ const SignUp = () => {
                 {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Displaying error message if exists */}
                 <button type="submit">Sign Up</button> {/* Submit button */}
             </form>
+            <a href="/login">Login instead</a>
         </div>
     );
 }
