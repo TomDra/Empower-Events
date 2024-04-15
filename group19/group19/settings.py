@@ -31,8 +31,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'rest_framework',  # FOR DJANGO-REACT
     'corsheaders',  # FOR DJANGO-REACT
-    'myapi',  # FOR DJANGO-REACT (maybe remove)
-    'UserAPI.apps.UserapiConfig',  # FOR DJANGO-REACT
+    'myapi',  # FOR DJANGO-REACT
+    'UserAPI.apps.UserapiConfig',  # FOR DRF API
+    'EventsAPI.apps.EventsapiConfig',  # FOR DRF API
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -132,6 +133,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+# FOR DRF API
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -140,6 +142,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.UserRateThrottle',
     ],
