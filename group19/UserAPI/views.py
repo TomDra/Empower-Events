@@ -6,17 +6,10 @@ from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-<<<<<<< HEAD
-from .serializers import UserLoginSerializer, UserRegistrationSerializer
-from .validators import *
-||||||| cebae78
-from .serializers import UserLoginSerializer
-from .validators import *
-=======
 from .business_validators import UsernameBusinessValidator, PasswordBusinessValidator, EmailBusinessValidator
 from .serializers import UserLoginSerializer, UserRegisterSerializer
 from .validators import UsernameValidator, PasswordValidator
->>>>>>> trunk
+
 
 
 class UserLogin(APIView):
@@ -80,12 +73,6 @@ class UserLogout(APIView):
     def post(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
-<<<<<<< HEAD
-    
-
-||||||| cebae78
-=======
-
 
 class UserRegister(APIView):
     """
@@ -133,4 +120,4 @@ class UserRegister(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
->>>>>>> trunk
+
