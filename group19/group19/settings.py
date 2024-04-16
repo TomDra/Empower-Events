@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'corsheaders',  # FOR DJANGO-REACT
     'myapi',  # FOR DJANGO-REACT (maybe remove)
     'UserAPI.apps.UserapiConfig',  # FOR DJANGO-REACT
+    'WeatherAPI',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
