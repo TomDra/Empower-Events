@@ -4,11 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./components/pages/login";
 import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
-<<<<<<< HEAD
 import Events from "./components/pages/events";
-=======
-import FeedbackForm from "./components/pages/feedback";
->>>>>>> d9b789b (added voice recording, commit for rebase)
 import "./App.css";
 import EventDetailPage from "./components/pages/eventdetails"; // Import the EventDetailPage component
 //import { useEffect, useState } from "react";
@@ -32,8 +28,6 @@ const App = () => {
   };
 
   return (
-
-
   <div className="App">
     <UserProvider>
     <BrowserRouter>
