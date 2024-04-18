@@ -1,6 +1,8 @@
 # Importing necessary libraries and modules
 from rest_framework import serializers
 
+from myapi.models import Feedback
+
 
 class FeedbackOverviewSerializer(serializers.Serializer):
     """
@@ -29,3 +31,31 @@ class FeedbackOverviewSerializer(serializers.Serializer):
     leader_word_freq = serializers.JSONField()
     user_phrase_freq = serializers.JSONField()
     leader_phrase_freq = serializers.JSONField()
+
+
+class ActivityFeedbackListSerializer(serializers.ModelSerializer):
+    """
+    ActivityFeedbackListSerializer is a serializer class that is used to serialize a list of feedback about an activity.
+
+    It contains the following fields:
+    - activity_feedback_text (CharField): The text feedback about the activity.
+    - activity_feedback_audio (BinaryField): The audio feedback about the activity.
+    """
+
+    class Meta:
+        model = Feedback
+        fields = ['activity_feedback_text', 'activity_feedback_audio']
+
+
+class LeaderFeedbackListSerializer(serializers.ModelSerializer):
+    """
+    LeaderFeedbackListSerializer is a serializer class that is used to serialize a list of feedback about a leader.
+
+    It contains the following fields:
+    - leader_feedback_text (CharField): The text feedback about the leader.
+    - leader_feedback_audio (BinaryField): The audio feedback about the leader.
+    """
+
+    class Meta:
+        model = Feedback
+        fields = ['leader_feedback_text', 'leader_feedback_audio']

@@ -51,40 +51,29 @@ class FeedbackAPITest(TestCase):
                                                 time=timezone.now(),
                                                 activity_leader=self.activity_leader)
 
-        # User feedback
-        user_feedback_data = [
+        # User and leader feedback
+        feedback_data = [
             {"user_id": self.user2.id,
-             "activity_feedback_text": "This event was a great experience! I was really happy to be there."},
-            {"user_id": self.user3.id,
-             "activity_feedback_text": "This event was okay. I think it could have been a better experience."},
-            {"user_id": self.user4.id,
-             "activity_feedback_text": "This event was a terrible experience. I didn't enjoy it at all."},
-            {"user_id": self.user5.id,
-             "activity_feedback_text": "This event was an amazing time! I loved every minute of it."}
-        ]
-
-        # User feedback
-        leader_feedback_text = [
-            {"user_id": self.user2.id,
+             "activity_feedback_text": "This event was a great experience! I was really happy to be there.",
              "leader_feedback_text": "The activity leader was fantastic! Very organized and engaging."},
             {"user_id": self.user3.id,
-             "leader_feedback_text": "We had a great time thanks to the activity leader's enthusiasm and energy."},
-            {"user_id": self.user4.id,
+             "activity_feedback_text": "This event was okay. I think it could have been a better experience.",
              "leader_feedback_text": "While the activity leader was knowledgeable, they could improve on providing "
                                      "clearer instructions."},
-            {"user_id": self.user5.id,
+            {"user_id": self.user4.id,
+             "activity_feedback_text": "This event was a terrible experience. I didn't enjoy it at all.",
              "leader_feedback_text": "Kudos to the activity leader for their creativity and passion in leading the "
                                      "activity, but there were some moments where communication could have been "
-                                     "clearer."}
+                                     "clearer."},
+            {"user_id": self.user5.id,
+             "activity_feedback_text": "This event was an amazing time! I loved every minute of it.",
+             "leader_feedback_text": "We had a great time thanks to the activity leader's enthusiasm and energy."},
         ]
 
         # Assign feedback to the event
-        for feedback in user_feedback_data:
+        for feedback in feedback_data:
             Feedback.objects.create(user_id=feedback['user_id'], calendar_event=self.calendar,
-                                    activity_feedback_text=feedback['activity_feedback_text'])
-
-        for feedback in leader_feedback_text:
-            Feedback.objects.create(user_id=feedback['user_id'], calendar_event=self.calendar,
+                                    activity_feedback_text=feedback['activity_feedback_text'],
                                     leader_feedback_text=feedback['leader_feedback_text'])
 
     def test_feedback_overview(self):
@@ -104,3 +93,53 @@ class FeedbackAPITest(TestCase):
 
         # Assert that the status code is 200 OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_activity_feedback_list(self):
+        """
+        Test the activity feedback list API endpoint.
+        """
+
+        # Log in a user
+        self.client.force_authenticate(user=self.user1)
+
+        # GET request to the activity feedback list endpoint
+        response = self.client.get(reverse('activity_feedback_list',
+                                           kwargs={'activity_id': self.activity.activity_id}), {'page': 1})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Assert that the response data is a list
+        self.assertIsInstance(response.data['results'], list)
+
+        # Assert that the list is not empty
+        self.assertGreater(len(response.data['results']), 0)
+
+        # Assert that each item in the list contains the expected keys
+        for item in response.data['results']:
+            self.assertIn('activity_feedback_text', item)
+            self.assertIn('activity_feedback_audio', item)
+
+    def test_leader_feedback_list(self):
+        """
+        Test the leader feedback list API endpoint.
+        """
+
+        # Log in a user
+        self.client.force_authenticate(user=self.user1)
+
+        # GET request to the leader feedback list endpoint
+        response = self.client.get(reverse('leader_feedback_list',
+                                           kwargs={'activity_id': self.activity.activity_id}), {'page': 1})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Assert that the response data is a list
+        self.assertIsInstance(response.data['results'], list)
+
+        # Assert that the list is not empty
+        self.assertGreater(len(response.data['results']), 0)
+
+        # Assert that each item in the list contains the expected keys
+        for item in response.data['results']:
+            self.assertIn('leader_feedback_text', item)
+            self.assertIn('leader_feedback_audio', item)

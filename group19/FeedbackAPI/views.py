@@ -1,7 +1,7 @@
 # Importing necessary libraries and modules
 from django.core.cache import cache
 from nltk.corpus import stopwords
-from rest_framework import status, permissions
+from rest_framework import status, permissions, pagination, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from textblob import TextBlob
@@ -9,7 +9,7 @@ import nltk
 from collections import Counter
 
 from .permissions import IsCharityOrActivityLeader
-from .serializers import FeedbackOverviewSerializer
+from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer
 from myapi.models import Feedback
 
 # Download the stopwords
@@ -51,8 +51,15 @@ class FeedbackOverview(APIView):
 
         # If the cache does not exist, calculate the data.
         if cache_data is None:
+
             # Getting all the feedback for a specific activity.
-            feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id)
+            cache_feedback = cache.get(f'feedback_{activity_id}')
+
+            if cache_feedback is None:
+                feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id)
+                cache.set(f'feedback_{activity_id}', feedback, timeout=3600)
+
+            feedback = cache_feedback
 
             # Calculate average user and leader sentiment and subjectivity
             user_sentiments = [TextBlob(f.activity_feedback_text).sentiment.polarity for f in
@@ -121,3 +128,77 @@ class FeedbackOverview(APIView):
 
         # Return the data
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ActivityFeedbackList(generics.ListAPIView):
+    """
+    ActivityFeedbackList class is a subclass of ListAPIView. It allows users to view a list of feedback for an activity.
+    It implements caching to help with performance. It implements pagination to limit the number of
+    feedback items returned.
+
+    It contains the following methods:
+    - get_queryset (GET): A method that returns a list of feedback for an activity.
+    """
+
+    permission_classes = [permissions.IsAuthenticated, IsCharityOrActivityLeader]
+    pagination_class = pagination.PageNumberPagination
+    serializer_class = ActivityFeedbackListSerializer
+
+    def get_queryset(self):
+        """
+        A method that returns a list of feedback for an activity.
+
+        :return: A list of feedback for an activity.
+        """
+
+        # Get the activity id from the URL
+        activity_id = self.kwargs['activity_id']
+
+        # Check if the data is in the cache
+        cache_feedback = cache.get(f'feedback_{activity_id}')
+
+        # If the cache does not exist, get the feedback from the database
+        if cache_feedback is None:
+            feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('feedback_id')
+            cache.set(f'feedback_{activity_id}', feedback, timeout=3600)
+        else:
+            # If the cache exists, use the cached data
+            feedback = cache_feedback
+        return feedback
+
+
+class LeaderFeedbackList(generics.ListAPIView):
+    """
+    LeaderFeedbackList class is a subclass of ListAPIView. It allows users to view a list of feedback for a leader.
+    It implements caching to help with performance. It implements pagination to limit the number of
+    feedback items returned.
+
+    It contains the following methods:
+    - get_queryset (GET): A method that returns a list of feedback for a leader.
+    """
+
+    permission_classes = [permissions.IsAuthenticated, IsCharityOrActivityLeader]
+    pagination_class = pagination.PageNumberPagination
+    serializer_class = LeaderFeedbackListSerializer
+
+    def get_queryset(self):
+        """
+        A method that returns a list of feedback for a leader.
+
+        :return: A list of feedback for a leader.
+        """
+
+        # Get the activity id from the URL
+        activity_id = self.kwargs['activity_id']
+
+        # Check if the data is in the cache
+        cache_feedback = cache.get(f'feedback_{activity_id}')
+
+        # If the cache does not exist, get the feedback from the database
+        if cache_feedback is None:
+            feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('feedback_id')
+            cache.set(f'feedback_{activity_id}', feedback, timeout=3600)
+        else:
+            # If the cache exists, use the cached data
+            feedback = cache_feedback
+        return feedback
