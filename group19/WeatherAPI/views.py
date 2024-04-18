@@ -15,12 +15,13 @@ class GetWeather(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        city = request.query_params.get('city', '')  # Fetch 'city' from query parameters
+        lat = request.query_params.get('lat', '')  # Fetch 'lat' from query parameters
+        lon = request.query_params.get('lon', '')  # Fetch 'lon' from query parameters
 
-        if not city:
-            return Response({'error': 'City parameter is required'}, status=400)
+        if not lat or not lon:
+            return Response({'error': 'Lat and lon parameters are required'}, status=400)
 
-        input_url = api_url + "q=" + city + "&appid=" + api_key
+        input_url = api_url + "lat=" + lat + "&lon=" + lon + "&appid=" + api_key
         response = requests.get(input_url)
 
         # Check if the request was successful

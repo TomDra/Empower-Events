@@ -14,5 +14,5 @@ class WeatherAPITest(TestCase):
         self.client = APIClient()
 
     def testGetWeather(self):
-        response = self.client.get(reverse('getWeather'), {"city" : "London"})
+        response = self.client.get(reverse('getWeather'), {"lat" : "51.503399", "lon" : "-0.119519"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
