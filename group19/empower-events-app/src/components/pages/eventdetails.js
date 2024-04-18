@@ -33,7 +33,7 @@ const EventDetailPage = () => {
       <img src={event.image || 'defaultImagePath.jpg'} alt="Event Cover" />
       <p><strong>Charity:</strong> {event.charity_name}</p>
       <p><strong>Compatible Disabilities:</strong> {event.compatible_disabilities.join(", ")}</p>
-      <LoadScript googleMapsApiKey="ASK MILES FOR GOOGLE MAPS API">  
+      <LoadScript googleMapsApiKey="AlzaSyD-P1nl2HT0g7Uv3aPvFer0pXAT4blnn90">
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
