@@ -13,6 +13,8 @@ class FeedbackOverviewSerializer(serializers.Serializer):
     - average_leader_sentiment (FloatField): The average sentiment of the leader feedback.
     - average_user_subjectivity (FloatField): The average subjectivity of the user feedback.
     - average_leader_subjectivity (FloatField): The average subjectivity of the leader feedback.
+    - possible_improvements (ListField): A list of possible improvements based on the feedback.
+    - possible_accomplishments (ListField): A list of possible accomplishments based on the feedback.
     - user_adjectives (ListField): A list of adjectives used in the user feedback.
     - leader_adjectives (ListField): A list of adjectives used in the leader feedback.
     - user_word_freq (JSONField): A dictionary containing the frequency of words in the user feedback.
@@ -25,6 +27,8 @@ class FeedbackOverviewSerializer(serializers.Serializer):
     average_leader_sentiment = serializers.FloatField()
     average_user_subjectivity = serializers.FloatField()
     average_leader_subjectivity = serializers.FloatField()
+    possible_improvements = serializers.ListField(child=serializers.CharField())
+    possible_accomplishments = serializers.ListField(child=serializers.CharField())
     user_adjectives = serializers.ListField(child=serializers.CharField())
     leader_adjectives = serializers.ListField(child=serializers.CharField())
     user_word_freq = serializers.JSONField()

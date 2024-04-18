@@ -1,4 +1,8 @@
 # Importing necessary libraries and modules
+import os
+
+import joblib
+from django.conf import settings
 from django.core.cache import cache
 from nltk.corpus import stopwords
 from rest_framework import status, permissions, pagination, generics
@@ -103,12 +107,60 @@ class FeedbackOverview(APIView):
             leader_phrase_freq = Counter(phrase for f in feedback if f.leader_feedback_text for phrase in
                                          TextBlob(f.leader_feedback_text).noun_phrases).most_common(n)
 
+            # Define the absolute path to the files for the classifier and vectorizer
+            classifier_path = os.path.join(settings.BASE_DIR, 'FeedbackAPI', 'FeedbackClassifier',
+                                           'feedback_classifier.pkl')
+            vectorizer_path = os.path.join(settings.BASE_DIR, 'FeedbackAPI', 'FeedbackClassifier',
+                                           'feedback_vectorizer.pkl')
+
+            # Load the files
+            clf = joblib.load(classifier_path)
+            vectorizer = joblib.load(vectorizer_path)
+
+            # Classify the feedback
+            feedback_classification = []
+            for f in feedback:
+                # Check if the feedback is not empty
+                if f.activity_feedback_text:
+                    # Transform the feedback into a vector
+                    X = vectorizer.transform([f.activity_feedback_text])
+
+                    # Predict the classification
+                    classification = clf.predict(X)[0]
+
+                    # Append the feedback and classification to the list
+                    feedback_classification.append((f, classification, 'activity_feedback_text'))
+
+                # Check if the feedback is not empty
+                if f.leader_feedback_text:
+                    # Transform the feedback into a vector
+                    X = vectorizer.transform([f.leader_feedback_text])
+
+                    # Predict the classification
+                    classification = clf.predict(X)[0]
+
+                    # Append the feedback and classification to the list
+                    feedback_classification.append((f, classification, 'leader_feedback_text'))
+
+            # Sort the feedback by classification
+            feedback_classification.sort(key=lambda x: x[1], reverse=True)
+
+            # Get the top 5 possible improvements and accomplishments, that are not 'Neither' e.g. useless feedback
+            possible_improvements = [f[0].activity_feedback_text if f[2] == 'activity_feedback_text' else f[
+                0].leader_feedback_text for f in feedback_classification if
+                                     f[1] == 'Improvements' and f[1] != 'Neither'][:5]
+            possible_accomplishments = [f[0].activity_feedback_text if f[2] == 'activity_feedback_text' else f[
+                0].leader_feedback_text for f in feedback_classification if
+                                        f[1] == 'Accomplishments' and f[1] != 'Neither'][:5]
+
             # Create a dictionary with the analysed data
             data = {
                 'average_user_sentiment': average_user_sentiment,
                 'average_leader_sentiment': average_leader_sentiment,
                 'average_user_subjectivity': average_user_subjectivity,
                 'average_leader_subjectivity': average_leader_subjectivity,
+                'possible_improvements': possible_improvements,
+                'possible_accomplishments': possible_accomplishments,
                 'user_adjectives': user_adjectives,
                 'leader_adjectives': leader_adjectives,
                 'user_word_freq': dict(user_word_freq),
