@@ -1,4 +1,6 @@
-# Importing necessary libraries and modules
+"""
+Views module for the FeedbackAPI app.
+"""
 import os
 
 import joblib
@@ -13,8 +15,11 @@ import nltk
 from collections import Counter
 
 from .permissions import IsCharityOrActivityLeader
-from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer
+from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer, \
+    FeedbackSubmissionSerializer
 from myapi.models import Feedback
+
+from .validators import validate_feedback_text
 
 # Download the stopwords
 nltk.download('stopwords')
@@ -254,3 +259,41 @@ class LeaderFeedbackList(generics.ListAPIView):
             # If the cache exists, use the cached data
             feedback = cache_feedback
         return feedback
+
+
+class FeedbackSubmission(APIView):
+    """
+    FeedbackSubmission class is a subclass of APIView. It allows users to submit feedback for an activity.
+    TODO: Remove serializer.data, and add support for feedback questions and answers.
+
+    It contains the following methods:
+    - post (POST): A method that allows users to submit feedback for an activity.
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, activity_id=None):
+        """
+        A method that allows users to submit feedback for an activity.
+
+        :param request: The request object.
+        :param activity_id: The id of the activity.
+        """
+
+        # Get the data from the request
+        data = request.data
+        data['user'] = request.user.id
+        data['activity_id'] = activity_id
+
+        # Validate the feedback text
+        validate_feedback_text(data.get('activity_feedback_text'))
+        validate_feedback_text(data.get('leader_feedback_text'))
+
+        # Create a serializer with the data
+        serializer = FeedbackSubmissionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# TODO: Return question answers lists in specific endpoints.

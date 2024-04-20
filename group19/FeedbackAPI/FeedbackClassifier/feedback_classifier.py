@@ -1,4 +1,8 @@
-# Import the necessary libraries and modules
+"""
+Feedback Classifier for the FeedbackAPI app.
+
+Run this script to train a classifier on the feedback data and save it to disk.
+"""
 import joblib
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer

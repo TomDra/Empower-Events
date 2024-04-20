@@ -1,4 +1,6 @@
-# Importing necessary libraries and modules
+"""
+Serializers for the FeedbackAPI.
+"""
 from rest_framework import serializers
 
 from myapi.models import Feedback
@@ -63,3 +65,24 @@ class LeaderFeedbackListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = ['leader_feedback_text', 'leader_feedback_audio']
+
+
+class FeedbackSubmissionSerializer(serializers.ModelSerializer):
+    """
+    FeedbackSubmissionSerializer is a serializer class that is used to serialize feedback submission data.
+
+    It contains the following fields:
+    - feedback_id (AutoField): The ID of the feedback. This field is read-only.
+    - user (ForeignKey): The user submitting the feedback.
+    - calendar_event (ForeignKey): The calendar event associated with the feedback.
+    - activity_feedback_text (CharField): The text feedback about the activity.
+    - activity_feedback_audio (BinaryField): The audio feedback about the activity.
+    - leader_feedback_text (CharField): The text feedback about the leader.
+    - leader_feedback_audio (BinaryField): The audio feedback about the leader.
+    """
+
+    class Meta:
+        model = Feedback
+        fields = ['feedback_id', 'user', 'calendar_event', 'activity_feedback_text', 'activity_feedback_audio',
+                  'leader_feedback_text', 'leader_feedback_audio']
+        read_only_fields = ['feedback_id']

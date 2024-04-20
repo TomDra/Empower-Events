@@ -1,3 +1,6 @@
+"""
+Permissions for the FeedbackAPI.
+"""
 from rest_framework import permissions
 from myapi.models import Charity, ActivityLeader
 

@@ -1,4 +1,6 @@
-# Import necessary libraries and modules
+"""
+Test cases for the Feedback API.
+"""
 import json
 
 from django.contrib.auth import get_user_model
@@ -143,3 +145,32 @@ class FeedbackAPITest(TestCase):
         for item in response.data['results']:
             self.assertIn('leader_feedback_text', item)
             self.assertIn('leader_feedback_audio', item)
+
+    def test_feedback_submission(self):
+        """
+        Test the feedback submission API endpoint.
+        """
+
+        # Log in a user
+        self.client.force_authenticate(user=self.user1)
+
+        # Feedback data
+        feedback_data = {
+            "calendar_event": self.calendar.event_id,  # Use event_id instead of id
+            "activity_feedback_text": "This event was amazing! I had a great time.",
+            "activity_feedback_audio": None,
+            "leader_feedback_text": "The activity leader was fantastic! Very engaging and supportive.",
+            "leader_feedback_audio": None
+        }
+
+        # POST request to the feedback submission endpoint
+        response = self.client.post(reverse('feedback_submission',
+                                            kwargs={'activity_id': self.activity.activity_id}), feedback_data,
+                                    format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Assert that the feedback is stored in the database
+        feedback = Feedback.objects.get(feedback_id=response.data['feedback_id'])
+        self.assertEqual(feedback.activity_feedback_text, feedback_data['activity_feedback_text'])
+        self.assertEqual(feedback.leader_feedback_text, feedback_data['leader_feedback_text'])
