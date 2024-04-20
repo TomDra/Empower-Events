@@ -156,7 +156,7 @@ class FeedbackAPITest(TestCase):
 
         # Feedback data
         feedback_data = {
-            "calendar_event": self.calendar.event_id,  # Use event_id instead of id
+            "calendar_event": self.calendar.event_id,
             "activity_feedback_text": "This event was amazing! I had a great time.",
             "activity_feedback_audio": None,
             "leader_feedback_text": "The activity leader was fantastic! Very engaging and supportive.",
