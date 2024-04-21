@@ -1,42 +1,60 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
-const mimeType = "audio/wav";
+const FeedbackForm = ({ match }) => {
 
-function FeedbackForm() {
-  const [feedback, setFeedback] = useState("");
+  const [textFeedback, setTextFeedback] = useState("");
+  const [radioOptions, setRadioOptions] = useState([]);
+
   const [permission, setPermission] = useState(false);
   const [stream, setStream] = useState(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
   const mediaRecorder = useRef(null);
+  const { id } = useParams();
 
-// Get json with questions set by charity about event
-  // const getData = async () => {
-  //   try {
-  //     const response = await axios.get("/api/feedback");
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.error("Error getting feedback:", error);
-  //   }
-  // };
-// post data of feedback to the server
-  // const postData = async () => {
-  //   try {
-  //     await axios.post("/api/feedback", { feedback });
-  //     console.log("Feedback submitted successfully");
-  //   } catch (error) {
-  //     console.error("Error submitting feedback:", error);
-  //   }
-  // };
+  useEffect(() => {
+    getData();
+  }, [id]);
+
+  // Get json with questions set by charity about event
+  const getData = async () => {
+    try {
+      const response = await axios.get("/api/feedback/${id}/");
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error getting feedback:", error);
+    }
+  };
+
+
+  const handleOptionChange = (questionIndex, optionValue) => {
+    setSelectedOptions((selectedOptions) => ({
+      ...selectedOptions,
+      [questionIndex]: optionValue,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/feedback", { feedback });
+      const reader = new FileReader();
+      reader.readAsDataURL(audio);
+      reader.onloadend = () => {
+        const base64data = reader.result.split(',')[1];
+      };
+
+      await axios.post("/api/feedback", { 
+        id: id,
+        textFeedback: textFeedback,
+        audio: base64data,
+        questionAnswers: selectedOptions,
+
+
+       });
       console.log("Feedback submitted successfully");
-      setFeedback("");
     } catch (error) {
       console.error("Error submitting feedback:", error);
     }
@@ -61,7 +79,7 @@ function FeedbackForm() {
 
   const startRecording = async () => {
     setRecordingStatus("recording");
-    const media = new MediaRecorder(stream, { type: mimeType });
+    const media = new MediaRecorder(stream, { type: "audio/wav" });
     mediaRecorder.current = media;
     mediaRecorder.current.start();
     let localaudioChunks = [];
@@ -79,7 +97,7 @@ function FeedbackForm() {
     mediaRecorder.current.stop();
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
-      const audioBlob = new Blob(audioChunks, { type: mimeType });
+      const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
       //creates a playable URL from the blob file.
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio(audioUrl);
@@ -89,24 +107,52 @@ function FeedbackForm() {
 
   return (
     <div className="Feedback pt-4 container">
-      <audio src={audio} controls></audio>
+      <h1>Feedback for {response.description}</h1>
       <form onSubmit={handleSubmit}>
-        <div>
-          {response.map((item, index) => (
-            <div key={index}>
-              {/* Render each item here */}
-              <p>{item}</p>
-              {/* Replace 'propertyName' with the actual property you want to display */}
-            </div>
-          ))}
-        </div>
+        {eventData.questions.map((question, index) => (
+          <div className="row justify-content-center">
+            <div className="card mb-3 text-start">
+              <h5 className="card-title">{question}</h5>
+              <div className="card-body btn-group">
+                <input
+                  type="radio"
+                  className="btn-check m-1"
+                  name={`btnradio${index}`}
+                  id={`btnradio${index}1`}
+                  autoComplete="off"
+                  value="positive"
+                  checked={selectedOptions[index] === "positive"}
+                  onChange={() => handleOptionChange(index, "positive")}
+                />
+                <label
+                  class="btn btn-outline-success bi bi-emoji-smile fs-1 "
+                  htmlFor={`btnradio${index}1`}
+                ></label>
 
+                <input
+                  type="radio"
+                  className="btn-check m-1"
+                  name={`btnradio${index}`}
+                  id={`btnradio${index}2`}
+                  autoComplete="off"
+                  value="negative"
+                  checked={selectedOptions[index] === "negative"}
+                  onChange={() => handleOptionChange(index, "negative")}
+                />
+                <label
+                  class="btn btn-outline-danger bi bi-emoji-frown fs-1"
+                  htmlFor={`btnradio${index}2`}
+                ></label>
+              </div>
+            </div>
+          </div>
+        ))}
         <div className="audio-controls">
           {!permission ? (
             <button
               onClick={getMicrophonePermission}
               type="button"
-              className="btn"
+              className="bi bi-plus-circle btn btn-primary p-4 m-3 fs-4"
             >
               Get Microphone
             </button>
@@ -115,7 +161,7 @@ function FeedbackForm() {
             <button
               onClick={startRecording}
               type="button"
-              className="btn btn-success"
+              className="bi bi-mic btn btn-success p-4 m-3 fs-4"
             >
               Start Recording
             </button>
@@ -124,14 +170,24 @@ function FeedbackForm() {
             <button
               onClick={stopRecording}
               type="button"
-              className="btn btn-danger"
+              className="bi bi-mic-mute btn btn-danger p-4 m-3 fs-4"
             >
               Stop Recording
             </button>
           ) : null}
+          <div>
+            <audio src={audio} controls></audio>
+          </div>
         </div>
-        <div>
-          <textarea name="General" className="flex"></textarea>
+        <div className="form-floating">
+          <textarea
+            name="general-feedback"
+            className="form-control"
+            id="TextArea"
+            style={{ height: "100px" }}
+            onChange={(e) => setTextFeedback(e.target.value)}
+          ></textarea>
+          <label htmlFor="TextArea">Type general feedback here</label>
         </div>
         <button type="Submit" className="btn btn-primary">
           Submit
@@ -139,6 +195,6 @@ function FeedbackForm() {
       </form>
     </div>
   );
-}
+};
 
 export default FeedbackForm;
