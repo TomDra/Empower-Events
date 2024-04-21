@@ -20,7 +20,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
-          <Route path="/feedback" element={<FeedbackForm />} />
+          <Route path="/feedback/:id" element={<FeedbackForm />} />
         </Routes>
       </BrowserRouter>
     </div>
