@@ -1,10 +1,10 @@
 import React from "react";
 import axios from "axios";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import HelloWorld from "./HelloWorld";
 import Login from "./components/pages/login";
-import SignUp from "./components/pages/signup"; // Ensure this path matches where your SignUp component is located
+import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
+import Events from "./components/pages/events";
 import Events from "./components/pages/events";
 import "./App.css";
 import { useEffect, useState } from "react";
