@@ -166,10 +166,18 @@ class Command(BaseCommand):
 					'activity_feedback_text': feedback_data.get('activity_feedback_text'),
 					'leader_feedback_text': feedback_data.get('leader_feedback_text'),
 					'activity_feedback_question_answers': json.dumps(feedback_data.get('activity_feedback_question_answers', '')),
-					'leader_feedback_question_answers': json.dumps(feedback_data.get('leader_feedback_question_answers', ''))
-					# Omitting audio fields for simplicity; include them as needed
+					'leader_feedback_question_answers': json.dumps(feedback_data.get('leader_feedback_question_answers', '')),
+					
+					
 				}
 			)
+
+ 				# Handling feedback questions
+			if 'feedback_questions' in data:
+				# Serialize feedback questions and save them in the Feedback model
+				feedback.set_feedback_questions(json.dumps(data['feedback_questions']))
+				feedback.save()
+
 
 			if created:
 				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' created.")

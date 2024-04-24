@@ -69,20 +69,29 @@ class Charity(AbstractBaseUser, PermissionsMixin):
 
 class Feedback(models.Model):
     feedback_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
     calendar_event = models.ForeignKey('Calendar', on_delete=models.CASCADE)
     activity_feedback_text = models.CharField(max_length=500, blank=True, null=True)
     activity_feedback_audio = models.BinaryField(blank=True, null=True)
     activity_feedback_question_answers = models.TextField(blank=True, null=True)  # Store JSON as a string
+
     leader_feedback_text = models.CharField(max_length=500, blank=True, null=True)
     leader_feedback_audio = models.BinaryField(blank=True, null=True)
     leader_feedback_question_answers = models.TextField(blank=True, null=True)  # Store JSON as a string
+    
+    feedback_questions = models.TextField(blank=True, null=True)  # New field to store JSON as a string
 
     def set_feedback_question_answers(self, data):
         self.feedback_question_answers = json.dumps(data)
 
     def get_feedback_question_answers(self):
         return json.loads(self.feedback_question_answers) if self.feedback_question_answers else None
+
+    def set_feedback_questions(self, data):
+        self.feedback_questions = json.dumps(data)
+
+    def get_feedback_questions(self):
+        return json.loads(self.feedback_questions) if self.feedback_questions else None
 
 
 class Calendar(models.Model):
