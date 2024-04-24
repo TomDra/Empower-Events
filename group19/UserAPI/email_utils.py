@@ -4,8 +4,8 @@ from django.core.mail import send_mail
 def send_welcome_email(to_email):
     send_mail(
         'Welcome to Our Service',
-        'Here is the message.',
-        'from@example.com',
+        'Here is our very important message.',
+        'Empower events',
         [to_email],
         fail_silently=False,
     )
