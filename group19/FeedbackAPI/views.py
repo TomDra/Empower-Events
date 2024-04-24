@@ -42,6 +42,8 @@ class FeedbackOverview(APIView):
         - Average leader sentiment
         - Average user subjectivity
         - Average leader subjectivity
+        - Possible improvements
+        - Possible accomplishments
         - Adjectives used in user feedback
         - Adjectives used in leader feedback
         - Most common words in user feedback
