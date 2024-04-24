@@ -126,6 +126,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # In your settings.py
 AUTH_USER_MODEL = 'myapi.User'
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'Empowerevents@gmail.com'
+EMAIL_HOST_PASSWORD = 'OsaWifjs_Sdfs-sd'
 
 # FOR DJANGO-REACT
 CORS_ALLOW_CREDENTIALS = True
@@ -142,3 +148,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
 }
+
+
