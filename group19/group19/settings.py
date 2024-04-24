@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'myapi',  # FOR DJANGO-REACT
     'UserAPI.apps.UserapiConfig',  # FOR DRF API
     'EventsAPI.apps.EventsapiConfig',  # FOR DRF API
+    'WeatherAPI',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
