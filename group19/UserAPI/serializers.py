@@ -9,12 +9,12 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     """
     UserSerializer class is a subclass of ModelSerializer that serializes the User model.
-    It contains 'username', 'email', and 'password' fields from the expected User model.
+    It contains 'username' and 'email' fields from the expected User model.
     """
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email']
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -48,3 +48,38 @@ class UserLoginSerializer(serializers.Serializer):
             return user
         else:
             raise serializers.ValidationError('Incorrect username or password.')
+
+
+
+
+class UserRegisterSerializer(serializers.ModelSerializer):
+    """
+    UserRegisterSerializer class is a subclass of ModelSerializer that serializes the User model.
+    It contains all fields from the expected User model.
+    """
+
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    def create(self, cleaned_data):
+        """
+        A method to create a new user using the username, email, and password fields.
+
+        :param cleaned_data: A dictionary containing the username, email, and password fields.
+        :return: The newly created user.
+        """
+
+        username_field = User.USERNAME_FIELD
+
+        credentials = {
+            username_field: cleaned_data['username'],
+            'email': cleaned_data['email'],
+            'password': cleaned_data['password']
+        }
+
+        # Create a new user
+        user = User.objects.create_user(**credentials)
+        user.save()
+        return user
+
