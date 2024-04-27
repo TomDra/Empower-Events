@@ -3,34 +3,30 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 
-
-
 const Events = () => {
-  const [response, setResponse] = useState([]);
-  const { isLoaded } = useLoadScript({    
-    googleMapsApiKey: '***REMOVED***',
-    });
+  const [responseData, setResponseData] = useState(null);
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "***REMOVED***",
+  });
 
   useEffect(() => {
-    getData();
+    axios
+      .get("http://localhost:8000/api/events/upcoming-list/?page=1")
+      .then((response) => {
+        setResponseData(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
-
-  // Get json with questions set by charity about event
-  const getData = async () => {
-    try {
-      response = await axios.get("/api/events/");
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error getting events:", error);
-    }
-  };
 
   return (
     <div className="Events">
       <div className="justify-content-center mt-5">
         <h1 className="text-center">Events</h1>
       </div>
-      {response.map((response) => {
+      {responseData.results.map((event) => {
         return (
           <div className="container px-4">
             <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
@@ -49,16 +45,16 @@ const Events = () => {
                     ></iframe>
                     <GoogleMap>
                       zoom={9}
-                      center={{ lat: response.latitude, lng: response.longitude }}
+                      center={{ lat: event.latitude, lng: event.longitude }}
                       mapContainerClassName='map-container'
                     </GoogleMap>
                   </div>
                 </div>
                 <div className="col-md-auto">
                   <div className="card-body">
-                    <h2 className="card-title">{response.description}</h2>
-                    <p className="card-text">Age group: {response.age_group}</p>
-                    <p className="card-text">Date: {response.date}</p>
+                    <h2 className="card-title">{event.description}</h2>
+                    <p className="card-text">Age group: {event.age_group}</p>
+                    <p className="card-text">Date: {event.date}</p>
                     <a href="#" className="btn btn-primary">
                       View More
                     </a>

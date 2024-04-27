@@ -22,7 +22,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="/test" element={<HomePage />} />
-          <Route path="/events" element={<Events />} />
+          <Route path="/events/future" element={<Events />} />
+          <Route path="/events/past" element={<Events />} />
         </Routes>
       </BrowserRouter>
     </div>
