@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'myapi',  # FOR DJANGO-REACT
     'UserAPI.apps.UserapiConfig',  # FOR DRF API
     'EventsAPI.apps.EventsapiConfig',  # FOR DRF API
+    'CharityAPI.apps.CharityapiConfig',  # FOR DRF API
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,7 +141,6 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
