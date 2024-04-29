@@ -76,8 +76,68 @@ class UpcomingEventsListTest(EventsAPITest):
         # GET the events list
         response = self.client.get(reverse('list_events_upcoming'), {'page': 1})
 
-        # Print the JSON response
-        print(json.dumps(response.data, indent=4))
+        # Check that the response is 200 OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Check that the response contains the correct number of events
+        self.assertEqual(len(response.data['results']), 2)
+
+        # Checking count, next, previous, and results keys in the response.
+        self.assertEqual(response.data['count'], 2)
+        # Two events fit into one page, so there should be no next or previous pages.
+        self.assertIsNone(response.data['next'])
+        self.assertIsNone(response.data['previous'])
+
+        # Check the first event in the list
+        event1 = response.data['results'][0]
+        self.assertEqual(event1['date'], self.expected_date1)
+        self.assertEqual(event1['description'], 'Test Activity 1')
+        self.assertEqual(event1['latitude'], '0.000000')
+        self.assertEqual(event1['longitude'], '0.000000')
+        self.assertEqual(event1['compatible_disabilities'], ['Test Disability 1', 'Test Disability 2'])
+        self.assertEqual(event1['charity'], 'Charity 1')
+        self.assertEqual(event1['age_group'], 'Test Group 1')
+        self.assertEqual(event1['activity_id'], self.activity1.activity_id)
+        self.assertEqual(event1['event_id'], self.calendar1.event_id)
+
+        # Check the second event in the list
+        event2 = response.data['results'][1]
+        self.assertEqual(event2['date'], self.expected_date2)
+        self.assertEqual(event2['description'], 'Test Activity 2')
+        self.assertEqual(event2['latitude'], '0.000000')
+        self.assertEqual(event2['longitude'], '0.000000')
+        self.assertEqual(event2['compatible_disabilities'], ['Test Disability 3', 'Test Disability 4'])
+        self.assertEqual(event2['charity'], 'Charity 2')
+        self.assertEqual(event2['age_group'], 'Test Group 2')
+        self.assertEqual(event2['activity_id'], self.activity2.activity_id)
+        self.assertEqual(event2['event_id'], self.calendar2.event_id)
+
+
+class PastEventsListTest(EventsAPITest):
+    """
+    Test case for the PastEventsList class in the EventsAPI.
+    """
+    def setUp(self):
+        """
+        Set up the test case with a test client and a test models.
+        """
+
+        super().setUp()
+
+        # Create past events
+        self.calendar1.time = timezone.now() - datetime.timedelta(days=1)
+        self.calendar1.save()
+        self.expected_date1 = self.calendar1.time.isoformat(timespec='microseconds').replace('+00:00', 'Z')
+        self.calendar2.time = timezone.now() - datetime.timedelta(days=2)
+        self.calendar2.save()
+        self.expected_date2 = self.calendar2.time.isoformat(timespec='microseconds').replace('+00:00', 'Z')
+
+    def test_get_paginated_past_events(self):
+        # Log in a user.
+        self.client.force_authenticate(user=self.user1)
+
+        # GET the past events list
+        response = self.client.get(reverse('list_events_past'), {'page': 1})
 
         # Check that the response is 200 OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)
