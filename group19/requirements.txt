@@ -4,3 +4,4 @@ django
 requests
 joblib
 nltk
+textblob
