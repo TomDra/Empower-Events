@@ -18,11 +18,13 @@ from .permissions import IsCharityOrActivityLeader
 from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer, \
     FeedbackSubmissionSerializer
 from myapi.models import Feedback
-
+from textblob.download_corpora import download_all
 from .validators import validate_feedback_text
 
 # Download the stopwords
 nltk.download('stopwords')
+nltk.download('punkt')
+download_all()
 
 
 class FeedbackOverview(APIView):
