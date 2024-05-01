@@ -25,11 +25,11 @@ class FeedbackAPITest(TestCase):
         self.client = APIClient()
 
         # Creating users
-        self.user1 = User.objects.create_user(username='user1', password='password')
-        self.user2 = User.objects.create_user(username='user2', password='password')
-        self.user3 = User.objects.create_user(username='user3', password='password')
-        self.user4 = User.objects.create_user(username='user4', password='password')
-        self.user5 = User.objects.create_user(username='user5', password='password')
+        self.user1 = User.objects.create_user(username='user1', password='password', email='testfeedback1@email.com')
+        self.user2 = User.objects.create_user(username='user2', password='password', email='testfeedback2@email.com')
+        self.user3 = User.objects.create_user(username='user3', password='password', email='testfeedback3@email.com')
+        self.user4 = User.objects.create_user(username='user4', password='password', email='testfeedback4@email.com')
+        self.user5 = User.objects.create_user(username='user5', password='password', email='testfeedback5@email.com')
 
         # Creating a charity
         self.charity = Charity.objects.create(charity_name='Charity', email='charity@email.com',

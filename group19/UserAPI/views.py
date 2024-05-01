@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication
 from .business_validators import UsernameBusinessValidator, PasswordBusinessValidator, EmailBusinessValidator
 from .serializers import UserLoginSerializer, UserRegisterSerializer, UserSerializer
-#from .validators import UsernameValidator, PasswordValidator
+from .validators import UsernameValidator, PasswordValidator
 from .serializers import UserLoginSerializer, UserSerializer
 from .validators import *
 
