@@ -1,72 +1,62 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./homePage.css";
+
 
 const HomePage = () => {
   return (
-    <div className="container px-4">
+    <div>
       {/* Hero Banner */}
-      <div className="hero-banner row justify-content-center mt-5">
+      <div className="hero-banner position-relative">
         <img
-          src="/images/freeroyaltyunsplash.jpg"
+          src="/static/images/freeroyaltyunsplash.jpg"
           alt="Empower Events"
-          className="col-12"
-          style={{ height: "300px", objectFit: "cover" }}
+          className="col-12 w-full cover"
+          style={{ height: "400px", objectFit: "cover" }}
         />
-        <h1 className="text-center mt-4">Welcome to Empower Events</h1>
+        <h1
+          className="text-center position-absolute w-100 text-white"
+          style={{
+            top: "40%",
+            transform: "translateY(-50%)",
+            fontSize: "2.5rem",
+            fontWeight: "bold"
+          }}
+        >
+          Welcome to Empower Events
+        </h1>
       </div>
 
       {/* Event Previews */}
-      <div className="event-previews row mt-4">
-        <div className="col-md-4">
-          <div class="card">
-            <img
-              src="/images/past-event.jpg"
-              className="card-img-top"
-              alt="Past Event"
-            />
-            <div className="card-body">
-              <h5 className="card-title">Past Event: XYZ Conference</h5>
-              <p className="card-text">A brief description of a past event.</p>
-              <a href="/events/xyz-conference" className="btn btn-primary">
-                Learn More
-              </a>
+      <div className="px-4">
+        <div className="event-previews row mt-4 justify-content-center">
+          <Link to="/events/" className="col-md-4 text-decoration-none">
+            <div className="card hover-effect">
+              <img
+                src="/static/images/random.jpg"
+                className="card-img-top"
+                alt="Past Event"
+              />
+              <div className="card-body">
+                <h5 className="card-title">Past Event</h5>
+                <p className="card-text">Review or view our past events.</p>
+              </div>
             </div>
-          </div>
-        </div>
+          </Link>
 
-        <div className="col-md-4">
-          <div class="card">
-            <img
-              src="/images/future-event.jpg"
-              class="card-img-top"
-              alt="Future Event"
-            />
-            <div className="card-body">
-              <h5 className="card-title">Future Event: ABC Summit</h5>
-              <p className="card-text">A brief description of an upcoming event.</p>
-              <a href="/events/abc-summit" className="btn btn-primary">
-                Learn More
-              </a>
+          <Link to="/events/abc-summit" className="col-md-4 text-decoration-none">
+            <div className="card hover-effect">
+              <img
+                src="/static/images/conference.jpg"
+                className="card-img-top"
+                alt="Future Event"
+              />
+              <div className="card-body">
+                <h5 className="card-title">Future Event</h5>
+                <p className="card-text">See our new events.</p>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Image Gallery */}
-      <div className="image-gallery row justify-content-center mt-5">
-        <div className="col-md-6">
-          <img
-            src="/images/gallery1.jpg"
-            alt="Event Image 1"
-            className="img-fluid"
-          />
-        </div>
-        <div class="col-md-6">
-          <img
-            src="/images/gallery2.jpg"
-            alt="Event Image 2"
-            className="img-fluid"
-          />
+          </Link>
         </div>
       </div>
 
@@ -84,9 +74,9 @@ const HomePage = () => {
           </a>
           <a href="https://facebook.com/empowerevents">Facebook</a>
         </div>
-        <div class="col-md-4">
+        <div className="col-md-4">
           <h5>About Us</h5>
-          <p>A brief description of the organization and its mission.</p>
+          <p>Miles Write Something Here.</p>
         </div>
       </div>
     </div>
