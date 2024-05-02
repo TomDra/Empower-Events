@@ -60,6 +60,13 @@ const EventDetailPage = () => {
         <div className="col-md-6">
           <p><strong>Charity:</strong> {event.charity_name}</p>
           <p><strong>Compatible Disabilities:</strong> {event.compatible_disabilities.join(", ")}</p>
+          <p><strong>Age Group:</strong> {event.age_group.title} ({event.age_group.lower} - {event.age_group.higher} years old)</p>
+          <p><strong>Feedback:</strong></p>
+          <ul>
+            {event.feedback.map((feedback, index) => (
+              <li key={index}>{feedback}</li>
+            ))}
+          </ul>
           <div ref={mapRef} style={{ width: '100%', height: '300px' }} />
         </div>
       </div>
