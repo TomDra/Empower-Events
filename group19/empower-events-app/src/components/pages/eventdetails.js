@@ -29,7 +29,7 @@ const EventDetailPage = () => {
     }
 
     const loader = new Loader({
-      apiKey: "***REMOVED***",
+      apiKey: "***REMOVED***", // Replace with your actual API key
       version: "weekly",
     });
 
@@ -51,12 +51,18 @@ const EventDetailPage = () => {
   }
 
   return (
-    <div className="event-detail-container">
-      <h1>{event.description}</h1>
-      <img src={event.image || 'defaultImagePath.jpg'} alt="Event Cover" />
-      <p><strong>Charity:</strong> {event.charity_name}</p>
-      <p><strong>Compatible Disabilities:</strong> {event.compatible_disabilities.join(", ")}</p>
-      <div ref={mapRef} style={{ width: '400px', height: '300px' }} />
+    <div className="container event-detail-container">
+      <h1 className="text-center">{event.description}</h1>
+      <div className="row">
+        <div className="col-md-6">
+          <img src={event.image || 'defaultImagePath.jpg'} alt="Event Cover" className="img-fluid rounded" />
+        </div>
+        <div className="col-md-6">
+          <p><strong>Charity:</strong> {event.charity_name}</p>
+          <p><strong>Compatible Disabilities:</strong> {event.compatible_disabilities.join(", ")}</p>
+          <div ref={mapRef} style={{ width: '100%', height: '300px' }} />
+        </div>
+      </div>
     </div>
   );
 };
