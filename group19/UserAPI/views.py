@@ -10,7 +10,8 @@ from .serializers import UserLoginSerializer, UserRegisterSerializer, UserSerial
 from .validators import UsernameValidator, PasswordValidator
 from .serializers import UserLoginSerializer, UserSerializer
 from .validators import *
-
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 class UserLogin(APIView):
     """
@@ -70,6 +71,7 @@ class UserLogout(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     # noinspection PyMethodMayBeStatic
+    @method_decorator(csrf_exempt)
     def post(self, request):
         logout(request)
         return Response(status=status.HTTP_200_OK)
