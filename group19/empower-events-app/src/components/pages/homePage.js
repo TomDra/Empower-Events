@@ -9,13 +9,13 @@ const HomePage = () => {
       </div>
       <div className="row justify-content-center mt-3">
         <a
-          href="/events"
+          href="/events/past"
           className="col-md-4 btn btn-outline-primary m-5 p-5 fs-1"
         >
           Past Events
         </a>
         <a
-          href="/events"
+          href="/events/future"
           className="col-md-4 btn btn-outline-primary m-5 p-5 fs-1 "
         >
           Future Events
