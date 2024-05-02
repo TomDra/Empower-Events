@@ -3,36 +3,38 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const FeedbackForm = ({ match }) => {
-
+  const [eventData, setEventData] = useState({ questions: [] });
+  const [responseData, setResponseData] = useState("");
   const [textFeedback, setTextFeedback] = useState("");
   const [radioOptions, setRadioOptions] = useState([]);
-
   const [permission, setPermission] = useState(false);
   const [stream, setStream] = useState(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioChunks, setAudioChunks] = useState([]);
   const [audio, setAudio] = useState(null);
+  const [base64data, setBase64data] = useState(null);
   const mediaRecorder = useRef(null);
   const { id } = useParams();
 
   useEffect(() => {
-    getData();
+    const fetchData = async () => {
+      try {
+        let response;
+        response = await axios.get("http://localhost:8000/api/feedback/1/activity-feedback-list");
+
+        setResponseData(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, [id]);
 
-  // Get json with questions set by charity about event
-  const getData = async () => {
-    try {
-      const response = await axios.get("/api/feedback/${id}/");
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error getting feedback:", error);
-    }
-  };
-
-
   const handleOptionChange = (questionIndex, optionValue) => {
-    setSelectedOptions((selectedOptions) => ({
-      ...selectedOptions,
+    setRadioOptions((radioOptions) => ({
+      ...radioOptions,
       [questionIndex]: optionValue,
     }));
   };
@@ -43,17 +45,18 @@ const FeedbackForm = ({ match }) => {
       const reader = new FileReader();
       reader.readAsDataURL(audio);
       reader.onloadend = () => {
-        const base64data = reader.result.split(',')[1];
+        base64data = reader.result.split(",")[1];
       };
 
-      await axios.post("/api/feedback", { 
-        id: id,
-        textFeedback: textFeedback,
-        audio: base64data,
-        questionAnswers: selectedOptions,
-
-
-       });
+      await axios.post(
+        "http://http://localhost:8000/api/feedback/1/feedback-submission",
+        {
+          id: id,
+          textFeedback: textFeedback,
+          audio: base64data,
+          questionAnswers: radioOptions,
+        }
+      );
       console.log("Feedback submitted successfully");
     } catch (error) {
       console.error("Error submitting feedback:", error);
@@ -105,9 +108,11 @@ const FeedbackForm = ({ match }) => {
     };
   };
 
+  if (!responseData) return <div>Loading...</div>;
+
   return (
     <div className="Feedback pt-4 container">
-      <h1>Feedback for {response.description}</h1>
+      <h1>Feedback for {responseData.description}</h1>
       <form onSubmit={handleSubmit}>
         {eventData.questions.map((question, index) => (
           <div className="row justify-content-center">
@@ -121,7 +126,7 @@ const FeedbackForm = ({ match }) => {
                   id={`btnradio${index}1`}
                   autoComplete="off"
                   value="positive"
-                  checked={selectedOptions[index] === "positive"}
+                  checked={radioOptions[index] === "positive"}
                   onChange={() => handleOptionChange(index, "positive")}
                 />
                 <label
@@ -136,7 +141,7 @@ const FeedbackForm = ({ match }) => {
                   id={`btnradio${index}2`}
                   autoComplete="off"
                   value="negative"
-                  checked={selectedOptions[index] === "negative"}
+                  checked={radioOptions[index] === "negative"}
                   onChange={() => handleOptionChange(index, "negative")}
                 />
                 <label
