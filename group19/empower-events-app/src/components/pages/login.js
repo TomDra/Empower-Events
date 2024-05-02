@@ -1,49 +1,40 @@
 import React, { useEffect, useState } from "react";
-// Importing necessary modules and components from React and Material-UI
-
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
+import { speak } from "../../utils/CheckSpeech"; // Adjust the path based on your actual file structure
 
-// Setting Axios defaults for CSRF protection and enabling credentials
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.withCredentials = true;
 
-
-// Defining the Login component
 const Login = () => {
-
-  // Initializing state variables using the useState hook
-  const [currentUser, setCurrentUser] = useState(null); // To track the current user
-  const [username, setUsername] = useState(""); // To store the entered username
-  const [password, setPassword] = useState(""); // To store the entered password
+  const [currentUser, setCurrentUser] = useState(null);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  // Handling form submission
+  const handleSpeak = () => {
+    // Reading out the welcome message and input field descriptions
+    speak("Welcome to the login page. Please enter your username and password to sign in.");
+  };
+
   const handleSubmit = async (e) => {
-    
-    // Send a POST request to the server
-    e.preventDefault(); // Preventing default form submission behavior
+    e.preventDefault();
     try {
-      // Sending a POST request to the backend API for login
       const response = await axios.post('http://localhost:8000/api/auth/login/', {
-        username, // Sending username entered by the user
-        password, // Sending password entered by the user
+        username,
+        password,
       });
-      // Log success
-      console.log('Login successful:', response.data); // Logging successful login response
-      setCurrentUser(true); // Setting currentUser to true upon successful login
-      // Redirect to the home page
+      console.log('Login successful:', response.data);
+      setCurrentUser(true);
       navigate("/");
     } catch (error) {
-      // Log failure
-      console.error('Login failed:', error.message); // Logging error message if login fails
+      console.error('Login failed:', error.message);
       alert("Login failed. Please try again.");
     }
   };
 
-  // Rendering the login form
   return (
     <Container maxWidth="xs">
       <Box
@@ -57,8 +48,14 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        <Button
+          onClick={handleSpeak}
+          variant="contained"
+          sx={{ mt: 1, mb: 1 }}
+        >
+          Read Instructions
+        </Button>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          {/* Username input field */}
           <TextField
             margin="normal"
             required
@@ -69,9 +66,8 @@ const Login = () => {
             autoComplete="username"
             autoFocus
             value={username}
-            onChange={(e) => setUsername(e.target.value)} // Handling username input change
+            onChange={(e) => setUsername(e.target.value)}
           />
-          {/* Password input field */}
           <TextField
             margin="normal"
             required
@@ -82,9 +78,8 @@ const Login = () => {
             id="password"
             autoComplete="current-password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)} // Handling password input change
+            onChange={(e) => setPassword(e.target.value)}
           />
-          {/* Submit button */}
           <Button
             type="submit"
             fullWidth
@@ -100,6 +95,4 @@ const Login = () => {
   );
 };
 
-
-// Exporting the Login component as the default export
 export default Login;
