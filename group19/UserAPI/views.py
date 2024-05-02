@@ -5,10 +5,10 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from .business_validators import UsernameBusinessValidator, PasswordBusinessValidator, EmailBusinessValidator
+from .serializers import UserLoginSerializer, UserRegisterSerializer, UserSerializer
+from .validators import UsernameValidator, PasswordValidator
 from .serializers import UserLoginSerializer, UserSerializer
-from .serializers import UserRegisterSerializer
 from .validators import *
 
 

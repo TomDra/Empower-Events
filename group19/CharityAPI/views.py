@@ -1,12 +1,15 @@
+# Importing necessary libraries and modules from Django, rest_framework, validators, and serializers
 from django.contrib.auth import login, logout
-from rest_framework import permissions, status
 from rest_framework.exceptions import APIException
+from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+# Uses serializer and validator from UserAPI for now
+# TODO: Write new specialised serializer and validator for charity logins once the model becomes more set in stone
+from UserAPI.serializers import UserLoginSerializer, CharityLoginSerializer
+from UserAPI.validators import *
 
-from .serializers import CharityLoginSerializer
-from .validators import *
 
 
 class CharityLogin(APIView):
@@ -15,6 +18,7 @@ class CharityLogin(APIView):
     It contains the following methods:
     - post: A method to authenticate a charity and log them in.
     """
+
 
     # Allow any user to login
     permission_classes = [permissions.AllowAny]
@@ -83,6 +87,7 @@ class CharityLogout(APIView):
         :param request: The request object.
         :return: Response object with status 200.
         """
+        
 
         # Log the charity out
         logout(request)

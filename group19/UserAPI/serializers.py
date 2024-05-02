@@ -42,7 +42,8 @@ class UserLoginSerializer(serializers.Serializer):
             'password': cleaned_data['password']
         }
 
-        user = authenticate(**credentials)
+        # Specify the backend here
+        user = authenticate(backend='django.contrib.auth.backends.ModelBackend', **credentials)
 
         if user:
             return user
