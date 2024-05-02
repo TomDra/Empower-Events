@@ -1,4 +1,4 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from rest_framework import permissions, status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -64,3 +64,28 @@ class CharityLogin(APIView):
         else:
             # Return the errors and a response code of 400
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CharityLogout(APIView):
+    """
+    CharityLogout class is a subclass of APIView. It is used to log a charity out.
+    It contains the following methods:
+    - post: A method to log a charity out.
+    """
+
+    # Allow only authenticated users to logout
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        """
+        A method to log out a charity.
+
+        :param request: The request object.
+        :return: Response object with status 200.
+        """
+
+        # Log the charity out
+        logout(request)
+
+        # Return a response code of 200
+        return Response(status=status.HTTP_200_OK)

@@ -46,3 +46,26 @@ class CharityLoginTest(CharityAPITest):
             'password': 'password'
         })
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CharityLogoutTest(CharityAPITest):
+    """
+    Test case for the charity logout endpoint.
+    """
+
+    def test_charity_logout(self):
+        """
+        Test that a charity can log out.
+        """
+
+        # First, log in the charity
+        self.client.login(charity_name='TestCharity', password='password')
+
+        # Then, log out the charity
+        response = self.client.post(reverse('logoutCharity'))
+
+        # Check that the response status code is 200
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Check that the charity is logged out
+        self.assertFalse(response.wsgi_request.user.is_authenticated)

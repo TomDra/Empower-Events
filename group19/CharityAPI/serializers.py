@@ -28,7 +28,6 @@ class CharityLoginSerializer(serializers.Serializer):
 
         :return: Authenticated charity or ValidationError
         """
-
         # Making a dictionary of the credentials
         credentials = {
             'charity_name': cleaned_data['charity_name'],
@@ -36,10 +35,15 @@ class CharityLoginSerializer(serializers.Serializer):
         }
 
         # Using the CharityNameBackend to authenticate the charity
-        backend = load_backend('CharityAPI.backends.CharityNameBackend')
+        backend_path = 'CharityAPI.backends.CharityNameBackend'
+        backend = load_backend(backend_path)
 
         # Authenticating the charity
-        charity = backend.authenticate(request=None, **credentials, backend=backend)
+        charity = backend.authenticate(request=None, **credentials)
+
+        # Set the backend attribute on the charity
+        if charity is not None:
+            charity.backend = backend_path
 
         # If the charity is authenticated and is active, return the charity
         if charity and charity.is_active:

@@ -151,3 +151,8 @@ REST_FRAMEWORK = {
         'user': '1000/hour',  # TODO: Change this to 5/minute in production
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Django's built-in backend
+    'CharityAPI.backends.CharityNameBackend',  # For Charity Portal
+]
