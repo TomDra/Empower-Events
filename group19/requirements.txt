@@ -2,3 +2,8 @@ djangorestframework
 django-cors-headers
 django
 requests
+joblib
+nltk
+textblob
+scikit-learn
+pandas

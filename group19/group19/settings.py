@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'myapi',  # FOR DJANGO-REACT
     'UserAPI.apps.UserapiConfig',  # FOR DRF API
     'EventsAPI.apps.EventsapiConfig',  # FOR DRF API
+    'CharityAPI.apps.CharityapiConfig',  # FOR DRF API
     'WeatherAPI',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -153,7 +154,6 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -164,3 +164,8 @@ REST_FRAMEWORK = {
         'user': '1000/hour',  # TODO: Change this to 5/minute in production
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Django's built-in backend
+    'CharityAPI.backends.CharityNameBackend',  # For Charity Portal
+]
