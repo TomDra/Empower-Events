@@ -1,17 +1,15 @@
 # Importing necessary libraries and modules from Django, rest_framework, validators, and serializers
 from django.contrib.auth import login, logout
-from django.core.exceptions import ValidationError
 from rest_framework import permissions, status
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication
 from .business_validators import UsernameBusinessValidator, PasswordBusinessValidator, EmailBusinessValidator
 from .serializers import UserLoginSerializer, UserRegisterSerializer, UserSerializer
 from .validators import UsernameValidator, PasswordValidator
 from .serializers import UserLoginSerializer, UserSerializer
 from .validators import *
-
 
 
 class UserLogin(APIView):
@@ -76,6 +74,7 @@ class UserLogout(APIView):
         logout(request)
         return Response(status=status.HTTP_200_OK)
 
+
 class UserRegister(APIView):
     """
     UserRegister class is a subclass of APIView. It is used to register a new user.
@@ -131,5 +130,3 @@ class UserView(APIView):
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
-
-
