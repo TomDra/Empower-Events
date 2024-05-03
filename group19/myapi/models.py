@@ -90,6 +90,8 @@ class Calendar(models.Model):
     activity = models.ForeignKey('Activity', on_delete=models.CASCADE)
     time = models.DateTimeField()
     activity_leader = models.ForeignKey(ActivityLeader, on_delete=models.CASCADE)
+    def get_time(self):
+        return self.time
 
 
 class Activity(models.Model):

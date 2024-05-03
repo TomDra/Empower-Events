@@ -58,6 +58,7 @@ const EventDetailPage = () => {
         <div className="text-overlay">
           <h1 className="event-title">{event?.description}</h1>
           <p className="event-description">Join us at this event to make a positive impact and enjoy a great time!</p>
+          <p className="event-time">{event.timeDate}</p>
         </div>
       </div>
 

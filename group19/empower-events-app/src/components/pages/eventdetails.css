@@ -44,6 +44,11 @@ position: absolute;
   font-size: 1.5rem;  /* Increase the font size */
   text-align: left;  /* Ensure text aligns to the left */
 }
+.event-time {
+  margin: 0;
+  font-size: 1.2rem;  /* Increase the font size */
+  text-align: left;  /* Ensure text aligns to the left */
+}
 
 .event-feedback {
   width: 80%;
