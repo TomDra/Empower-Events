@@ -25,9 +25,7 @@ const AppNavbar = () => {
     } catch (error) {
        console.error('Error logging out:', error);
     }
-}
-  
-  
+  }
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
@@ -44,8 +42,14 @@ const AppNavbar = () => {
                 <NavLink className="nav-link" to="#" onClick={onLogout}>Logout</NavLink>
               </>
             ) : (
-              <NavLink className="nav-link" to="/login">Login</NavLink>
+              <>
+                <NavLink className="nav-link" to="/login">Login</NavLink>
+
+              </>
             )}
+          </Nav>
+          <Nav className="ms-auto">
+            <NavLink className="nav-link" to="/charity/login">Charity Portal</NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>
