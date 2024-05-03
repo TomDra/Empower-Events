@@ -30,7 +30,7 @@ const HomePage = () => {
       {/* Event Previews */}
       <div className="px-4">
         <div className="event-previews row mt-4 justify-content-center">
-          <Link to="/events/" className="col-md-4 text-decoration-none">
+          <Link to="/events/past" className="col-md-4 text-decoration-none">
             <div className="card hover-effect">
               <img
                 src="/static/images/random.jpg"
@@ -44,7 +44,7 @@ const HomePage = () => {
             </div>
           </Link>
 
-          <Link to="/events/abc-summit" className="col-md-4 text-decoration-none">
+          <Link to="/events/future" className="col-md-4 text-decoration-none">
             <div className="card hover-effect">
               <img
                 src="/static/images/conference.jpg"

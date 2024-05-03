@@ -6,16 +6,13 @@ import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
 import "./App.css";
-<<<<<<< HEAD
 import EventDetailPage from "./components/pages/eventdetails"; // Import the EventDetailPage component
-=======
 //import { useEffect, useState } from "react";
 // src/App.js
 import React, { useEffect, useState } from 'react';
 //import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import AppNavbar from './components/navbar';
 import { UserProvider } from './contexts/userContext';
->>>>>>> trunk
 
 
 
@@ -31,18 +28,6 @@ const App = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/events/:eventId" element={<EventDetailPage />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/test" element={<HomePage />} />
-        </Routes>
-      </BrowserRouter>
-=======
 
 
   <div className="App">
@@ -54,13 +39,13 @@ const App = () => {
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/test" element={<HomePage />} />
-        <Route path="/events/future" element={<Events />} />
+        <Route path="/events/:eventId" element={<EventDetailPage />} />
         <Route path="/events/past" element={<Events />} />
+        <Route path="/events/future" element={<Events />} />
         {/* Add other routes as needed */}
       </Routes>
     </BrowserRouter>
     </UserProvider>
->>>>>>> trunk
     </div>
 
   );
