@@ -1,4 +1,4 @@
-import React from "react";
+//import React from "react";
 import axios from "axios";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./components/pages/login";
@@ -6,10 +6,10 @@ import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
 import "./App.css";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 // src/App.js
-import React, { useState } from 'react';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+//import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import AppNavbar from './components/navbar';
 import { UserProvider } from './contexts/userContext';
 
