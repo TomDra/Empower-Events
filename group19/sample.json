@@ -40,6 +40,13 @@
 		"birth_date": "1990-05-15T08:00:00Z",
 		"charity": "Charity A",
 		"email": "john_leader@example.com"
+	  },
+	  {
+		"user": "thomas_l",
+		"name": "Thomas Leader",
+		"birth_date": "1990-06-15T08:00:00Z",
+		"charity": "Charity B",
+		"email": "thomas_leader@example.com"
 	  }
 	],
 	"activities": [
@@ -61,13 +68,20 @@
 	  },
 	  {
 		"description": "Music Therapy Session",
-		"latitude": 51.5074,
-		"longitude": -0.1278,
+		"latitude": 51.234271,
+		"longitude": -0.572400,
 		"age_group": "Teens",
 		"compatible_disabilities": ["deaf", "wheelchair user"],
 		"charity": "Charity A"
+	  },
+	  {
+		"description": "Activity Test",
+		"latitude": 42.817669,
+		"longitude": -72.575256,
+		"age_group": "Teens",
+		"compatible_disabilities": ["wheelchair user"],
+		"charity": "Charity B"
 	  }
-	  
 	],
 	"age_groups": [
 	  {
@@ -97,6 +111,11 @@
 		"activity_description": "Art Workshop",
 		"time": "2024-04-20T14:00:00Z",
 		"activity_leader_name": "John Doe"
+	  },
+	  {
+		"activity_description": "Activity Test",
+		"time": "2025-12-20T14:00:00Z",
+		"activity_leader_name": "Thomas Leader"
 	  }
 	],
 	"feedback_entries": [

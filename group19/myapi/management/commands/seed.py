@@ -72,10 +72,8 @@ class Command(BaseCommand):
 		for activity_data in data['activities']:
 			# Get the corresponding age group object
 			age_group = AgeGroup.objects.get(group_title=activity_data['age_group'])
-
 			# Get the corresponding charity object
 			charity = Charity.objects.get(charity_name=activity_data['charity'])
-
 			# Create the activity
 			activity, created = Activity.objects.get_or_create(
 				description=activity_data['description'],
@@ -84,6 +82,7 @@ class Command(BaseCommand):
 				age_group=age_group,
 				charity=charity
 			)
+
 
 			# If the activity was just created, or if you want to update existing entries,
 			# set the compatible_disabilities field.
@@ -99,11 +98,11 @@ class Command(BaseCommand):
 		# Seed Activity Leaders
 		for leader_data in data['activity_leaders']:
 			# Retrieve the user associated with this leader
-			try:
-				user = User.objects.get(username=leader_data['user'])
-			except User.DoesNotExist:
-				print(f"User '{leader_data['user']}' not found. Skipping activity leader creation.")
-				continue
+			# try:
+			# 	user = User.objects.get(username=leader_data['user'])
+			# except User.DoesNotExist:
+			# 	print(f"User '{leader_data['user']}' not found. Skipping activity leader creation.")
+			# 	continue
 
 			# Retrieve the charity associated with this leader using charity_objs
 			charity = charity_objs.get(leader_data['charity'])
@@ -113,15 +112,11 @@ class Command(BaseCommand):
 
 			# Create the activity leader if they don't already exist
 			activity_leader, created = ActivityLeader.objects.get_or_create(
-				user=user,
-				defaults={
-					'name': leader_data['name'],
-					'birth_date': leader_data['birth_date'],
-					'charity': charity,
-					'email': leader_data['email']
-				}
+				name= leader_data['name'],
+				birth_date= leader_data['birth_date'],
+				charity= charity,
+				email= leader_data['email']
 			)
-
 			if created:
 				print(f"Activity Leader '{leader_data['name']}' created.")
 			else:
@@ -136,7 +131,6 @@ class Command(BaseCommand):
 			except Activity.DoesNotExist:
 				print(f"Activity '{event_data['activity_description']}' not found. Skipping calendar event creation.")
 				continue
-
 			# Ensure the ActivityLeader exists
 			try:
 				activity_leader = ActivityLeader.objects.get(
@@ -182,8 +176,6 @@ class Command(BaseCommand):
 					'leader_feedback_text': feedback_data.get('leader_feedback_text'),
 					'activity_feedback_question_answers': json.dumps(feedback_data.get('activity_feedback_question_answers', '')),
 					'leader_feedback_question_answers': json.dumps(feedback_data.get('leader_feedback_question_answers', '')),
-					
-					
 				}
 			)
 

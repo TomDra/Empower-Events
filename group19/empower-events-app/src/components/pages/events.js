@@ -61,7 +61,7 @@ const Events = () => {
                   <h2 className="card-title">{event.description}</h2>
                   <p className="card-text">Age group: {event.age_group}</p>
                   <p className="card-text">Date: {event.date}</p>
-                  <a href={"/events/" + event.event_id} className="btn btn-primary">
+                  <a href={"/events/" + event.activity_id} className="btn btn-primary">
                     View More
                   </a>
                 </div>

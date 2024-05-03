@@ -15,7 +15,7 @@ class ModelTestCase(TestCase):
                                                       password='testpass')
 
         # Create test data for ActivityLeader
-        self.activity_leader = ActivityLeader.objects.create(user=self.user, name='John Doe', birth_date=timezone.now(),
+        self.activity_leader = ActivityLeader.objects.create(name='John Doe', birth_date=timezone.now(),
                                                              charity=self.charity, email='john@example.com')
 
         # Create test data for AgeGroup

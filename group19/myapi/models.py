@@ -16,7 +16,7 @@ class User(AbstractUser):
 
 
 class ActivityLeader(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    activity_leader_id = models.AutoField(primary_key=True, )
     name = models.CharField(max_length=30)
     birth_date = models.DateTimeField()
     charity = models.ForeignKey('Charity', on_delete=models.CASCADE)
@@ -99,6 +99,7 @@ class Calendar(models.Model):
     activity = models.ForeignKey('Activity', on_delete=models.CASCADE)
     time = models.DateTimeField()
     activity_leader = models.ForeignKey(ActivityLeader, on_delete=models.CASCADE)
+
     def get_time(self):
         return self.time
 
