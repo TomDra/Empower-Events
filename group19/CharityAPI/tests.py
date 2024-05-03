@@ -44,7 +44,7 @@ class CharityLoginTest(CharityAPITest):
         """
         response = self.post_request('loginCharity', {
             'charity_name': 'TestCharity',
-
+        }
 # Getting the User model from Django
 User = get_user_model()
 
