@@ -24,15 +24,18 @@ SECRET_KEY = 'django-insecure-o=+w-^#hx$y)zf=_s*#(t4xdl6^739wf8jun2=y#pcsf4mz9-2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost"]
 
 # Application definition
 
 INSTALLED_APPS = [
     'rest_framework',  # FOR DJANGO-REACT
     'corsheaders',  # FOR DJANGO-REACT
-    'myapi',  # FOR DJANGO-REACT (maybe remove)
-    'UserAPI.apps.UserapiConfig',  # FOR DJANGO-REACT
+    'myapi',  # FOR DJANGO-REACT
+    'UserAPI.apps.UserapiConfig',  # FOR DRF API
+    'EventsAPI.apps.EventsapiConfig',  # FOR DRF API
+    'CharityAPI.apps.CharityapiConfig',  # FOR DRF API
+    'WeatherAPI',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -122,9 +125,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # In your settings.py
 AUTH_USER_MODEL = 'myapi.User'
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -136,10 +139,23 @@ EMAIL_HOST_PASSWORD = 'OsaWifjs_Sdfs-sd'
 # FOR DJANGO-REACT
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',  # Or other domains allowed to make requests
 ]
-
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+# Ensure all necessary headers are allowed
+CORS_ALLOW_HEADERS = [
+    'Content-Type',
+    'X-CSRFToken',
+    # other headers as needed...
+]
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',] 
+# FOR DRF API   
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -147,6 +163,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
     ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '1000/hour',  # TODO: Change this to 5/minute in production
+    }
 }
 
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Django's built-in backend
+    'CharityAPI.backends.CharityNameBackend',  # For Charity Portal
+]

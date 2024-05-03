@@ -90,6 +90,8 @@ class Calendar(models.Model):
     activity = models.ForeignKey('Activity', on_delete=models.CASCADE)
     time = models.DateTimeField()
     activity_leader = models.ForeignKey(ActivityLeader, on_delete=models.CASCADE)
+    def get_time(self):
+        return self.time
 
 
 class Activity(models.Model):
@@ -105,7 +107,9 @@ class Activity(models.Model):
         self.compatible_disabilities = json.dumps(data)
 
     def get_compatible_disabilities(self):
-        return json.loads(self.compatible_disabilities) if self.compatible_disabilities else None
+        return json.loads(self.compatible_disabilities) if self.compatible_disabilities else {}
+
+
 
 
 class AgeGroup(models.Model):

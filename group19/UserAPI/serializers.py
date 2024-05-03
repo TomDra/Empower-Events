@@ -42,12 +42,15 @@ class UserLoginSerializer(serializers.Serializer):
             'password': cleaned_data['password']
         }
 
-        user = authenticate(**credentials)
+        # Specify the backend here
+        user = authenticate(backend='django.contrib.auth.backends.ModelBackend', **credentials)
 
         if user:
             return user
         else:
             raise serializers.ValidationError('Incorrect username or password.')
+
+
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -80,3 +83,4 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**credentials)
         user.save()
         return user
+
