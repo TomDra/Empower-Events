@@ -38,3 +38,25 @@
     transform: rotate(360deg);
   }
 }
+.event-detail-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.event-detail-container h1 {
+  color: #333;
+}
+
+.event-detail-container p {
+  color: #666;
+}
+
+.event-detail-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}

@@ -6,6 +6,7 @@ import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
 import "./App.css";
+import EventDetailPage from "./components/pages/eventdetails"; // Import the EventDetailPage component
 //import { useEffect, useState } from "react";
 // src/App.js
 import React, { useEffect, useState } from 'react';
@@ -38,8 +39,9 @@ const App = () => {
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="/test" element={<HomePage />} />
-        <Route path="/events/future" element={<Events />} />
+        <Route path="/events/:eventId" element={<EventDetailPage />} />
         <Route path="/events/past" element={<Events />} />
+        <Route path="/events/future" element={<Events />} />
         {/* Add other routes as needed */}
       </Routes>
     </BrowserRouter>
