@@ -7,26 +7,46 @@ import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
 import "./App.css";
 import { useEffect, useState } from "react";
+// src/App.js
+import React, { useState } from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import AppNavbar from './components/navbar';
+import { UserProvider } from './contexts/userContext';
 
-const client = axios.create({
-  baseURL: "http://localhost:8000",
-});
 
-function App() {
+
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/test" element={<HomePage />} />
-          <Route path="/events/future" element={<Events />} />
-          <Route path="/events/past" element={<Events />} />
-        </Routes>
-      </BrowserRouter>
+
+
+  <div className="App">
+    <UserProvider>
+    <BrowserRouter>
+      <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/register" element={<SignUp />} />
+        <Route path="/test" element={<HomePage />} />
+        <Route path="/events/future" element={<Events />} />
+        <Route path="/events/past" element={<Events />} />
+        {/* Add other routes as needed */}
+      </Routes>
+    </BrowserRouter>
+    </UserProvider>
     </div>
+
   );
-}
+};
 
 export default App;
