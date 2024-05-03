@@ -1,0 +1,3 @@
+*.pyc
+group19/db.sqlite3
+.idea/

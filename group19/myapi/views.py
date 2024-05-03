@@ -7,4 +7,4 @@ from rest_framework.response import Response
 def hello_world(request):
     return Response({'message': 'Hello,  happy world! (Django)'})
 
-# Create your views here.
+
