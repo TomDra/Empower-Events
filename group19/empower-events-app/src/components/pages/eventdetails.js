@@ -15,17 +15,17 @@ const EventDetailPage = () => {
       .then((data) => {
         console.log("Fetched event data:", data);
         setEvent(data);
-        loadMap(data);
+        loadMap(data.activity); // Updated to pass activity data to loadMap
       })
       .catch(error => console.error('Error fetching event details:', error));
   }, [eventId]);
 
-  const loadMap = (eventData) => {
-    const lat = parseFloat(eventData?.latitude);
-    const lng = parseFloat(eventData?.longitude);
+  const loadMap = (activityData) => { // Updated to receive activityData
+    const lat = parseFloat(activityData.latitude);
+    const lng = parseFloat(activityData.longitude);
 
     if (isNaN(lat) || isNaN(lng)) {
-      console.error("Invalid coordinates:", eventData?.latitude, eventData?.longitude);
+      console.error("Invalid coordinates:", activityData.latitude, activityData.longitude);
       return;
     }
 
@@ -54,9 +54,9 @@ const EventDetailPage = () => {
   return (
     <div className="event-detail-page">
       <div className="photo-container">
-        <img src={event?.image || '/static/images/mic.jpg'} alt="Event Cover" className="event-image" />
+        <img src={event.activity.image || '/static/images/mic.jpg'} alt="Event Cover" className="event-image" />
         <div className="text-overlay">
-          <h1 className="event-title">{event?.description}</h1>
+          <h1 className="event-title">{event.activity.description}</h1> {/* Updated to access activity description */}
           <p className="event-description">Join us at this event to make a positive impact and enjoy a great time!</p>
           <p className="event-time">{event.timeDate}</p>
         </div>
@@ -64,15 +64,15 @@ const EventDetailPage = () => {
 
       <div className="event-info-containers">
         <div className="event-info-card">
-          <p><strong>Charity:</strong> {event?.charity_name}</p>
+          <p><strong>Charity:</strong> {event.charity.name}</p> {/* Updated to access charity name */}
         </div>
 
         <div className="event-info-card">
-          <p><strong>Compatible Disabilities:</strong> {event?.compatible_disabilities.join(", ")}</p>
+          <p><strong>Compatible Disabilities:</strong> {event.activity.compatible_disabilities.join(", ")}</p> {/* Updated to access activity compatible disabilities */}
         </div>
 
         <div className="event-info-card">
-          <p><strong>Age Group:</strong> {event?.age_group.title} ({event?.age_group.lower} - {event?.age_group.higher} years old)</p>
+          <p><strong>Age Group:</strong> {event.activity.age_group.title} ({event.activity.age_group.lower} - {event.activity.age_group.higher} years old)</p> {/* Updated to access activity age group */}
         </div>
       </div>
 
@@ -80,14 +80,6 @@ const EventDetailPage = () => {
 
       <div ref={mapRef} className="map" />
 
-      <div className="event-feedback">
-        <p><strong>Feedback:</strong></p>
-        <ul>
-          {event?.feedback.map((feedback, index) => (
-            <li key={index}>{feedback}</li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 };
