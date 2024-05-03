@@ -33,8 +33,7 @@ class Command(BaseCommand):
 					user.set_disabilities(user_data['disabilities'])
 				user.save()
 			else:
-				print(f"User with username '{
-				      username}' already exists. Skipping creation.")
+				print(f"User with username '{username}' already exists. Skipping creation.")
 
 		# Seed Charities
 # Seed Charities
@@ -103,15 +102,13 @@ class Command(BaseCommand):
 			try:
 				user = User.objects.get(username=leader_data['user'])
 			except User.DoesNotExist:
-				print(f"User '{leader_data['user']
-					}' not found. Skipping activity leader creation.")
+				print(f"User '{leader_data['user']}' not found. Skipping activity leader creation.")
 				continue
 
 			# Retrieve the charity associated with this leader using charity_objs
 			charity = charity_objs.get(leader_data['charity'])
 			if charity is None:
-				print(f"Charity '{leader_data['charity']
-						}' not found. Skipping activity leader creation.")
+				print(f"Charity '{leader_data['charity']}' not found. Skipping activity leader creation.")
 				continue
 
 			# Create the activity leader if they don't already exist
@@ -128,8 +125,7 @@ class Command(BaseCommand):
 			if created:
 				print(f"Activity Leader '{leader_data['name']}' created.")
 			else:
-				print(f"Activity Leader '{
-				      leader_data['name']}' already exists. Skipping creation.")
+				print(f"Activity Leader '{leader_data['name']}' already exists. Skipping creation.")
 
 		# Seed Calendar Events
 		for event_data in data['calendar_events']:
@@ -138,8 +134,7 @@ class Command(BaseCommand):
 				activity = Activity.objects.get(
 					description=event_data['activity_description'])
 			except Activity.DoesNotExist:
-				print(f"Activity '{event_data['activity_description']
-						}' not found. Skipping calendar event creation.")
+				print(f"Activity '{event_data['activity_description']}' not found. Skipping calendar event creation.")
 				continue
 
 			# Ensure the ActivityLeader exists
@@ -159,8 +154,7 @@ class Command(BaseCommand):
 			)
 
 			if created:
-				print(f"Calendar event for '{
-				      activity.description}' at {event.time} created.")
+				print(f"Calendar event for '{activity.description}' at {event.time} created.")
 
 		# Seed Feedback
 		for feedback_data in data.get('feedback_entries', []):
@@ -168,8 +162,7 @@ class Command(BaseCommand):
 			try:
 				user = User.objects.get(username=feedback_data['user'])
 			except User.DoesNotExist:
-				print(f"User '{feedback_data['user']
-					}' not found. Skipping feedback entry.")
+				print(f"User '{feedback_data['user']}' not found. Skipping feedback entry.")
 				continue
 
 			# Find the calendar event by description (this assumes you have a way to uniquely identify events by description)
@@ -177,8 +170,7 @@ class Command(BaseCommand):
 				calendar_event = Calendar.objects.get(
 					activity__description=feedback_data['calendar_event_description'])
 			except Calendar.DoesNotExist:
-				print(f"Calendar event '{
-				      feedback_data['calendar_event_description']}' not found. Skipping feedback entry.")
+				print(f"Calendar event '{feedback_data['calendar_event_description']}' not found. Skipping feedback entry.")
 				continue
 
 			# Create or update the feedback entry
@@ -195,10 +187,8 @@ class Command(BaseCommand):
 			)
 
 			if created:
-				print(f"Feedback for '{calendar_event.activity.description}' by '{
-				      user.username}' created.")
+				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' created.")
 			else:
-				print(f"Feedback for '{calendar_event.activity.description}' by '{
-				      user.username}' updated.")
+				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' updated.")
 
 		self.stdout.write(self.style.SUCCESS('Database seeded successfully'))

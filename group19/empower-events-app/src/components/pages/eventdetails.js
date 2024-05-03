@@ -10,7 +10,7 @@ const EventDetailPage = () => {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/events/${eventId}/`)
+    fetch(`http://localhost:8000/api/events/detail/${eventId}/`)
       .then(response => response.json())
       .then((data) => {
         console.log("Fetched event data:", data);

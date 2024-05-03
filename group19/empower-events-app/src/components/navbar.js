@@ -40,7 +40,7 @@ const AppNavbar = () => {
             <NavLink className="nav-link" to="/contact-us">Contact Us</NavLink>
             {isLoggedIn ? (
               <>
-                <NavLink className="nav-link" to="/feedback">Give Feedback</NavLink>
+                <NavLink className="nav-link" to="/events/past">Give Feedback</NavLink>
                 <NavLink className="nav-link" to="#" onClick={onLogout}>Logout</NavLink>
               </>
             ) : (
