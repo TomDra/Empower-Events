@@ -16,7 +16,8 @@ class User(AbstractUser):
 
 
 class ActivityLeader(models.Model):
-    activity_leader_id = models.AutoField(primary_key=True, )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    # activity_leader_id = models.AutoField(primary_key=True, )
     name = models.CharField(max_length=30)
     birth_date = models.DateTimeField()
     charity = models.ForeignKey('Charity', on_delete=models.CASCADE)

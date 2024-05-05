@@ -301,3 +301,25 @@ class FeedbackSubmission(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # TODO: Return question answers lists in specific endpoints.
+
+class FeedbackQuestions(APIView):
+    """
+    FeedbackQuestions class is a subclass of APIView. It allows users to view feedback questions for an activity.
+
+    It contains the following methods:
+    - get (GET): A method that returns feedback questions for an activity.
+    """
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, activity_id):
+        """
+        A method that returns feedback questions for an activity.
+
+        :param request: The request object.
+        :param activity_id: The id of the activity.
+        """
+
+        # Get the activity id from the URL
+        activity_id = self.kwargs['activity_id']
+        questions = Feedback.objects.get(calendar_event__activity_id=activity_id).feedback_questions

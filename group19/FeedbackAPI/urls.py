@@ -10,4 +10,6 @@ urlpatterns = [
          name='leader_feedback_list'),
     path('<int:activity_id>/feedback-submission', views.FeedbackSubmission.as_view(),
          name='feedback_submission'),
+    path('<int:activity_id>/feedback-questions', views.FeedbackSubmission.as_view(),
+         name='feedback_questions'),
 ]
