@@ -114,70 +114,162 @@ class CalendarSerializer(serializers.ModelSerializer):
         return representation
 
 
-class EventSerializer(serializers.Serializer):
+class ActivityLeaderSerializer(serializers.ModelSerializer):
     """
-    EventSerializer class is a subclass of Serializer that serializes the data for creating a new event.
+    ActivityLeaderSerializer class is a subclass of ModelSerializer that serializes the ActivityLeader model.
 
     It contains the following fields:
-    - description: A CharField that represents the description of the event.
-    - latitude: A DecimalField that represents the latitude of the location of the event.
-    - longitude: A DecimalField that represents the longitude of the location of the event.
-    - age_range_lower: An IntegerField that represents the lower bound of the age range of the event.
-    - age_range_higher: An IntegerField that represents the upper bound of the age range of the event.
-    - group_title: A CharField that represents the title of the age group of the event.
-    - compatible_disabilities: A JSONField that represents the compatible disabilities of the event.
-    - time: A DateTimeField that represents the time of the event.
-
-    It contains the following methods:
-    - create: A method that creates a new event.
+    - name: A CharField that represents the name of the activity leader.
+    - charity: The CharitySerializer that represents the charity of the activity leader.
+    - email: An EmailField that represents the email of the activity leader.
+    - user: A PrimaryKeyRelatedField that represents the user of the activity leader.
     """
 
-    # Defining the fields
-    description = serializers.CharField(max_length=500)
-    latitude = serializers.DecimalField(max_digits=8, decimal_places=6)
-    longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
-    age_range_lower = serializers.IntegerField()
-    age_range_higher = serializers.IntegerField()
-    group_title = serializers.CharField(max_length=20)
-    compatible_disabilities = serializers.JSONField()
-    time = serializers.DateTimeField(validators=[validate_future_date])
+    charity = CharitySerializer(read_only=True)
+
+    class Meta:
+        model = ActivityLeader
+        fields = ['name', 'charity', 'email', 'user']
+
+
+class AgeGroupSerializerAddEvent(serializers.ModelSerializer):
+    """
+    AgeGroupSerializerAddEvent class is a subclass of ModelSerializer that serializes the AgeGroup model.
+
+    It contains the following fields:
+    - age_range_lower: An IntegerField that represents the lower bound of the age range.
+    - age_range_higher: An IntegerField that represents the upper bound of the age range.
+    - group_title: A CharField that represents the title of the age group.
+
+    It contains the following methods:
+    - create: A method that creates an age group.
+    """
+
+    class Meta:
+        model = AgeGroup
+        fields = ['age_range_lower', 'age_range_higher', 'group_title']
 
     def create(self, validated_data):
         """
-        A method that creates a new event.
+        A method that creates an age group.
 
-        :param validated_data: The validated data for creating the new event.
+        :param validated_data: The validated data.
 
-        :return: The new event.
+        :return: The created age group.
         """
 
-        # Get and validate data for AgeGroup
-        age_range_lower = validated_data.pop('age_range_lower')
-        age_range_higher = validated_data.pop('age_range_higher')
-        group_title = validated_data.pop('group_title')
+        # Create the age group
+        age_group = AgeGroup.objects.create(age_range_lower=validated_data['age_range_lower'],
+                                            age_range_higher=validated_data['age_range_higher'],
+                                            group_title=validated_data['group_title'])
+        return age_group
 
-        # Create and save the new AgeGroup
-        age_group = AgeGroup.objects.create(age_range_lower=age_range_lower, age_range_higher=age_range_higher,
-                                            group_title=group_title)
-        age_group.save()
 
-        # Get the activity leader from the request
-        activity_leader = ActivityLeader.objects.get(
-            user=self.context['request'].user)
+class ActivitySerializerAddEvent(serializers.ModelSerializer):
+    """
+    ActivitySerializerAddEvent class is a subclass of ModelSerializer that serializes the Activity model.
 
-        # Extract and validate data for Calendar
-        time = validated_data.pop('time')
+    It contains the following fields:
+    - description: A CharField that represents the description of the activity.
+    - latitude: A DecimalField that represents the latitude of the location of the activity.
+    - longitude: A DecimalField that represents the longitude of the location of the activity.
+    - age_group: The AgeGroupSerializerAddEvent that represents the age group of the activity.
+    - compatible_disabilities: A ListField that represents the compatible disabilities of the activity.
 
-        # Create and save the new Activity
-        activity = Activity(age_group=age_group, charity=activity_leader.charity)
-        activity.set_compatible_disabilities(validated_data.pop('compatible_disabilities'))
-        activity.description = validated_data.pop('description')
-        activity.latitude = validated_data.pop('latitude')
-        activity.longitude = validated_data.pop('longitude')
-        activity.save()
+    It contains the following methods:
+    - create: A method that creates an activity.
+    """
 
-        # Create and save the new Calendar event
-        event = Calendar.objects.create(activity=activity, time=time, activity_leader=activity_leader)
-        event.save()
+    age_group = AgeGroupSerializerAddEvent()
+    compatible_disabilities = serializers.ListField(child=serializers.CharField())
 
-        return event
+    class Meta:
+        model = Activity
+        fields = ['description', 'latitude', 'longitude', 'age_group', 'compatible_disabilities']
+
+    def create(self, validated_data):
+        """
+        A method that creates an activity.
+
+        :param validated_data: The validated data.
+
+        :return: The created activity.
+        """
+
+        # Create the age group using the age group serializer
+        age_group_data = validated_data.pop('age_group')
+        age_group_serializer = AgeGroupSerializerAddEvent(data=age_group_data)
+
+        # Validate the age group serializer
+        if age_group_serializer.is_valid():
+            age_group = age_group_serializer.save()
+        else:
+            raise serializers.ValidationError(age_group_serializer.errors)
+
+        # Create the activity
+        description = validated_data.get('description')
+        latitude = validated_data.get('latitude')
+        longitude = validated_data.get('longitude')
+        compatible_disabilities = json.dumps(validated_data.get('compatible_disabilities'))
+
+        activity = Activity.objects.create(
+            description=description,
+            latitude=latitude,
+            longitude=longitude,
+            age_group=age_group,
+            charity=self.context['request'].user,
+            compatible_disabilities=compatible_disabilities
+        )
+        return activity
+
+
+class CalendarSerializerAddEvent(serializers.ModelSerializer):
+    """
+    CalendarSerializerAddEvent class is a subclass of ModelSerializer that serializes the Calendar model.
+
+    It contains the following fields:
+    - activity: The ActivitySerializerAddEvent that represents the activity of the calendar event.
+    - time: A DateTimeField that represents the time of the calendar event.
+    - activity_leader: An IntegerField that represents the ID of the activity leader.
+
+    It contains the following methods:
+    - create: A method that creates a calendar event.
+    """
+
+    activity = ActivitySerializerAddEvent()
+    time = serializers.DateTimeField(validators=[validate_future_date])
+
+    class Meta:
+        model = Calendar
+        fields = ['activity', 'time', 'activity_leader']
+
+    def create(self, validated_data):
+        """
+        A method that creates a calendar event.
+
+        :param validated_data: The validated data.
+
+        :return: The created calendar event.
+        """
+
+        # Create the activity using the activity serializer
+        activity_data = validated_data.pop('activity')
+        activity_serializer = ActivitySerializerAddEvent(data=activity_data, context=self.context)
+
+        # Validate the activity serializer
+        if activity_serializer.is_valid():
+            activity = activity_serializer.save()
+        else:
+            raise serializers.ValidationError(activity_serializer.errors)
+
+        # Create the calendar event
+        time = validated_data.get('time')
+        activity_leader_id = validated_data.get('activity_leader')
+        activity_leader = ActivityLeader.objects.get(user_id=activity_leader_id)
+
+        calendar = Calendar.objects.create(
+            activity=activity,
+            time=time,
+            activity_leader=activity_leader
+        )
+        return calendar

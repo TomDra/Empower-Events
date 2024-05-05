@@ -4,11 +4,11 @@ The views module for the EventsAPI app
 from django.utils import timezone
 from rest_framework import permissions, generics, pagination, status
 
-from EventsAPI.serializers import CalendarSerializer, EventSerializer
-from myapi.models import Calendar
+from EventsAPI.serializers import CalendarSerializer, CalendarSerializerAddEvent, ActivityLeaderSerializer
+from myapi.models import Calendar, ActivityLeader, Charity
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .permissions import IsActivityLeader
+from .permissions import IsCharity
 
 
 class UpcomingEventsList(generics.ListAPIView):
@@ -60,28 +60,47 @@ class PastEventsList(generics.ListAPIView):
 class AddEvent(APIView):
     """
     AddEvent class is a subclass of APIView. It is used to add an event.
-    It contains the following methods:
-    - post: A method to add an event.
-    """
+    TODO: remove serializer.data from post method
 
-    # Setting the permission classes.
-    permission_classes = [permissions.IsAuthenticated, IsActivityLeader]
+    It contains the following methods:
+    - get (get): A method to get the list of all activity leaders and their user id's for the subsequent post request.
+    - post (post): A method to add an event.
+    """
+    permission_classes = [permissions.IsAuthenticated, IsCharity]
+
+    def get(self, request):
+        """
+        A method to get the list of all activity leaders and their user id's for the subsequent post request.
+
+        :param request: The request object.
+
+        :return: A response containing the list of all activity leaders and their user id's.
+        """
+        charity = Charity.objects.get(charity_name=request.user.charity_name)
+        activity_leaders = ActivityLeader.objects.filter(charity=charity)
+        serializer = ActivityLeaderSerializer(activity_leaders, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
         """
         A method to add an event.
 
         :param request: The request object.
-        :return: Response object with status 201 if the event is added, else 400/500.
+
+        :return: A response containing the added event or the errors if the data is invalid.
         """
 
-        # Passing the request data to the EventSerializer.
-        serializer = EventSerializer(data=request.data, context={'request': request})
+        # Create a new event
+        serializer = CalendarSerializerAddEvent(data=request.data, context={'request': request})
 
-        # If the serializer is valid, save the event and return a response with status 201.
+        # Check if the data is valid
         if serializer.is_valid():
-            event = serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
-        # If the serializer is not valid, return a response with status 400.
+            # Save the event
+            serializer.save()
+
+            # Return the added event
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        # Return the errors
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

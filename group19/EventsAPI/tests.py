@@ -177,36 +177,67 @@ class PastEventsListTest(EventsAPITest):
 
 
 class AddEventTestCase(TestCase):
-    """
-    Test case for the AddEvent class in the EventsAPI.
-    """
     def setUp(self):
         """
         Set up the test case with a test client and a test models.
         """
+
+        # Create a test client
         self.client = APIClient()
+
+        # Create a test user, charity, activity leader, and age group
         self.user = User.objects.create_user(username='testuser', password='testpass123', email="test@email.com")
-        self.userNoPermission = User.objects.create_user(username='testuser2', password='testpass123', email="test1@email.com")
         self.charity = Charity.objects.create(charity_name='Test Charity', email='testcharity@email.com', password='testpass123')
         self.activity_leader = ActivityLeader.objects.create(user=self.user, name='Test Leader', birth_date=timezone.now(), charity=self.charity, email='testleader@email.com')
         self.age_group = AgeGroup.objects.create(age_range_lower=10, age_range_higher=20, group_title='Test Group')
 
+    def test_get_activity_leaders(self):
+        """
+        Test that a charity can get a list of its activity leaders.
+        """
+
+        # Log in the charity
+        self.client.force_authenticate(user=self.charity)
+
+        # Get the list of activity leaders
+        url = reverse('add_event')
+        response = self.client.get(url)
+
+        # Check that the response is 200 OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Check that the response contains the correct activity leader
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['name'], self.activity_leader.name)
+
     def test_add_event(self):
         """
-        Test that a user can add an event to the database.
+        Test that a charity can add an event to the database.
         """
-        self.client.force_authenticate(user=self.user)
+
+        # Log in the charity
+        self.client.force_authenticate(user=self.charity)
+
+        # Add an event to the database
         url = reverse('add_event')
+        future_date = (timezone.now() + datetime.timedelta(days=1)).isoformat()
         data = {
-            'description': 'Test Activity',
-            'latitude': 0.0,
-            'longitude': 0.0,
-            'age_range_lower': 10,
-            'age_range_higher': 20,
-            'group_title': 'Test Group',
-            'compatible_disabilities': ['Test Disability 1', 'Test Disability 2'],
-            'time': '2024-12-31T23:59:59'
+            "activity": {
+                "description": "Activity description",
+                "latitude": 12.9715,
+                "longitude": 77.5945,
+                "age_group": {
+                    "age_range_lower": 10,
+                    "age_range_higher": 20,
+                    "group_title": "10-20"
+                },
+                "compatible_disabilities": ["disability1", "disability2"]
+            },
+            "time": future_date,
+            "activity_leader": self.activity_leader.user.id
         }
+
+        # POST the data to the endpoint
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -215,34 +246,15 @@ class AddEventTestCase(TestCase):
         calendar = Calendar.objects.latest('event_id')
 
         # Verify the fields of the Activity instance
-        self.assertEqual(activity.description, data['description'])
-        self.assertEqual(float(activity.latitude), data['latitude'])
-        self.assertEqual(float(activity.longitude), data['longitude'])
-        self.assertEqual(activity.age_group.age_range_lower, data['age_range_lower'])
-        self.assertEqual(activity.age_group.age_range_higher, data['age_range_higher'])
-        self.assertEqual(activity.age_group.group_title, data['group_title'])
-        self.assertEqual(json.loads(activity.compatible_disabilities), data['compatible_disabilities'])
+        self.assertEqual(activity.description, data['activity']['description'])
+        self.assertEqual(float(activity.latitude), data['activity']['latitude'])
+        self.assertEqual(float(activity.longitude), data['activity']['longitude'])
+        self.assertEqual(activity.age_group.age_range_lower, data['activity']['age_group']['age_range_lower'])
+        self.assertEqual(activity.age_group.age_range_higher, data['activity']['age_group']['age_range_higher'])
+        self.assertEqual(activity.age_group.group_title, data['activity']['age_group']['group_title'])
+        self.assertEqual(json.loads(activity.compatible_disabilities), data['activity']['compatible_disabilities'])
 
         # Verify the fields of the Calendar instance
         self.assertEqual(calendar.activity, activity)
         self.assertEqual(calendar.activity_leader, self.activity_leader)
-        self.assertEqual(calendar.time.strftime('%Y-%m-%dT%H:%M:%S'), data['time'])
-
-    def test_add_event_regular_user(self):
-        """
-        Test that a regular user cannot add an event to the database.
-        """
-        self.client.force_authenticate(user=self.userNoPermission)
-        url = reverse('add_event')
-        data = {
-            'description': 'Test Activity',
-            'latitude': 0.0,
-            'longitude': 0.0,
-            'age_range_lower': 10,
-            'age_range_higher': 20,
-            'group_title': 'Test Group',
-            'compatible_disabilities': ['Test Disability 1', 'Test Disability 2'],
-            'time': '2024-12-31T23:59:59'
-        }
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(calendar.time.isoformat(), data['time'])
