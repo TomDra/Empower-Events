@@ -12,6 +12,7 @@ import EventDetailPage from "./components/pages/eventdetails"; // Import the Eve
 import React, { useEffect, useState } from 'react';
 //import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import AppNavbar from './components/navbar';
+import Footer from "./components/footer";
 import { UserProvider } from './contexts/userContext';
 
 
@@ -34,6 +35,7 @@ const App = () => {
     <UserProvider>
     <BrowserRouter>
       <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <div className="content-wrapper">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
@@ -44,6 +46,8 @@ const App = () => {
         <Route path="/events/future" element={<Events />} />
         {/* Add other routes as needed */}
       </Routes>
+      </div>
+      <Footer />
     </BrowserRouter>
     </UserProvider>
     </div>
