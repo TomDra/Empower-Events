@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.16.6"
+    "@googlemaps/js-api-loader": "^1.16.6",
+    "react-toastify": "^10.0.5"
   }
 }
