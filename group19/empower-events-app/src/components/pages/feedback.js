@@ -17,11 +17,11 @@ const FeedbackForm = ({ match }) => {
   const { id } = useParams();
 
   useEffect(() => {
+    console.log("id", id);
     const fetchData = async () => {
       try {
         let response;
-        response = await axios.get("http://localhost:8000/api/feedback/1/activity-feedback-list");
-
+        response = await axios.get(`http://localhost:8000/api/feedback/${id}/activity-feedback-list`);
         setResponseData(response.data);
         console.log(response.data);
       } catch (error) {
@@ -49,7 +49,7 @@ const FeedbackForm = ({ match }) => {
       };
 
       await axios.post(
-        "http://http://localhost:8000/api/feedback/1/feedback-submission",
+        `http://http://localhost:8000/api/feedback/${id}/feedback-submission`,
         {
           id: id,
           textFeedback: textFeedback,

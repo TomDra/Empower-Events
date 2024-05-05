@@ -5,12 +5,11 @@ import Login from "./components/pages/login";
 import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
+import Feedback from "./components/pages/feedback";
 import "./App.css";
-import EventDetailPage from "./components/pages/eventdetails"; // Import the EventDetailPage component
-//import { useEffect, useState } from "react";
+import EventDetailPage from "./components/pages/eventdetails";
 // src/App.js
 import React, { useEffect, useState } from 'react';
-//import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import AppNavbar from './components/navbar';
 import { UserProvider } from './contexts/userContext';
 
@@ -38,6 +37,7 @@ const App = () => {
         <Route path="/register" element={<SignUp />} />
         <Route path="/test" element={<HomePage />} />
         <Route path="/events/:eventId" element={<EventDetailPage />} />
+        <Route path="/feedback/:id" element={<Feedback />} />
         <Route path="/events/past" element={<Events />} />
         <Route path="/events/future" element={<Events />} />
         {/* Add other routes as needed */}
