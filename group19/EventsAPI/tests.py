@@ -38,9 +38,9 @@ class EventsAPITest(TestCase):
         self.age_group2 = AgeGroup.objects.create(age_range_lower=20, age_range_higher=30, group_title='Test Group 2')
 
         # Create activity leaders
-        self.activity_leader1 = ActivityLeader.objects.create(user=self.user1, name='Test Leader 1',
+        self.activity_leader1 = ActivityLeader.objects.create(name='Test Leader 1',
                                                               birth_date=timezone.now(), charity=self.charity1)
-        self.activity_leader2 = ActivityLeader.objects.create(user=self.user2, name='Test Leader 2',
+        self.activity_leader2 = ActivityLeader.objects.create(name='Test Leader 2',
                                                               birth_date=timezone.now(), charity=self.charity2)
 
         # Create activities
