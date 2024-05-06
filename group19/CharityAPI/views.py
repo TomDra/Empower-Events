@@ -1,5 +1,6 @@
 # Importing necessary libraries and modules from Django, rest_framework, validators, and serializers
 from django.contrib.auth import login, logout
+from django.core.exceptions import ValidationError
 from rest_framework.exceptions import APIException
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -7,8 +8,9 @@ from rest_framework.views import APIView
 
 # Uses serializer and validator from UserAPI for now
 # TODO: Write new specialised serializer and validator for charity logins once the model becomes more set in stone
-from UserAPI.serializers import UserLoginSerializer#, CharityLoginSerializer
+from CharityAPI.serializers import CharityLoginSerializer
 from UserAPI.validators import *
+from CharityAPI.validators import CharityNameValidator
 
 
 
@@ -39,8 +41,8 @@ class CharityLogin(APIView):
                 raise ValidationError('Charity name and password are required.')
 
             # Validate the charity name and password fields
-            CharityNameValidator.validate(data['charity_name'])
-            PasswordValidator.validate(data['password'])
+            #CharityNameValidator.validate(data['charity_name'])
+            #PasswordValidator.validate(data['password'])
 
         except ValidationError as e:
             # Return the error message and a response code of 400
@@ -53,21 +55,21 @@ class CharityLogin(APIView):
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # Create a serializer instance
-        # serializer = CharityLoginSerializer(data=data)
+        serializer = CharityLoginSerializer(data=data)
 
-        # # Check if the serializer is valid
-        # if serializer.is_valid():
-        #     # Authenticate the charity
-        #     charity = serializer.auth_charity(serializer.validated_data)
+        # Check if the serializer is valid
+        if serializer.is_valid():
+            # Authenticate the charity
+            charity = serializer.auth_charity(serializer.validated_data)
 
-        #     # Log the charity in
-        #     login(request, charity)
+            # Log the charity in
+            login(request, charity)
 
-        #     # Return a response code of 200
-        #     return Response(serializer.data, status=status.HTTP_200_OK)
-        # else:
-        #     # Return the errors and a response code of 400
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Return a response code of 200
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            # Return the errors and a response code of 400
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CharityLogout(APIView):

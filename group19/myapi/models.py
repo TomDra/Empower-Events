@@ -16,8 +16,7 @@ class User(AbstractUser):
 
 
 class ActivityLeader(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    # activity_leader_id = models.AutoField(primary_key=True, )
+    activity_leader_id = models.AutoField(primary_key=True, )
     name = models.CharField(max_length=30)
     birth_date = models.DateTimeField()
     charity = models.ForeignKey('Charity', on_delete=models.CASCADE)
@@ -79,7 +78,7 @@ class Feedback(models.Model):
     leader_feedback_text = models.CharField(max_length=500, blank=True, null=True)
     leader_feedback_audio = models.BinaryField(blank=True, null=True)
     leader_feedback_question_answers = models.TextField(blank=True, null=True)  # Store JSON as a string
-    
+
     feedback_questions = models.TextField(blank=True, null=True)  # New field to store JSON as a string
 
     def set_feedback_question_answers(self, data):
@@ -119,8 +118,6 @@ class Activity(models.Model):
 
     def get_compatible_disabilities(self):
         return json.loads(self.compatible_disabilities) if self.compatible_disabilities else {}
-
-
 
 
 class AgeGroup(models.Model):
