@@ -1,6 +1,7 @@
 """
 Views module for the FeedbackAPI app.
 """
+import json
 import os
 
 import joblib
@@ -305,6 +306,7 @@ class FeedbackSubmission(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # TODO: Return question answers lists in specific endpoints.
 
 class FeedbackQuestions(APIView):
@@ -315,6 +317,7 @@ class FeedbackQuestions(APIView):
     - get (GET): A method that returns feedback questions for an activity.
     """
 
+    # Permission classes and serializer class
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = FeedbackQuestionsSerializer
 
@@ -324,8 +327,28 @@ class FeedbackQuestions(APIView):
 
         :param request: The request object.
         :param activity_id: The id of the activity.
+
+        :return: A list of feedback questions for an activity.
         """
 
         # Get the activity id from the URL
         activity_id = self.kwargs['activity_id']
-        questions = Feedback.objects.get(calendar_event__activity_id=activity_id).feedback_questions
+
+        # Get the feedback questions from the cache
+        cache_key = f'feedback_questions_{activity_id}'
+        questions = cache.get(cache_key)
+
+        # If the cache does not exist, get the feedback questions from the database
+        if questions is None:
+            feedbacks = Feedback.objects.filter(calendar_event__activity_id=activity_id)
+
+            if not feedbacks.exists():
+                return Response({"detail": "Feedback not found."}, status=status.HTTP_404_NOT_FOUND)
+
+            questions = [json.loads(feedback.get_feedback_questions()) for feedback in feedbacks]
+
+            # Cache the feedback questions for 1 hour
+            cache.set(cache_key, questions, timeout=3600)
+
+        # Return the feedback questions
+        return Response(questions, status=status.HTTP_200_OK)

@@ -87,8 +87,8 @@ class FeedbackSubmissionSerializer(serializers.ModelSerializer):
                   'leader_feedback_text', 'leader_feedback_audio']
         read_only_fields = ['feedback_id']
 
-class FeedbackQuestionsSerializer(serializers.ModelSerializer):
 
+class FeedbackQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = ['feedback_questions']
