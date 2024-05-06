@@ -76,11 +76,13 @@ class Command(BaseCommand):
 			charity = Charity.objects.get(charity_name=activity_data['charity'])
 			# Create the activity
 			activity, created = Activity.objects.get_or_create(
+				title = activity_data['title'],
 				description=activity_data['description'],
 				latitude=activity_data['latitude'],
 				longitude=activity_data['longitude'],
 				age_group=age_group,
-				charity=charity
+				charity=charity,
+				photo_file_path = activity_data['photo_file_path'],
 			)
 
 
@@ -93,7 +95,7 @@ class Command(BaseCommand):
 
 			# If the activity was just created, print a message
 			if created:
-				print(f"Activity '{activity.description}' created.")
+				print(f"Activity '{activity.title}' created.")
 
 		# Seed Activity Leaders
 		for leader_data in data['activity_leaders']:
@@ -127,9 +129,9 @@ class Command(BaseCommand):
 			# Ensure the Activity exists
 			try:
 				activity = Activity.objects.get(
-					description=event_data['activity_description'])
+					title=event_data['activity_title'])
 			except Activity.DoesNotExist:
-				print(f"Activity '{event_data['activity_description']}' not found. Skipping calendar event creation.")
+				print(f"Activity '{event_data['activity_title']}' not found. Skipping calendar event creation.")
 				continue
 			# Ensure the ActivityLeader exists
 			try:
@@ -148,7 +150,7 @@ class Command(BaseCommand):
 			)
 
 			if created:
-				print(f"Calendar event for '{activity.description}' at {event.time} created.")
+				print(f"Calendar event for '{activity.title}' at {event.time} created.")
 
 		# Seed Feedback
 		for feedback_data in data.get('feedback_entries', []):
@@ -162,9 +164,9 @@ class Command(BaseCommand):
 			# Find the calendar event by description (this assumes you have a way to uniquely identify events by description)
 			try:
 				calendar_event = Calendar.objects.get(
-					activity__description=feedback_data['calendar_event_description'])
+					activity__title=feedback_data['calendar_event_title'])
 			except Calendar.DoesNotExist:
-				print(f"Calendar event '{feedback_data['calendar_event_description']}' not found. Skipping feedback entry.")
+				print(f"Calendar event '{feedback_data['calendar_event_title']}' not found. Skipping feedback entry.")
 				continue
 
 			# Create or update the feedback entry
@@ -187,8 +189,8 @@ class Command(BaseCommand):
 
 
 			if created:
-				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' created.")
+				print(f"Feedback for '{calendar_event.activity.title}' by '{user.username}' created.")
 			else:
-				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' updated.")
+				print(f"Feedback for '{calendar_event.activity.title}' by '{user.username}' updated.")
 
 		self.stdout.write(self.style.SUCCESS('Database seeded successfully'))

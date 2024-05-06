@@ -48,8 +48,8 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = ['description', 'latitude', 'longitude', 'compatible_disabilities', 'charity', 'age_group',
-                  'activity_id']
+        fields = ['title', 'description', 'latitude', 'longitude', 'compatible_disabilities', 'charity', 'age_group',
+                  'activity_id', 'photo_file_path']
 
     def to_representation(self, instance):
         """

@@ -51,36 +51,44 @@
 	],
 	"activities": [
 	  {
-		"description": "Outdoor Sports Event",
+		"title": "Outdoor Sports Event",
+		"description": "Join us for our Outdoor Sports Event, bring wellies!",
 		"latitude": 40.7128,
 		"longitude": -74.0060,
 		"age_group": "Kids",
 		"compatible_disabilities": ["deaf"],
-		"charity": "Charity A"
+		"charity": "Charity A",
+		"photo_file_path":"activity_images/activity2.jpg"
 	  },
 	  {
-		"description": "Art Workshop",
+		"title": "Art Workshop",
+		"description": "Join us for our Outdoor Sports Event, bring wellies!",
 		"latitude": 34.0522,
 		"longitude": -118.2437,
 		"age_group": "Teens",
 		"compatible_disabilities": ["blind"],
-		"charity": "Charity B"
+		"charity": "Charity B",
+		"photo_file_path":"activity_images/activity1.jpg"
 	  },
 	  {
-		"description": "Music Therapy Session",
+		"title": "Music Therapy Session",
+		"description": "Join us for our Outdoor Sports Event, bring wellies!",
 		"latitude": 51.234271,
 		"longitude": -0.572400,
 		"age_group": "Teens",
 		"compatible_disabilities": ["deaf", "wheelchair user"],
-		"charity": "Charity A"
+		"charity": "Charity A",
+		"photo_file_path":"activity_images/defalt.jpg"
 	  },
 	  {
-		"description": "Activity Test",
+		"title": "Activity Test",
+		"description": "TESTING Join us for our Outdoor Sports Event, bring wellies!",
 		"latitude": 42.817669,
 		"longitude": -72.575256,
 		"age_group": "Teens",
 		"compatible_disabilities": ["wheelchair user"],
-		"charity": "Charity B"
+		"charity": "Charity B",
+		"photo_file_path":"activity_images/defalt.jpg"
 	  }
 	],
 	"age_groups": [
@@ -103,17 +111,17 @@
 	],
 	"calendar_events": [
 	  {
-		"activity_description": "Outdoor Sports Event",
+		"activity_title": "Outdoor Sports Event",
 		"time": "2024-04-15T10:00:00Z",
 		"activity_leader_name": "John Doe"
 	  },
 	  {
-		"activity_description": "Art Workshop",
+		"activity_title": "Art Workshop",
 		"time": "2024-04-20T14:00:00Z",
 		"activity_leader_name": "John Doe"
 	  },
 	  {
-		"activity_description": "Activity Test",
+		"activity_title": "Activity Test",
 		"time": "2025-12-20T14:00:00Z",
 		"activity_leader_name": "Thomas Leader"
 	  }
@@ -121,13 +129,13 @@
 	"feedback_entries": [
 	  {
 		"user": "john_doe",
-		"calendar_event_description": "Outdoor Sports Event",
+		"calendar_event_title": "Outdoor Sports Event",
 		"activity_feedback_text": "Great event, very well organized!",
 		"leader_feedback_text": "The leader was very knowledgeable and engaging."
 	  },
 	  {
 		"user": "jane_smith",
-		"calendar_event_description": "Art Workshop",
+		"calendar_event_title": "Art Workshop",
 		"activity_feedback_text": "Loved the creativity involved.",
 		"leader_feedback_text": "Inspirational leader, made the session fun."
 	  }

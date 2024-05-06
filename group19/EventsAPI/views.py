@@ -93,6 +93,7 @@ def calander_details(self, event_id):
     data = {
         'activity':{
             'activity_id': activity.pk,
+            'title':activity.title,
             'description': activity.description,
             'latitude': activity.latitude,
             'longitude': activity.longitude,
@@ -102,7 +103,9 @@ def calander_details(self, event_id):
                 'lower': activity.age_group.age_range_lower,
                 'higher': activity.age_group.age_range_higher,
                 'title': activity.age_group.group_title,
-            }
+            },
+            'photo_file_path': activity.photo_file_path
+            
         },
         'timeDate': time_readable,
         'event_leader':{

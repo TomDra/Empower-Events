@@ -106,12 +106,14 @@ class Calendar(models.Model):
 
 class Activity(models.Model):
     activity_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=200)
     description = models.CharField(max_length=500)
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     age_group = models.ForeignKey('AgeGroup', on_delete=models.CASCADE)
     compatible_disabilities = models.TextField(blank=True, null=True)  # Store JSON as a string
     charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
+    photo_file_path = models.CharField(max_length=300, default='activity_photos/defalt.jpg')
 
     def set_compatible_disabilities(self, data):
         self.compatible_disabilities = json.dumps(data)
