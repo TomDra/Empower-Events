@@ -16,7 +16,7 @@ from collections import Counter
 
 from .permissions import IsCharityOrActivityLeader
 from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer, \
-    FeedbackSubmissionSerializer
+    FeedbackSubmissionSerializer, FeedbackQuestionsSerializer
 from myapi.models import Feedback
 from textblob.download_corpora import download_all
 from .validators import validate_feedback_text
@@ -311,6 +311,7 @@ class FeedbackQuestions(APIView):
     """
 
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = FeedbackQuestionsSerializer
 
     def get(self, request, activity_id):
         """
