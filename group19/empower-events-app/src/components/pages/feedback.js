@@ -21,7 +21,7 @@ const FeedbackForm = ({ match }) => {
     const fetchData = async () => {
       try {
         let response;
-        response = await axios.get(`http://localhost:8000/api/feedback/${id}/activity-feedback-list`);
+        response = await axios.get(`http://localhost:8000/api/feedback/${id}/feedback-questions-list`);
         setResponseData(response.data);
         console.log(response.data);
       } catch (error) {
