@@ -129,7 +129,7 @@ class ActivityLeaderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ActivityLeader
-        fields = ['name', 'charity', 'email', 'user']
+        fields = ['name', 'charity', 'email']
 
 
 class AgeGroupSerializerAddEvent(serializers.ModelSerializer):
