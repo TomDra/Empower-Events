@@ -71,124 +71,129 @@ class FeedbackOverview(APIView):
             if cache_feedback is None:
                 feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id)
                 cache.set(f'feedback_{activity_id}', feedback, timeout=3600)
+            else:
+                feedback = cache_feedback
 
-            feedback = cache_feedback
-
-            # Calculate average user and leader sentiment and subjectivity
-            user_sentiments = [TextBlob(f.activity_feedback_text).sentiment.polarity for f in
-                               feedback if f.activity_feedback_text]
-            leader_sentiments = [TextBlob(f.leader_feedback_text).sentiment.polarity for f in
-                                 feedback if f.leader_feedback_text]
-            user_subjectivities = [TextBlob(f.activity_feedback_text).sentiment.subjectivity for f in
+            # Check if feedback is not None
+            if feedback is not None:
+                # Calculate average user and leader sentiment and subjectivity
+                user_sentiments = [TextBlob(f.activity_feedback_text).sentiment.polarity for f in
                                    feedback if f.activity_feedback_text]
-            leader_subjectivities = [TextBlob(f.leader_feedback_text).sentiment.subjectivity for f in
+                leader_sentiments = [TextBlob(f.leader_feedback_text).sentiment.polarity for f in
                                      feedback if f.leader_feedback_text]
+                user_subjectivities = [TextBlob(f.activity_feedback_text).sentiment.subjectivity for f in
+                                       feedback if f.activity_feedback_text]
+                leader_subjectivities = [TextBlob(f.leader_feedback_text).sentiment.subjectivity for f in
+                                         feedback if f.leader_feedback_text]
 
-            # Calculate the average sentiment and subjectivity
-            average_user_sentiment = sum(user_sentiments) / len(user_sentiments) if user_sentiments else None
-            average_leader_sentiment = sum(leader_sentiments) / len(leader_sentiments) if leader_sentiments else None
-            average_user_subjectivity = sum(user_subjectivities) / len(
-                user_subjectivities) if user_subjectivities else None
-            average_leader_subjectivity = sum(leader_subjectivities) / len(leader_subjectivities) \
-                if leader_subjectivities else None
+                # Calculate the average sentiment and subjectivity
+                average_user_sentiment = sum(user_sentiments) / len(user_sentiments) if user_sentiments else None
+                average_leader_sentiment = sum(leader_sentiments) / len(
+                    leader_sentiments) if leader_sentiments else None
+                average_user_subjectivity = sum(user_subjectivities) / len(
+                    user_subjectivities) if user_subjectivities else None
+                average_leader_subjectivity = sum(leader_subjectivities) / len(
+                    leader_subjectivities) if leader_subjectivities else None
 
-            # Analyse adjectives used in feedback, (JJ, JJR, JJS are adjective tags)
-            user_adjectives = [word for f in feedback if f.activity_feedback_text for word, tag in
-                               TextBlob(f.activity_feedback_text).tags if
-                               tag in ('JJ', 'JJR', 'JJS')]
-            leader_adjectives = [word for f in feedback if f.leader_feedback_text for word, tag in
-                                 TextBlob(f.leader_feedback_text).tags if
-                                 tag in ('JJ', 'JJR', 'JJS')]
+                # Analyse adjectives used in feedback, (JJ, JJR, JJS are adjective tags)
+                user_adjectives = [word for f in feedback if f.activity_feedback_text for word, tag in
+                                   nltk.pos_tag(nltk.word_tokenize(f.activity_feedback_text)) if
+                                   tag in ['JJ', 'JJR', 'JJS']]
+                leader_adjectives = [word for f in feedback if f.leader_feedback_text for word, tag in
+                                     nltk.pos_tag(nltk.word_tokenize(f.leader_feedback_text)) if
+                                     tag in ['JJ', 'JJR', 'JJS']]
 
-            # Define stop words
-            stop_words = set(stopwords.words('english'))
+                # Define stop words
+                stop_words = set(stopwords.words('english'))
 
-            # Calculate word and phrase frequency. Removing stop words.
-            n = 10  # Limit the number of words/phrases to 10
-            user_word_freq = Counter(word for f in feedback if f.activity_feedback_text
-                                     for word in TextBlob(f.activity_feedback_text).words
-                                     if word.lower() not in stop_words).most_common(n)
-            leader_word_freq = Counter(word for f in feedback if f.leader_feedback_text
-                                       for word in TextBlob(f.leader_feedback_text).words
-                                       if word.lower() not in stop_words).most_common(n)
-            user_phrase_freq = Counter(phrase for f in feedback if f.activity_feedback_text for phrase in
-                                       TextBlob(f.activity_feedback_text).noun_phrases).most_common(n)
-            leader_phrase_freq = Counter(phrase for f in feedback if f.leader_feedback_text for phrase in
-                                         TextBlob(f.leader_feedback_text).noun_phrases).most_common(n)
+                stop_words.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}'])
 
-            # Define the absolute path to the files for the classifier and vectorizer
-            classifier_path = os.path.join(settings.BASE_DIR, 'FeedbackAPI', 'FeedbackClassifier',
-                                           'feedback_classifier.pkl')
-            vectorizer_path = os.path.join(settings.BASE_DIR, 'FeedbackAPI', 'FeedbackClassifier',
-                                           'feedback_vectorizer.pkl')
+                # Calculate word and phrase frequency. Removing stop words.
+                n = 10  # Limit the number of words/phrases to 10
+                user_word_freq = Counter(word for f in feedback if f.activity_feedback_text
+                                         for word in nltk.word_tokenize(f.activity_feedback_text) if
+                                         word not in stop_words).most_common(n)
+                leader_word_freq = Counter(word for f in feedback if f.leader_feedback_text
+                                           for word in nltk.word_tokenize(f.leader_feedback_text) if
+                                           word not in stop_words).most_common(n)
+                user_phrase_freq = Counter(phrase for f in feedback if f.activity_feedback_text for phrase in
+                                           TextBlob(f.activity_feedback_text).noun_phrases).most_common(n)
+                leader_phrase_freq = Counter(phrase for f in feedback if f.leader_feedback_text for phrase in
+                                             TextBlob(f.leader_feedback_text).noun_phrases).most_common(n)
 
-            # Load the files
-            clf = joblib.load(classifier_path)
-            vectorizer = joblib.load(vectorizer_path)
+                # Define the absolute path to the files for the classifier and vectorizer
+                classifier_path = os.path.join(settings.BASE_DIR, 'FeedbackAPI', 'FeedbackClassifier',
+                                               'feedback_classifier.pkl')
+                vectorizer_path = os.path.join(settings.BASE_DIR, 'FeedbackAPI', 'FeedbackClassifier',
+                                               'feedback_vectorizer.pkl')
 
-            # Classify the feedback
-            feedback_classification = []
-            for f in feedback:
-                # Check if the feedback is not empty
-                if f.activity_feedback_text:
-                    # Transform the feedback into a vector
-                    X = vectorizer.transform([f.activity_feedback_text])
+                # Load the files
+                clf = joblib.load(classifier_path)
+                vectorizer = joblib.load(vectorizer_path)
 
-                    # Predict the classification
-                    classification = clf.predict(X)[0]
+                # Classify the feedback
+                feedback_classification = []
+                for f in feedback:
+                    # Check if the feedback is not empty
+                    if f.activity_feedback_text:
+                        # Transform the feedback into a vector
+                        X = vectorizer.transform([f.activity_feedback_text])
 
-                    # Append the feedback and classification to the list
-                    feedback_classification.append((f, classification, 'activity_feedback_text'))
+                        # Predict the classification
+                        classification = clf.predict(X)[0]
 
-                # Check if the feedback is not empty
-                if f.leader_feedback_text:
-                    # Transform the feedback into a vector
-                    X = vectorizer.transform([f.leader_feedback_text])
+                        # Append the feedback and classification to the list
+                        feedback_classification.append((f, classification, 'activity_feedback_text'))
 
-                    # Predict the classification
-                    classification = clf.predict(X)[0]
+                    # Check if the feedback is not empty
+                    if f.leader_feedback_text:
+                        # Transform the feedback into a vector
+                        X = vectorizer.transform([f.leader_feedback_text])
 
-                    # Append the feedback and classification to the list
-                    feedback_classification.append((f, classification, 'leader_feedback_text'))
+                        # Predict the classification
+                        classification = clf.predict(X)[0]
 
-            # Sort the feedback by classification
-            feedback_classification.sort(key=lambda x: x[1], reverse=True)
+                        # Append the feedback and classification to the list
+                        feedback_classification.append((f, classification, 'leader_feedback_text'))
 
-            # Get the top 5 possible improvements and accomplishments, that are not 'Neither' e.g. useless feedback
-            possible_improvements = [f[0].activity_feedback_text if f[2] == 'activity_feedback_text' else f[
-                0].leader_feedback_text for f in feedback_classification if
-                                     f[1] == 'Improvements' and f[1] != 'Neither'][:5]
-            possible_accomplishments = [f[0].activity_feedback_text if f[2] == 'activity_feedback_text' else f[
-                0].leader_feedback_text for f in feedback_classification if
-                                        f[1] == 'Accomplishments' and f[1] != 'Neither'][:5]
+                # Sort the feedback by classification
+                feedback_classification.sort(key=lambda x: x[1], reverse=True)
 
-            # Create a dictionary with the analysed data
-            data = {
-                'average_user_sentiment': average_user_sentiment,
-                'average_leader_sentiment': average_leader_sentiment,
-                'average_user_subjectivity': average_user_subjectivity,
-                'average_leader_subjectivity': average_leader_subjectivity,
-                'possible_improvements': possible_improvements,
-                'possible_accomplishments': possible_accomplishments,
-                'user_adjectives': user_adjectives,
-                'leader_adjectives': leader_adjectives,
-                'user_word_freq': dict(user_word_freq),
-                'leader_word_freq': dict(leader_word_freq),
-                'user_phrase_freq': dict(user_phrase_freq),
-                'leader_phrase_freq': dict(leader_phrase_freq)
-            }
+                # Get the top 5 possible improvements and accomplishments, that are not 'Neither' e.g. useless feedback
+                possible_improvements = [f[0].activity_feedback_text if f[2] == 'activity_feedback_text' else f[
+                    0].leader_feedback_text for f in feedback_classification if
+                                         f[1] == 'Improvements' and f[1] != 'Neither'][:5]
+                possible_accomplishments = [f[0].activity_feedback_text if f[2] == 'activity_feedback_text' else f[
+                    0].leader_feedback_text for f in feedback_classification if
+                                            f[1] == 'Accomplishments' and f[1] != 'Neither'][:5]
 
-            # Cache the data for 1 hour
-            cache.set(f'feedback_overview_{activity_id}', data, timeout=3600)
+                # Create a dictionary with the analysed data
+                data = {
+                    'average_user_sentiment': average_user_sentiment,
+                    'average_leader_sentiment': average_leader_sentiment,
+                    'average_user_subjectivity': average_user_subjectivity,
+                    'average_leader_subjectivity': average_leader_subjectivity,
+                    'possible_improvements': possible_improvements,
+                    'possible_accomplishments': possible_accomplishments,
+                    'user_adjectives': user_adjectives,
+                    'leader_adjectives': leader_adjectives,
+                    'user_word_freq': user_word_freq,
+                    'leader_word_freq': leader_word_freq,
+                    'user_phrase_freq': user_phrase_freq,
+                    'leader_phrase_freq': leader_phrase_freq
+                }
 
-            # Set the cache data
-            cache_data = data
+                # Cache the data for 1 hour
+                cache.set(f'feedback_overview_{activity_id}', data, timeout=3600)
 
-        # Serialise the data
-        serializer = FeedbackOverviewSerializer(cache_data)
+                # Set the cache data
+                cache_data = data
 
-        # Return the data
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            # Serialise the data
+            serializer = FeedbackOverviewSerializer(cache_data)
+
+            # Return the data
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ActivityFeedbackList(generics.ListAPIView):
@@ -257,7 +262,7 @@ class LeaderFeedbackList(generics.ListAPIView):
 
         # If the cache does not exist, get the feedback from the database
         if cache_feedback is None:
-            feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('feedback_id')
+            feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('-feedback_id')
             cache.set(f'feedback_{activity_id}', feedback, timeout=3600)
         else:
             # If the cache exists, use the cached data
