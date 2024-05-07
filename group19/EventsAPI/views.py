@@ -48,7 +48,7 @@ class PastEventsList(generics.ListAPIView):
     """
     # Setting the serializer, permission classes, and pagination class.
     serializer_class = CalendarSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = []#permissions.IsAuthenticated]
     pagination_class = pagination.PageNumberPagination
 
     def get_queryset(self):
@@ -69,7 +69,7 @@ class PreviousEventsList(generics.ListAPIView):
     """
     # Setting the serializer, permission classes, and pagination class.
     serializer_class = CalendarSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = []#permissions.IsAuthenticated]
     pagination_class = pagination.PageNumberPagination
 
     def get_queryset(self):
@@ -84,6 +84,28 @@ class PreviousEventsList(generics.ListAPIView):
 
 
 class AddEvent(APIView):
+    """
+    EXAMPLE QUERY:
+{
+  "activity": {
+    "title": "title test",
+    "description": "event desc",
+    "latitude": 2,
+    "longitude": 1,
+    "age_group": {
+      "age_range_lower": 5,
+      "age_range_higher": 10,
+      "group_title": "Kids"
+    },
+    "compatible_disabilities": [
+      "wheelchair user"
+    ],
+    "photo_file_path": "activity2.jpg"
+  },
+  "time": "2024-09-15T10:00:00Z",
+  "activity_leader_id": 22
+}
+    """
     """
     AddEvent class is a subclass of APIView. It is used to add an event.
     TODO: remove serializer.data from post method

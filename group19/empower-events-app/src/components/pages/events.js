@@ -47,7 +47,7 @@ const Events = () => {
               <div className="col-md-2 d-flex justify-content-center align-items-center">
                 <div className="ratio ratio-1x1">
                   {/* Ensure event.photo_file_path is constructed properly */}
-                  <img src={`http://localhost:8000/media/${event.photo_file_path}`} alt="Event photo" style={{ height: "100%" }} />
+                  <img src={`http://localhost:8000/media/activity_images/${event.photo_file_path}`} alt="Event photo" style={{ height: "100%" }} />
                 </div>
               </div>
               <div className="col-md-8">

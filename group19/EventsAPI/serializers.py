@@ -184,7 +184,7 @@ class ActivitySerializerAddEvent(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = ['description', 'latitude', 'longitude', 'age_group', 'compatible_disabilities']
+        fields = ['title', 'description', 'latitude', 'longitude', 'age_group', 'compatible_disabilities', 'photo_file_path']
 
     def create(self, validated_data):
         """
@@ -206,18 +206,22 @@ class ActivitySerializerAddEvent(serializers.ModelSerializer):
             raise serializers.ValidationError(age_group_serializer.errors)
 
         # Create the activity
+        title = validated_data.get('title')
         description = validated_data.get('description')
         latitude = validated_data.get('latitude')
         longitude = validated_data.get('longitude')
         compatible_disabilities = json.dumps(validated_data.get('compatible_disabilities'))
+        photo_file_path = validated_data.get('photo_file_path')
 
         activity = Activity.objects.create(
+            title = title,
             description=description,
             latitude=latitude,
             longitude=longitude,
             age_group=age_group,
             charity=self.context['request'].user,
-            compatible_disabilities=compatible_disabilities
+            compatible_disabilities=compatible_disabilities,
+            photo_file_path = validated_data.get('photo_file_path')
         )
         return activity
 

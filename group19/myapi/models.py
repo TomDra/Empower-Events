@@ -113,7 +113,7 @@ class Activity(models.Model):
     age_group = models.ForeignKey('AgeGroup', on_delete=models.CASCADE)
     compatible_disabilities = models.TextField(blank=True, null=True)  # Store JSON as a string
     charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
-    photo_file_path = models.CharField(max_length=300, default='activity_photos/defalt.jpg')
+    photo_file_path = models.CharField(max_length=300, default='defalt.jpg')
 
     def set_compatible_disabilities(self, data):
         self.compatible_disabilities = json.dumps(data)

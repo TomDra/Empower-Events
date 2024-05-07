@@ -65,7 +65,7 @@
 		"age_group": "Kids",
 		"compatible_disabilities": ["deaf"],
 		"charity": "Charity A",
-		"photo_file_path":"activity_images/activity2.jpg"
+		"photo_file_path":"activity2.jpg"
 	  },
 	  {
 		"title": "Art Workshop",
@@ -75,7 +75,7 @@
 		"age_group": "Teens",
 		"compatible_disabilities": ["blind"],
 		"charity": "Charity B",
-		"photo_file_path":"activity_images/activity1.jpg"
+		"photo_file_path":"activity1.jpg"
 	  },
 	  {
 		"title": "Music Therapy Session",
@@ -85,7 +85,7 @@
 		"age_group": "Teens",
 		"compatible_disabilities": ["deaf", "wheelchair user"],
 		"charity": "Charity A",
-		"photo_file_path":"activity_images/defalt.jpg"
+		"photo_file_path":"defalt.jpg"
 	  },
 	  {
 		"title": "Activity Test",
@@ -95,7 +95,7 @@
 		"age_group": "Teens",
 		"compatible_disabilities": ["wheelchair user"],
 		"charity": "Charity B",
-		"photo_file_path":"activity_images/defalt.jpg"
+		"photo_file_path":"defalt.jpg"
 	  }
 	],
 	"age_groups": [
