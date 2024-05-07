@@ -186,9 +186,10 @@ class AddEventTestCase(TestCase):
         self.client = APIClient()
 
         # Create a test user, charity, activity leader, and age group
-        self.user = User.objects.create_user(username='testuser', password='testpass123', email="test@email.com")
-        self.charity = Charity.objects.create(charity_name='Test Charity', email='testcharity@email.com', password='testpass123')
-        self.activity_leader = ActivityLeader.objects.create(user=self.user, name='Test Leader', birth_date=timezone.now(), charity=self.charity, email='testleader@email.com')
+        self.charity = Charity.objects.create(charity_name='Test Charity', email='testcharity@email.com',
+                                              password='testpass123')
+        self.activity_leader = ActivityLeader.objects.create(name='Test Leader', birth_date=timezone.now(),
+                                                             charity=self.charity, email='testleader@email.com')
         self.age_group = AgeGroup.objects.create(age_range_lower=10, age_range_higher=20, group_title='Test Group')
 
     def test_get_activity_leaders(self):
@@ -202,6 +203,8 @@ class AddEventTestCase(TestCase):
         # Get the list of activity leaders
         url = reverse('add_event')
         response = self.client.get(url)
+
+        print(response.data)
 
         # Check that the response is 200 OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -234,7 +237,7 @@ class AddEventTestCase(TestCase):
                 "compatible_disabilities": ["disability1", "disability2"]
             },
             "time": future_date,
-            "activity_leader": self.activity_leader.user.id
+            "activity_leader_id": self.activity_leader.activity_leader_id
         }
 
         # POST the data to the endpoint

@@ -122,14 +122,13 @@ class ActivityLeaderSerializer(serializers.ModelSerializer):
     - name: A CharField that represents the name of the activity leader.
     - charity: The CharitySerializer that represents the charity of the activity leader.
     - email: An EmailField that represents the email of the activity leader.
-    - user: A PrimaryKeyRelatedField that represents the user of the activity leader.
     """
 
     charity = CharitySerializer(read_only=True)
 
     class Meta:
         model = ActivityLeader
-        fields = ['name', 'charity', 'email']
+        fields = ['activity_leader_id', 'name', 'charity', 'email']
 
 
 class AgeGroupSerializerAddEvent(serializers.ModelSerializer):
@@ -238,10 +237,11 @@ class CalendarSerializerAddEvent(serializers.ModelSerializer):
 
     activity = ActivitySerializerAddEvent()
     time = serializers.DateTimeField(validators=[validate_future_date])
+    activity_leader_id = serializers.IntegerField()
 
     class Meta:
         model = Calendar
-        fields = ['activity', 'time', 'activity_leader']
+        fields = ['activity', 'time', 'activity_leader_id']
 
     def create(self, validated_data):
         """
@@ -264,8 +264,10 @@ class CalendarSerializerAddEvent(serializers.ModelSerializer):
 
         # Create the calendar event
         time = validated_data.get('time')
-        activity_leader_id = validated_data.get('activity_leader')
-        activity_leader = ActivityLeader.objects.get(user_id=activity_leader_id)
+        activity_leader_id = validated_data.get('activity_leader_id')
+
+        # Get the activity leader
+        activity_leader = ActivityLeader.objects.get(activity_leader_id=activity_leader_id)
 
         calendar = Calendar.objects.create(
             activity=activity,
