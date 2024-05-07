@@ -19,6 +19,7 @@ const FeedbackForm = ({ match }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrftoken=')).split('=')[1];
         const response = await axios.get(
           `http://localhost:8000/api/feedback/${id}/feedback-questions-list`
         );
@@ -41,17 +42,25 @@ const FeedbackForm = ({ match }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+        const csrfToken = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("csrftoken="))
+          .split("=")[1];
     try {
       await axios.post(
-        `http://localhost:8000/api/feedback/${id}/feedback-submission`,
-        {
-          id: id,
+        `http://localhost:8000/api/feedback/${id}/feedback-submission`, 
+       {
+          activity_id: id,
           activityFeedback: activityFeedback,
           leaderFeedback: leaderFeedback,
           audio: base64data,
           questionAnswers: radioOptions,
-        }
-      );
+       },
+       {
+          headers: {
+            'X-CSRFToken': csrfToken,
+          },
+       });
       console.log("Feedback submitted successfully");
     } catch (error) {
       console.error("Error submitting feedback:", error);

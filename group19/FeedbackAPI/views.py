@@ -18,9 +18,10 @@ from collections import Counter
 from .permissions import IsCharityOrActivityLeader
 from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer, \
     FeedbackSubmissionSerializer, FeedbackQuestionsSerializer
-from myapi.models import Feedback
+from myapi.models import Feedback, Calendar
 from textblob.download_corpora import download_all
 from .validators import validate_feedback_text
+from rest_framework.authentication import SessionAuthentication
 
 # Download the stopwords
 nltk.download('stopwords')
@@ -294,10 +295,15 @@ class FeedbackSubmission(APIView):
         data = request.data
         data['user'] = request.user.id
         data['activity_id'] = activity_id
+        data['activityFeedback'] = request.data.get('activityFeedback')
+        data['leaderFeedback'] = request.data.get('leaderFeedback')
+        data['audio'] = request.data.get('audio')
+        data['questionAnswers'] = request.data.get('questionAnswers')
+        data['calendar_event'] = Calendar.objects.get(activity_id=activity_id).event_id
 
         # Validate the feedback text
-        validate_feedback_text(data.get('activity_feedback_text'))
-        validate_feedback_text(data.get('leader_feedback_text'))
+        validate_feedback_text(data.get('activityFeedback'))
+        validate_feedback_text(data.get('leaderFeedback'))
 
         # Create a serializer with the data
         serializer = FeedbackSubmissionSerializer(data=data)
