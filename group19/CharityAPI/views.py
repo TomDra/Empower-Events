@@ -7,8 +7,9 @@ from rest_framework.views import APIView
 
 # Uses serializer and validator from UserAPI for now
 # TODO: Write new specialised serializer and validator for charity logins once the model becomes more set in stone
-from UserAPI.serializers import UserLoginSerializer#, CharityLoginSerializer
+from CharityAPI.serializers import CharityLoginSerializer
 from UserAPI.validators import *
+from CharityAPI.validators import CharityNameValidator
 
 
 
@@ -53,21 +54,21 @@ class CharityLogin(APIView):
             return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         # Create a serializer instance
-        # serializer = CharityLoginSerializer(data=data)
+        serializer = CharityLoginSerializer(data=data)
 
         # # Check if the serializer is valid
-        # if serializer.is_valid():
-        #     # Authenticate the charity
-        #     charity = serializer.auth_charity(serializer.validated_data)
+        if serializer.is_valid():
+            # Authenticate the charity
+            charity = serializer.auth_charity(serializer.validated_data)
 
         #     # Log the charity in
-        #     login(request, charity)
+            login(request, charity)
 
-        #     # Return a response code of 200
-        #     return Response(serializer.data, status=status.HTTP_200_OK)
-        # else:
-        #     # Return the errors and a response code of 400
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Return a response code of 200
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+             # Return the errors and a response code of 400
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CharityLogout(APIView):
