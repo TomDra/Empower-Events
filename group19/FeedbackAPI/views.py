@@ -294,12 +294,12 @@ class FeedbackSubmission(APIView):
         # Get the data from the request
         data = request.data
         data['user'] = request.user.id
-        data['activity_id'] = activity_id
-        data['activityFeedback'] = request.data.get('activityFeedback')
-        data['leaderFeedback'] = request.data.get('leaderFeedback')
-        data['audio'] = request.data.get('audio')
-        data['questionAnswers'] = request.data.get('questionAnswers')
         data['calendar_event'] = Calendar.objects.get(activity_id=activity_id).event_id
+        data['activity_feedback_text'] = request.data.get('activityFeedback')
+        data['leader_feedback_text'] = request.data.get('leaderFeedback')
+        data['activity_feedback_audio'] = request.data.get('audio')
+        data['activity_feedback_question_answers'] = request.data.get('questionAnswers')
+        data['feedback_questions'] = request.data.get('feedbackQuestions')
 
         # Validate the feedback text
         validate_feedback_text(data.get('activityFeedback'))
@@ -309,6 +309,7 @@ class FeedbackSubmission(APIView):
         serializer = FeedbackSubmissionSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
