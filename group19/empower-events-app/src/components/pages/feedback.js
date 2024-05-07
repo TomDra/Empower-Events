@@ -3,9 +3,9 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 const FeedbackForm = ({ match }) => {
-  const [eventData, setEventData] = useState({ questions: [] });
-  const [responseData, setResponseData] = useState("");
-  const [textFeedback, setTextFeedback] = useState("");
+  const [responseData, setResponseData] = useState([]);
+  const [activityFeedback, setActivityFeedback] = useState("");
+  const [leaderFeedback, setLeaderFeedback] = useState("");
   const [radioOptions, setRadioOptions] = useState([]);
   const [permission, setPermission] = useState(false);
   const [stream, setStream] = useState(null);
@@ -17,13 +17,13 @@ const FeedbackForm = ({ match }) => {
   const { id } = useParams();
 
   useEffect(() => {
-    console.log("id", id);
     const fetchData = async () => {
       try {
-        let response;
-        response = await axios.get(`http://localhost:8000/api/feedback/${id}/feedback-questions-list`);
-        setResponseData(response.data);
-        console.log(response.data);
+        const response = await axios.get(
+          `http://localhost:8000/api/feedback/${id}/feedback-questions-list`
+        );
+        setResponseData(response.data[0]);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -42,17 +42,12 @@ const FeedbackForm = ({ match }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const reader = new FileReader();
-      reader.readAsDataURL(audio);
-      reader.onloadend = () => {
-        base64data = reader.result.split(",")[1];
-      };
-
       await axios.post(
-        `http://http://localhost:8000/api/feedback/${id}/feedback-submission`,
+        `http://localhost:8000/api/feedback/${id}/feedback-submission`,
         {
           id: id,
-          textFeedback: textFeedback,
+          activityFeedback: activityFeedback,
+          leaderFeedback: leaderFeedback,
           audio: base64data,
           questionAnswers: radioOptions,
         }
@@ -101,6 +96,13 @@ const FeedbackForm = ({ match }) => {
     mediaRecorder.current.onstop = () => {
       //creates a blob file from the audiochunks data
       const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
+      //creates a reader to read the blob as data URL
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      reader.onloadend = () => {
+        const base64data = reader.result.split(",")[1]; // extract base64 data
+        setBase64data(base64data);
+      };
       //creates a playable URL from the blob file.
       const audioUrl = URL.createObjectURL(audioBlob);
       setAudio(audioUrl);
@@ -114,10 +116,10 @@ const FeedbackForm = ({ match }) => {
     <div className="Feedback pt-4 container">
       <h1>Feedback for {responseData.description}</h1>
       <form onSubmit={handleSubmit}>
-        {eventData.questions.map((question, index) => (
+        {responseData.map((question, index) => (
           <div className="row justify-content-center">
             <div className="card mb-3 text-start">
-              <h5 className="card-title">{question}</h5>
+              <h5 className="card-title">{question.question}</h5>
               <div className="card-body btn-group">
                 <input
                   type="radio"
@@ -130,7 +132,7 @@ const FeedbackForm = ({ match }) => {
                   onChange={() => handleOptionChange(index, "positive")}
                 />
                 <label
-                  class="btn btn-outline-success bi bi-emoji-smile fs-1 "
+                  className="btn btn-outline-success bi bi-emoji-smile fs-1 "
                   htmlFor={`btnradio${index}1`}
                 ></label>
 
@@ -145,7 +147,7 @@ const FeedbackForm = ({ match }) => {
                   onChange={() => handleOptionChange(index, "negative")}
                 />
                 <label
-                  class="btn btn-outline-danger bi bi-emoji-frown fs-1"
+                  className="btn btn-outline-danger bi bi-emoji-frown fs-1"
                   htmlFor={`btnradio${index}2`}
                 ></label>
               </div>
@@ -188,11 +190,21 @@ const FeedbackForm = ({ match }) => {
           <textarea
             name="general-feedback"
             className="form-control"
-            id="TextArea"
+            id="TextAreaActivity"
             style={{ height: "100px" }}
-            onChange={(e) => setTextFeedback(e.target.value)}
+            onChange={(e) => setActivityFeedback(e.target.value)}
           ></textarea>
-          <label htmlFor="TextArea">Type general feedback here</label>
+          <label htmlFor="TextAreaActivity">Type general feedback here</label>
+        </div>
+        <div className="form-floating">
+          <textarea
+            name="general-feedback"
+            className="form-control"
+            id="TextAreaLeader"
+            style={{ height: "100px" }}
+            onChange={(e) => setLeaderFeedback(e.target.value)}
+          ></textarea>
+          <label htmlFor="TextAreaLeader">Type leader feedback here</label>
         </div>
         <button type="Submit" className="btn btn-primary">
           Submit
