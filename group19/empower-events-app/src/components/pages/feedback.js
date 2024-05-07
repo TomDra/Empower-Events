@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 const FeedbackForm = ({ match }) => {
   const [responseData, setResponseData] = useState([]);
-  const [activityFeedback, setActivityFeedback] = useState("");
+  const [activityFeedback, setActivityFeedback] = useState([]);
   const [leaderFeedback, setLeaderFeedback] = useState("");
   const [radioOptions, setRadioOptions] = useState([]);
   const [permission, setPermission] = useState(false);
@@ -19,12 +19,11 @@ const FeedbackForm = ({ match }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrftoken=')).split('=')[1];
-        const response = await axios.get(
+        let response;
+        response = await axios.get(
           `http://localhost:8000/api/feedback/${id}/feedback-questions-list`
         );
-        setResponseData(response.data[0]);
-        // console.log(response.data);
+        setResponseData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -41,6 +40,7 @@ const FeedbackForm = ({ match }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(radioOptions)
     e.preventDefault();
         const csrfToken = document.cookie
           .split("; ")
@@ -54,7 +54,7 @@ const FeedbackForm = ({ match }) => {
           activityFeedback: activityFeedback,
           leaderFeedback: leaderFeedback,
           audio: base64data,
-          questionAnswers: radioOptions,
+          questionAnswers: JSON.stringify(radioOptions),
           feedbackQuestions: responseData,
        },
        {
@@ -119,7 +119,6 @@ const FeedbackForm = ({ match }) => {
       setAudioChunks([]);
     };
   };
-
   if (!responseData) return <div>Loading...</div>;
 
   return (
