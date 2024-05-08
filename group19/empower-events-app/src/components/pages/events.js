@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
@@ -61,6 +61,16 @@ const Events = () => {
                   <a href={"/events/" + event.event_id} className="btn btn-primary">
                     View More
                   </a>
+                  {currentURL.includes("past") ? (
+                    <a href={"/feedback/" + event.event_id} className="btn btn-primary">
+                      Give Feedback
+                    </a>
+                  ) : null}
+                  {currentURL.includes("future") ? (
+                  <a href={"/register-interest/" + event.event_id} className="btn btn-primary">
+                      Resister your interest
+                    </a>
+                   ) : null}
                 </div>
               </div>
               <div className="col-md-2 d-flex justify-content-center align-items-center">
@@ -75,31 +85,7 @@ const Events = () => {
                   />
                 </div>
               </div>
-              <div className="col-md-auto">
-                <div className="card-body">
-                  <h2 className="card-title">{event.description}</h2>
-                  <p className="card-text">Age group: {event.age_group}</p>
-                  <p className="card-text">Date: {event.date}</p>
-                  <div className="col gx-3 btn-group">
-                    <a
-                      href={"/events/" + event.event_id}
-                      className="btn btn-outline-primary p-3"
-                    >
-                      View More
-                    </a>
-                    {currentURL.includes("past") ? (
-                      <a
-                        href={"/feedback/" + event.event_id}
-                        className="btn btn-outline-primary p-3"
-                      >
-                        Give Feedback
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
             </div>
-
           </div>
         </div>
       ))}
