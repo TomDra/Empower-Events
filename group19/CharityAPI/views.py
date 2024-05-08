@@ -57,6 +57,7 @@ class CharityLogin(APIView):
         # Create a serializer instance
         serializer = CharityLoginSerializer(data=data)
 
+
         # Check if the serializer is valid
         if serializer.is_valid():
             # Authenticate the charity
@@ -64,7 +65,6 @@ class CharityLogin(APIView):
 
             # Log the charity in
             login(request, charity)
-
             # Return a response code of 200
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:

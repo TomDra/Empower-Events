@@ -46,7 +46,24 @@ const Events = () => {
         <div className="container px-4" key={event.event_id}>
           <div className="card mb-3 text-start" style={{ maxWidth: "auto" }}>
             <div className="row g-0">
-              <div className="col-md-2 d-flex justify-content-center align-items-center mr-1">
+              <div className="col-md-2 d-flex justify-content-center align-items-center">
+                <div className="ratio ratio-1x1">
+                  {/* Ensure event.photo_file_path is constructed properly */}
+                  <img src={`http://localhost:8000/media/activity_images/${event.photo_file_path}`} alt="Event photo" style={{ height: "100%" }} />
+                </div>
+              </div>
+              <div className="col-md-8">
+                <div className="card-body">
+                  <h2 className="card-title">{event.title}</h2>
+                  <h6 className="card-title">{event.description}</h6>
+                  <p className="card-text">Age group: {event.age_group}</p>
+                  <p className="card-text">Date: {event.date}</p>
+                  <a href={"/events/" + event.event_id} className="btn btn-primary">
+                    View More
+                  </a>
+                </div>
+              </div>
+              <div className="col-md-2 d-flex justify-content-center align-items-center">
                 <div className="ratio ratio-1x1">
                   <GoogleMap
                     zoom={9}
@@ -82,6 +99,7 @@ const Events = () => {
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       ))}

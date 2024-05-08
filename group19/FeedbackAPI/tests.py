@@ -1,8 +1,10 @@
 """
 Test cases for the Feedback API.
 """
+
 import json
 
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -17,6 +19,9 @@ User = get_user_model()
 
 # TODO: Implement more tests for the Feedback API
 # Base test case for the Feedback API
+
+
+
 class FeedbackAPITest(TestCase):
     def setUp(self):
         """
@@ -43,7 +48,7 @@ class FeedbackAPITest(TestCase):
                                                              birth_date=timezone.now(), charity=self.charity)
 
         # Create an activity
-        self.activity = Activity.objects.create(description='Test Activity', latitude=0.0, longitude=0.0,
+        self.activity = Activity.objects.create(title="test activity title", description='Test Activity', latitude=0.0, longitude=0.0,
                                                 charity=self.charity, age_group=self.age_group)
         self.activity.set_compatible_disabilities(["Test Disability 1", "Test Disability 2"])
         self.activity.save()
@@ -131,12 +136,13 @@ class FeedbackAPITest(TestCase):
 
         # POST request to the feedback submission endpoint
         response = self.client.post(reverse('feedback_submission',
-                                            kwargs={'activity_id': self.activity.activity_id}), feedback_data,
+                                            kwargs={'event_id': self.calendar.event_id}), feedback_data,
                                     format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Assert that the feedback is stored in the database
-        feedback = Feedback.objects.get(feedback_id=response.data['feedback_id'])
+        #feedback = Feedback.objects.get(feedback_id=response.data['feedback_id'])
+        feedback = get_object_or_404(Feedback, feedback_id=response.data['feedback_id'])
         self.assertEqual(feedback.activity_feedback_text, feedback_data['activity_feedback_text'])
         self.assertEqual(feedback.leader_feedback_text, feedback_data['leader_feedback_text'])

@@ -96,6 +96,7 @@ class Calendar(models.Model):
 
 class Activity(models.Model):
     activity_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=200, default='Activity')
     description = models.CharField(max_length=500)
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
@@ -104,7 +105,7 @@ class Activity(models.Model):
     charity = models.ForeignKey(Charity, on_delete=models.CASCADE)
     #moved feedback questions to activity to stop duplicated data
     feedback_questions = models.TextField(blank=True, null=True)
-
+    photo_file_path = models.CharField(max_length=300, default='defalt.jpg')
 
     def set_compatible_disabilities(self, data):
         self.compatible_disabilities = json.dumps(data)

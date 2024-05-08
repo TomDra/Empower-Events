@@ -59,26 +59,6 @@ const HomePage = () => {
           </Link>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="footer row mt-5 bg-light py-3">
-        <div className="col-md-4">
-          <h5>Contact Us</h5>
-          <p>Email: contact@empowerevents.com</p>
-          <p>Phone: (123) 456-7890</p>
-        </div>
-        <div className="col-md-4">
-          <h5>Follow Us</h5>
-          <a href="https://twitter.com/empowerevents" className="me-2">
-            Twitter
-          </a>
-          <a href="https://facebook.com/empowerevents">Facebook</a>
-        </div>
-        <div className="col-md-4">
-          <h5>About Us</h5>
-          <p>Miles Write Something Here.</p>
-        </div>
-      </div>
     </div>
   );
 };
