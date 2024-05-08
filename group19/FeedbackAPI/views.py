@@ -295,10 +295,11 @@ class FeedbackSubmission(APIView):
         data = request.data
         data['user'] = request.user.id
         data['calendar_event'] = Calendar.objects.get(activity_id=activity_id).event_id
-        data['activity_feedback_text'] = request.data.get('activityFeedback')
-        data['leader_feedback_text'] = request.data.get('leaderFeedback')
-        # data['activity_feedback_audio'] = request.data.get('audio')
-        data['activity_feedback_question_answers'] = request.data.get('questionAnswers')
+        data['activity_feedback_text'] = data.get('activity_feedback_text')
+        #print(data['activity_feedback_text'])
+        data['leader_feedback_text'] = request.data.get('leader_feedback_text')
+        #data['activity_feedback_audio'] = request.data.get('audio')
+        data['activity_feedback_question_answers'] = data.get('activity_feedback_question_answers')
         # Validate the feedback text
         validate_feedback_text(data.get('activityFeedback'))
         validate_feedback_text(data.get('leaderFeedback'))

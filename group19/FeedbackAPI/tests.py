@@ -90,7 +90,7 @@ class FeedbackAPITest(TestCase):
         response = self.client.get(reverse('feedback_overview', kwargs={'activity_id': self.activity.activity_id}))
 
         # Print the JSON response
-        print(json.dumps(response.data, indent=4))
+        #print(json.dumps(response.data, indent=4))
 
         # Assert that the status code is 200 OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -107,7 +107,7 @@ class FeedbackAPITest(TestCase):
         response = self.client.get(reverse('leader_feedback_list', kwargs={'activity_id': self.activity.activity_id}))
 
         # Print the JSON response
-        print(json.dumps(response.data, indent=4))
+        #print(json.dumps(response.data, indent=4))
 
         # Assert that the status code is 200 OK
         self.assertEqual(response.status_code, status.HTTP_200_OK)

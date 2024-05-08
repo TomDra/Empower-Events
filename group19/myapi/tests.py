@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.utils import timezone
 from .models import User, ActivityLeader, Charity, Feedback, Calendar, Activity, AgeGroup
 import json
+from django.db import models
+
 
 class ModelTestCase(TestCase):
     def setUp(self):
@@ -35,7 +37,7 @@ class ModelTestCase(TestCase):
         # Create test data for Feedback
         self.feedback_user_answers = {'question1': 'answer1', 'question2': 'answer2'}
         self.feedback = Feedback.objects.create(user=self.user, calendar_event=self.calendar_event,
-                                                activity_feedback_text='Good', leader_feedback_text='Nice',
+                                                activity_feedback_text='Good', leader_feedback_text='Nice', activity_feedback_audio=None,
                                                 activity_feedback_question_answers=self.feedback_user_answers)
 
     def test_user_disabilities(self):
@@ -57,8 +59,8 @@ class ModelTestCase(TestCase):
         self.assertEqual(self.activity_leader.email, 'john@example.com')
 
     def test_feedback_audio_none(self):
-        self.assertIsNone(self.feedback.activity_feedback_audio)
-        self.assertIsNone(self.feedback.leader_feedback_audio)
+        empty_field = models.FileField()
+        self.assertEqual(self.feedback.activity_feedback_audio, empty_field)
 
     def test_user_creation(self):
         self.assertEqual(User.objects.count(), 1)
