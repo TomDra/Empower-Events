@@ -18,10 +18,11 @@ from collections import Counter
 from .permissions import IsCharityOrActivityLeader
 from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer, \
     FeedbackSubmissionSerializer, FeedbackQuestionsSerializer
-from myapi.models import Activity, Feedback, Calendar
+from myapi.models import Activity, Feedback, Calendar, User
 from textblob.download_corpora import download_all
 from .validators import validate_feedback_text
 from rest_framework.authentication import SessionAuthentication
+from django.shortcuts import get_object_or_404
 
 # Download the stopwords
 nltk.download('stopwords')
@@ -283,7 +284,7 @@ class FeedbackSubmission(APIView):
 
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, activity_id=None):
+    def post(self, request, event_id):
         """
         A method that allows users to submit feedback for an activity.
 
@@ -293,23 +294,22 @@ class FeedbackSubmission(APIView):
 
         # Get the data from the request
         data = request.data
-        data['user'] = request.user.id
-        data['calendar_event'] = Calendar.objects.get(activity_id=activity_id).event_id
-        data['activity_feedback_text'] = data.get('activity_feedback_text')
-        #print(data['activity_feedback_text'])
-        data['leader_feedback_text'] = request.data.get('leader_feedback_text')
-        #data['activity_feedback_audio'] = request.data.get('audio')
-        data['activity_feedback_question_answers'] = data.get('activity_feedback_question_answers')
+        serializer_data = {}
+        serializer_data['user'] = get_object_or_404(User, pk=request.user.id).id
+        serializer_data['calendar_event'] = get_object_or_404(Calendar, pk=event_id).event_id
+        serializer_data['activity_feedback_text'] = data.get('activityFeedback')
+        serializer_data['leader_feedback_text'] = data.get('leaderFeedback')
+        serializer_data['activity_feedback_question_answers'] = data.get('questionAnswers')
         # Validate the feedback text
         validate_feedback_text(data.get('activityFeedback'))
         validate_feedback_text(data.get('leaderFeedback'))
 
         audio_file = request.FILES.get('audio')
         if audio_file:
-            data['activity_feedback_audio'] = audio_file
+            serializer_data['activity_feedback_audio'] = audio_file
 
         # Create a serializer with the data
-        serializer = FeedbackSubmissionSerializer(data=data)
+        serializer = FeedbackSubmissionSerializer(data=serializer_data)
         if serializer.is_valid():
             serializer.save()
             print(serializer.data)
@@ -331,7 +331,7 @@ class FeedbackQuestions(APIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = FeedbackQuestionsSerializer
 
-    def get(self, request, activity_id):
+    def get(self, request, event_id):
         """
         A method that returns feedback questions for an activity.
 
@@ -342,15 +342,15 @@ class FeedbackQuestions(APIView):
         """
 
         # Get the activity id from the URL
-        activity_id = self.kwargs['activity_id']
+        event_id = self.kwargs['event_id']
 
         # Get the feedback questions from the cache
-        cache_key = f'feedback_questions_{activity_id}'
+        cache_key = f'feedback_questions_{event_id}'
         questions = cache.get(cache_key)
 
         # If the cache does not exist, get the feedback questions from the database
         if questions is None:
-            activity = Activity.objects.get(activity_id=activity_id)
+            activity = Calendar.objects.get(event_id=event_id).activity
 
             if activity is None:
                 return Response({"detail": "Feedback not found."}, status=status.HTTP_404_NOT_FOUND)

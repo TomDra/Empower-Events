@@ -8,8 +8,8 @@ urlpatterns = [
          name='activity_feedback_list'),
     path('<int:activity_id>/leader-feedback-list/', views.LeaderFeedbackList.as_view(),
          name='leader_feedback_list'),
-    path('<int:activity_id>/feedback-submission', views.FeedbackSubmission.as_view(),
+    path('<int:event_id>/feedback-submission', views.FeedbackSubmission.as_view(),
          name='feedback_submission'),
-    path('<int:activity_id>/feedback-questions-list', views.FeedbackQuestions.as_view(),
+    path('<int:event_id>/feedback-questions-list', views.FeedbackQuestions.as_view(),
          name='feedback_questions'),
 ]

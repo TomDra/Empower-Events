@@ -62,7 +62,8 @@
 		"longitude": -74.0060,
 		"age_group": "Kids",
 		"compatible_disabilities": ["deaf"],
-		"charity": "Charity A"
+		"charity": "Charity A",
+		"feedback_questions": {"Was it good?": ""}
 	  },
 	  {
 		"description": "Art Workshop",
