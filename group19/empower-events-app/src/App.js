@@ -9,11 +9,9 @@ import Feedback from "./components/pages/feedback";
 import "./App.css";
 import EventDetailPage from "./components/pages/eventdetails";
 // src/App.js
-import React, { useEffect, useState } from 'react';
-import AppNavbar from './components/navbar';
-import { UserProvider } from './contexts/userContext';
-
-
+import React, { useEffect, useState } from "react";
+import AppNavbar from "./components/navbar";
+import { UserProvider } from "./contexts/userContext";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,25 +25,23 @@ const App = () => {
   };
 
   return (
-  <div className="App">
-    <UserProvider>
-    <BrowserRouter>
-      <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/register" element={<SignUp />} />
-        <Route path="/test" element={<HomePage />} />
-        <Route path="/events/:eventId" element={<EventDetailPage />} />
-        <Route path="/feedback/:id" element={<Feedback />} />
-        <Route path="/events/past" element={<Events />} />
-        <Route path="/events/future" element={<Events />} />
-        {/* Add other routes as needed */}
-      </Routes>
-    </BrowserRouter>
-    </UserProvider>
+    <div className="App">
+      <UserProvider>
+        <BrowserRouter>
+          <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/test" element={<HomePage />} />
+            <Route path="/events/:eventId" element={<EventDetailPage />} />
+            <Route path="/feedback/:id" element={<Feedback />} />
+            <Route key="past" path="/events/past" element={<Events />} />
+            <Route key="future" path="/events/future" element={<Events />} />
+          </Routes>
+        </BrowserRouter>
+      </UserProvider>
     </div>
-
   );
 };
 

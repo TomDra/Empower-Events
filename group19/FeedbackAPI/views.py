@@ -18,7 +18,7 @@ from collections import Counter
 from .permissions import IsCharityOrActivityLeader
 from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer, \
     FeedbackSubmissionSerializer, FeedbackQuestionsSerializer
-from myapi.models import Feedback, Calendar
+from myapi.models import Activity, Feedback, Calendar
 from textblob.download_corpora import download_all
 from .validators import validate_feedback_text
 from rest_framework.authentication import SessionAuthentication
@@ -297,13 +297,15 @@ class FeedbackSubmission(APIView):
         data['calendar_event'] = Calendar.objects.get(activity_id=activity_id).event_id
         data['activity_feedback_text'] = request.data.get('activityFeedback')
         data['leader_feedback_text'] = request.data.get('leaderFeedback')
-        data['activity_feedback_audio'] = request.data.get('audio')
+        # data['activity_feedback_audio'] = request.data.get('audio')
         data['activity_feedback_question_answers'] = request.data.get('questionAnswers')
-        data['feedback_questions'] = request.data.get('feedbackQuestions')
-
         # Validate the feedback text
         validate_feedback_text(data.get('activityFeedback'))
         validate_feedback_text(data.get('leaderFeedback'))
+
+        audio_file = request.FILES.get('audio')
+        if audio_file:
+            data['activity_feedback_audio'] = audio_file
 
         # Create a serializer with the data
         serializer = FeedbackSubmissionSerializer(data=data)
@@ -347,15 +349,15 @@ class FeedbackQuestions(APIView):
 
         # If the cache does not exist, get the feedback questions from the database
         if questions is None:
-            feedbacks = Feedback.objects.filter(calendar_event__activity_id=activity_id)
+            activity = Activity.objects.get(activity_id=activity_id)
 
-            if not feedbacks.exists():
+            if activity is None:
                 return Response({"detail": "Feedback not found."}, status=status.HTTP_404_NOT_FOUND)
 
-            questions = [json.loads(feedback.get_feedback_questions()) for feedback in feedbacks]
-
+            questions = json.loads(activity.feedback_questions)
             # Cache the feedback questions for 1 hour
             cache.set(cache_key, questions, timeout=3600)
 
         # Return the feedback questions
+        print(questions)
         return Response(questions, status=status.HTTP_200_OK)

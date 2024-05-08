@@ -1,37 +1,39 @@
 import { React, useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 window.google = window.google ? window.google : {};
 
 const Events = () => {
   const [responseData, setResponseData] = useState("");
+  const location = useLocation();
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "***REMOVED***",
   });
   const currentURL = window.location.href;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response;
-        if (currentURL.includes("past")) {
-          response = await axios.get(
-            "http://localhost:8000/api/events/previous-list/?page=1"
-          );
-        } else {
-          response = await axios.get(
-            "http://localhost:8000/api/events/upcoming-list/?page=1"
-          );
-        }
-        setResponseData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  const fetchData = async () => {
+    try {
+      let response;
+      if (currentURL.includes("past")) {
+        response = await axios.get(
+          "http://localhost:8000/api/events/previous-list/?page=1"
+        );
+      } else {
+        response = await axios.get(
+          "http://localhost:8000/api/events/upcoming-list/?page=1"
+        );
       }
-    };
+      setResponseData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [location]);
 
   if (!isLoaded) return "Loading maps";
   if (!responseData) return <div>Loading...</div>;
@@ -61,9 +63,22 @@ const Events = () => {
                   <h2 className="card-title">{event.description}</h2>
                   <p className="card-text">Age group: {event.age_group}</p>
                   <p className="card-text">Date: {event.date}</p>
-                  <a href={"/events/" + event.event_id} className="btn btn-primary">
-                    View More
-                  </a>
+                  <div className="col gx-3 btn-group">
+                    <a
+                      href={"/events/" + event.event_id}
+                      className="btn btn-outline-primary p-3"
+                    >
+                      View More
+                    </a>
+                    {currentURL.includes("past") ? (
+                      <a
+                        href={"/feedback/" + event.event_id}
+                        className="btn btn-outline-primary p-3"
+                      >
+                        Give Feedback
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>

@@ -1,19 +1,20 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Recorder from "mic-recorder-to-mp3";
 import { useParams } from "react-router-dom";
+
+const recorder = new Recorder({
+  bitRate: 128,
+});
 
 const FeedbackForm = ({ match }) => {
   const [responseData, setResponseData] = useState([]);
   const [activityFeedback, setActivityFeedback] = useState([]);
   const [leaderFeedback, setLeaderFeedback] = useState("");
   const [radioOptions, setRadioOptions] = useState([]);
-  const [permission, setPermission] = useState(false);
-  const [stream, setStream] = useState(null);
   const [recordingStatus, setRecordingStatus] = useState("inactive");
-  const [audioChunks, setAudioChunks] = useState([]);
-  const [audio, setAudio] = useState(null);
-  const [base64data, setBase64data] = useState(null);
-  const mediaRecorder = useRef(null);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [permission, setPermission] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -40,28 +41,31 @@ const FeedbackForm = ({ match }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log(radioOptions)
     e.preventDefault();
-        const csrfToken = document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("csrftoken="))
-          .split("=")[1];
+    const csrfToken = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("csrftoken="))
+      .split("=")[1];
+
+    const formData = new FormData();
+    formData.append("audio", audioBlob, `recording${id}.mp3`);
+    formData.append("activity_id", id);
+    formData.append("activityFeedback", activityFeedback);
+    formData.append("leaderFeedback", leaderFeedback);
+    formData.append("questionAnswers", JSON.stringify(radioOptions));
+    formData.append("feedbackQuestions", JSON.stringify(responseData));
+
     try {
       await axios.post(
-        `http://localhost:8000/api/feedback/${id}/feedback-submission`, 
-       {
-          activity_id: id,
-          activityFeedback: activityFeedback,
-          leaderFeedback: leaderFeedback,
-          audio: base64data,
-          questionAnswers: JSON.stringify(radioOptions),
-          feedbackQuestions: responseData,
-       },
-       {
+        `http://localhost:8000/api/feedback/${id}/feedback-submission`,
+        formData,
+        {
           headers: {
-            'X-CSRFToken': csrfToken,
+            "Content-Type": "multipart/form-data",
+            "X-CSRFToken": csrfToken,
           },
-       });
+        }
+      );
       console.log("Feedback submitted successfully");
     } catch (error) {
       console.error("Error submitting feedback:", error);
@@ -76,7 +80,6 @@ const FeedbackForm = ({ match }) => {
           video: false,
         });
         setPermission(true);
-        setStream(streamData);
       } catch (err) {
         alert(err.message);
       }
@@ -86,39 +89,30 @@ const FeedbackForm = ({ match }) => {
   };
 
   const startRecording = async () => {
-    setRecordingStatus("recording");
-    const media = new MediaRecorder(stream, { type: "audio/wav" });
-    mediaRecorder.current = media;
-    mediaRecorder.current.start();
-    let localaudioChunks = [];
-    mediaRecorder.current.ondataavailable = (event) => {
-      if (typeof event.data === "undefined") return;
-      if (event.data.size === 0) return;
-      localaudioChunks.push(event.data);
-    };
-    setAudioChunks(localaudioChunks);
+    recorder
+      .start()
+      .then(() => {
+        setRecordingStatus("recording");
+      })
+      .catch((err) => {
+        console.error("Failed to start recording: ", err);
+      });
   };
 
   const stopRecording = () => {
     setRecordingStatus("inactive");
-    //stops the recording instance
-    mediaRecorder.current.stop();
-    mediaRecorder.current.onstop = () => {
-      //creates a blob file from the audiochunks data
-      const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-      //creates a reader to read the blob as data URL
-      const reader = new FileReader();
-      reader.readAsDataURL(audioBlob);
-      reader.onloadend = () => {
-        const base64data = reader.result.split(",")[1]; // extract base64 data
-        setBase64data(base64data);
-      };
-      //creates a playable URL from the blob file.
-      const audioUrl = URL.createObjectURL(audioBlob);
-      setAudio(audioUrl);
-      setAudioChunks([]);
-    };
+    recorder
+      .stop()
+      .getMp3()
+      .then(([buffer, blob]) => {
+        console.log("Recording stopped");
+        setAudioBlob(blob);
+      })
+      .catch((err) => {
+        console.error("Failed to get MP3: ", err);
+      });
   };
+
   if (!responseData) return <div>Loading...</div>;
 
   return (
@@ -192,7 +186,9 @@ const FeedbackForm = ({ match }) => {
             </button>
           ) : null}
           <div>
-            <audio src={audio} controls></audio>
+            {audioBlob ? (
+              <audio src={URL.createObjectURL(audioBlob)} controls></audio>
+            ) : null}
           </div>
         </div>
         <div className="form-floating">
