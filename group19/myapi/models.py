@@ -106,7 +106,7 @@ class Calendar(models.Model):
 
 class Activity(models.Model):
     activity_id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, default='Activity')
     description = models.CharField(max_length=500)
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
