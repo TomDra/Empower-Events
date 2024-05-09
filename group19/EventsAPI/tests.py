@@ -235,7 +235,7 @@ class AddEventTestCase(TestCase):
                     "age_range_higher": 20,
                     "group_title": "10-20"
                 },
-                "compatible_disabilities": ["disability1", "disability2"]
+                "compatible_disabilities": ["disability1", "disability2"],
                 "photo_file_path":"test.jpg"
             },
             "time": future_date,

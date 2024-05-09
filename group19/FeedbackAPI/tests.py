@@ -128,9 +128,9 @@ class FeedbackAPITest(TestCase):
         # Feedback data
         feedback_data = {
             "calendar_event": self.calendar.event_id,
-            "activity_feedback_text": "This event was amazing! I had a great time.",
+            "activityFeedback": "This event was amazing! I had a great time.",
             "activity_feedback_audio": None,
-            "leader_feedback_text": "The activity leader was fantastic! Very engaging and supportive.",
+            "leaderFeedback": "The activity leader was fantastic! Very engaging and supportive.",
             "leader_feedback_audio": None
         }
 
@@ -144,5 +144,6 @@ class FeedbackAPITest(TestCase):
         # Assert that the feedback is stored in the database
         #feedback = Feedback.objects.get(feedback_id=response.data['feedback_id'])
         feedback = get_object_or_404(Feedback, feedback_id=response.data['feedback_id'])
-        self.assertEqual(feedback.activity_feedback_text, feedback_data['activity_feedback_text'])
-        self.assertEqual(feedback.leader_feedback_text, feedback_data['leader_feedback_text'])
+        print(feedback.activity_feedback_text)
+        self.assertEqual(feedback.activity_feedback_text, feedback_data['activityFeedback'])
+        self.assertEqual(feedback.leader_feedback_text, feedback_data['leaderFeedback'])
