@@ -314,5 +314,4 @@ class FeedbackQuestions(APIView):
         questions = json.loads(activity.feedback_questions)
 
         # Return the feedback questions
-        print(questions)
         return Response(questions, status=status.HTTP_200_OK)

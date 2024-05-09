@@ -14,22 +14,36 @@ ChartJS.register(ArcElement, CategoryScale, RadialLinearScale, Tooltip);
 
 const AdminFeedback = () => {
   const [responseData, setResponseData] = useState("");
+  const [activityFeedback, setActivityFeedback] = useState("");
+  const [leaderFeedback, setLeaderFeedback] = useState("");
+  const [questions, setQuestions] = useState("");
   const { id } = useParams();
   const [sentimentData, setSentimentData] = useState({});
 
   const getData = async () => {
     try {
-      let response = await axios.get(
+      let responseOverview = await axios.get(
         `http://localhost:8000/api/feedback/${id}/overview`
       );
-      setResponseData(response.data);
-      console.log(response.data);
+      let responseActivity = await axios.get(
+        `http://localhost:8000/api/feedback/${id}/activity-feedback-list`
+      );
+      let responseLeader = await axios.get(
+        `http://localhost:8000/api/feedback/${id}/leader-feedback-list`
+      );
+      let responseQuestions = await axios.get(
+        `http://localhost:8000/api/feedback/${id}/feedback-questions-list`
+      );
+      setResponseData(responseOverview.data);
+      setActivityFeedback(responseActivity.data);
+      setLeaderFeedback(responseLeader.data);
+      setQuestions(responseQuestions.data);
+      console.log(responseOverview.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
   useEffect(() => {
-
     getData();
     setSentimentData({
       labels: [
@@ -61,7 +75,7 @@ const AdminFeedback = () => {
 
   return (
     <div className="container mt-4">
-      <h1>Dashboard</h1>
+      <h1>Feedback for </h1>
       <div className="row">
         <div className="col">
           <PolarArea

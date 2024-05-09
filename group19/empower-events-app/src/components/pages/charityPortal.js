@@ -43,7 +43,7 @@ const Portal = () => {
             </div>
           </Link>
 
-          <Link to="/events/future" className="col-md-4 text-decoration-none">
+          <Link to="/admin/events" className="col-md-4 text-decoration-none">
             <div className="card hover-effect" id="homePageCard">
               <img
                 src="/static/images/conference.jpg"
