@@ -1,37 +1,39 @@
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 window.google = window.google ? window.google : {};
 
 const Events = () => {
   const [responseData, setResponseData] = useState("");
+  const location = useLocation();
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "***REMOVED***",
   });
   const currentURL = window.location.href;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response;
-        if (currentURL.includes("past")) {
-          response = await axios.get(
-            "http://localhost:8000/api/events/previous-list/?page=1"
-          );
-        } else {
-          response = await axios.get(
-            "http://localhost:8000/api/events/upcoming-list/?page=1"
-          );
-        }
-        setResponseData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+  const fetchData = async () => {
+    try {
+      let response;
+      if (currentURL.includes("past")) {
+        response = await axios.get(
+          "http://localhost:8000/api/events/previous-list/?page=1"
+        );
+      } else {
+        response = await axios.get(
+          "http://localhost:8000/api/events/upcoming-list/?page=1"
+        );
       }
-    };
+      setResponseData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [location]);
 
   if (!isLoaded) return "Loading maps";
   if (!responseData) return <div>Loading...</div>;
@@ -59,6 +61,16 @@ const Events = () => {
                   <a href={"/events/" + event.event_id} className="btn btn-primary">
                     View More
                   </a>
+                  {currentURL.includes("past") ? (
+                    <a href={"/feedback/" + event.event_id} className="btn btn-primary">
+                      Give Feedback
+                    </a>
+                  ) : null}
+                  {currentURL.includes("future") ? (
+                  <a href={"/register-interest/" + event.event_id} className="btn btn-primary">
+                      Resister your interest
+                    </a>
+                   ) : null}
                 </div>
               </div>
               <div className="col-md-2 d-flex justify-content-center align-items-center">
@@ -71,11 +83,9 @@ const Events = () => {
                     }}
                     mapContainerStyle={{ width: "100%", height: "100%" }}
                   />
-
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       ))}

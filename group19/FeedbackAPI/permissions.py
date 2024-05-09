@@ -27,8 +27,4 @@ class IsCharityOrActivityLeader(permissions.BasePermission):
         if isinstance(request.user, Charity):
             return True
 
-        # Check if the user is an activity leader
-        if ActivityLeader.objects.filter(user=request.user).exists():
-            return True
-
         return False

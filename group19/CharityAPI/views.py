@@ -1,5 +1,6 @@
 # Importing necessary libraries and modules from Django, rest_framework, validators, and serializers
 from django.contrib.auth import login, logout
+from django.core.exceptions import ValidationError
 from rest_framework.exceptions import APIException
 from rest_framework import permissions, status
 from rest_framework.response import Response
@@ -40,8 +41,8 @@ class CharityLogin(APIView):
                 raise ValidationError('Charity name and password are required.')
 
             # Validate the charity name and password fields
-            CharityNameValidator.validate(data['charity_name'])
-            PasswordValidator.validate(data['password'])
+            #CharityNameValidator.validate(data['charity_name'])
+            #PasswordValidator.validate(data['password'])
 
         except ValidationError as e:
             # Return the error message and a response code of 400
@@ -56,18 +57,18 @@ class CharityLogin(APIView):
         # Create a serializer instance
         serializer = CharityLoginSerializer(data=data)
 
-        # # Check if the serializer is valid
+
+        # Check if the serializer is valid
         if serializer.is_valid():
             # Authenticate the charity
             charity = serializer.auth_charity(serializer.validated_data)
 
-        #     # Log the charity in
+            # Log the charity in
             login(request, charity)
-
             # Return a response code of 200
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
-             # Return the errors and a response code of 400
+            # Return the errors and a response code of 400
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

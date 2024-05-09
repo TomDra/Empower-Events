@@ -226,6 +226,7 @@ class AddEventTestCase(TestCase):
         future_date = (timezone.now() + datetime.timedelta(days=1)).isoformat()
         data = {
             "activity": {
+                "title": "activity title",
                 "description": "Activity description",
                 "latitude": 12.9715,
                 "longitude": 77.5945,
@@ -234,7 +235,8 @@ class AddEventTestCase(TestCase):
                     "age_range_higher": 20,
                     "group_title": "10-20"
                 },
-                "compatible_disabilities": ["disability1", "disability2"]
+                "compatible_disabilities": ["disability1", "disability2"],
+                "photo_file_path":"test.jpg"
             },
             "time": future_date,
             "activity_leader_id": self.activity_leader.activity_leader_id

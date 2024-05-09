@@ -17,7 +17,13 @@
 		"password": "password789",
 		"email": "alex@example.com",
 		"disabilities": ["blind"]
-	  }   
+	  },
+	{
+		"username": "drapt002",
+		"password": "Thomas33",
+		"email": "drapt002@gmail.com",
+		"disabilities": []
+	}
 	],
 	"charities": [
 	  {

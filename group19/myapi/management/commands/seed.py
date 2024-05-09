@@ -82,6 +82,8 @@ class Command(BaseCommand):
 				longitude=activity_data['longitude'],
 				age_group=age_group,
 				charity=charity,
+				# feedback_questions=data['feedback_questions']
+				feedback_questions=json.dumps(data['feedback_questions']),
 				photo_file_path = activity_data['photo_file_path'],
 			)
 
@@ -177,16 +179,8 @@ class Command(BaseCommand):
 					'activity_feedback_text': feedback_data.get('activity_feedback_text'),
 					'leader_feedback_text': feedback_data.get('leader_feedback_text'),
 					'activity_feedback_question_answers': json.dumps(feedback_data.get('activity_feedback_question_answers', '')),
-					'leader_feedback_question_answers': json.dumps(feedback_data.get('leader_feedback_question_answers', '')),
 				}
 			)
-
- 				# Handling feedback questions
-			if 'feedback_questions' in data:
-				# Serialize feedback questions and save them in the Feedback model
-				feedback.set_feedback_questions(json.dumps(data['feedback_questions']))
-				feedback.save()
-
 
 			if created:
 				print(f"Feedback for '{calendar_event.activity.title}' by '{user.username}' created.")
