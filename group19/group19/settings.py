@@ -185,3 +185,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Django's built-in backend
     'CharityAPI.backends.CharityNameBackend',  # For Charity Portal
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR / 'caches',
+    }
+}
