@@ -14,11 +14,14 @@ def validate_feedback_text(value):
     """
 
     # Check if the feedback text is too long
-    if len(value) > 500:
-        raise ValidationError('Feedback text is too long. Maximum length is 500 characters.')
+    if value:
+        if len(value) > 500:
+            raise ValidationError('Feedback text is too long. Maximum length is 500 characters.')
 
-    # Spellcheck the feedback text
-    spellchecked_text = TextBlob(value).correct()
+        # Spellcheck the feedback text
+        spellchecked_text = TextBlob(value).correct()
 
-    return str(spellchecked_text)
+        return str(spellchecked_text)
+    else:
+        return value
 
