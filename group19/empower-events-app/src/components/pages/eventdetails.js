@@ -47,18 +47,22 @@ const EventDetailPage = () => {
     });
   };
 
+
+  
   if (!event) {
     return <div>Loading...</div>;
   }
-
+  const dateString = event.timeDate;
+  //console.log(new Date(dateString).toString());
+  //const formattedDate = new Date(dateString).toString();
   return (
     <div className="event-detail-page">
       <div className="photo-container">
-        <img src={event.activity.image || '/static/images/mic.jpg'} alt="Event Cover" className="event-image" />
+        <img src={`http://localhost:8000/media/activity_images/${event.activity.photo_file_path}`} alt="Event Cover" className="event-image" />
         <div className="text-overlay">
-          <h1 className="event-title">{event.activity.description}</h1> {/* Updated to access activity description */}
-          <p className="event-description">Join us at this event to make a positive impact and enjoy a great time!</p>
-          <p className="event-time">{event.timeDate}</p>
+          <h1 className="event-title">{event.activity.title}</h1> 
+          <p className="event-description">{event.activity.description}</p>
+          <p className="event-time">{dateString}</p>
         </div>
       </div>
 

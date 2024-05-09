@@ -6,15 +6,15 @@ import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
 import CharityLogin from "./components/pages/charityLogIn";
+import Feedback from "./components/pages/feedback";
 import "./App.css";
-import EventDetailPage from "./components/pages/eventdetails"; // Import the EventDetailPage component
-//import { useEffect, useState } from "react";
+import EventDetailPage from "./components/pages/eventdetails";
 // src/App.js
 import React, { useEffect, useState } from 'react';
 //import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import AppNavbar from './components/navbar';
+import Footer from "./components/footer";
 import { UserProvider } from './contexts/userContext';
-
 
 
 const App = () => {
@@ -29,12 +29,11 @@ const App = () => {
   };
 
   return (
-
-
   <div className="App">
     <UserProvider>
     <BrowserRouter>
       <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <div className="content-wrapper">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
@@ -42,14 +41,16 @@ const App = () => {
         <Route path="/charity/login" element={<CharityLogin/>} />
         <Route path="/test" element={<HomePage />} />
         <Route path="/events/:eventId" element={<EventDetailPage />} />
-        <Route path="/events/past" element={<Events />} />
-        <Route path="/events/future" element={<Events />} />
+        <Route key="past" path="/events/past" element={<Events />} />
+        <Route key="future" path="/events/future" element={<Events />} />
+        <Route path="/feedback/:id" element={<Feedback />} />
         {/* Add other routes as needed */}
       </Routes>
+      </div>
+      <Footer />
     </BrowserRouter>
     </UserProvider>
     </div>
-
   );
 };
 
