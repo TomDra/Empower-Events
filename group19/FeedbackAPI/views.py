@@ -6,7 +6,6 @@ import os
 
 import joblib
 from django.conf import settings
-from django.core.cache import cache
 from nltk.corpus import stopwords
 from rest_framework import status, permissions, pagination, generics
 from rest_framework.response import Response
@@ -32,8 +31,8 @@ download_all()
 
 class FeedbackOverview(APIView):
     """
-    FeedbackOverview class is a subclass of APIView. It conducts sentiment,
-    objectivity, adjective, word and phrase analysis. It also caches the data to help with performance.
+    FeedbackOverview class is a subclass of APIView. It conducts sentiment, objectivity, adjective, word and phrase
+     analysis.
 
     It contains the following methods:
     - get: A method that analyses the feedback for a specific activity and returns the aforementioned data.
@@ -55,8 +54,6 @@ class FeedbackOverview(APIView):
         - Most common words in leader feedback
         - Most common phrases in user feedback
         - Most common phrases in leader feedback
-
-        The data is cached for 1 hour to help with performance.
 
         :param request: The request object.
         :param activity_id: The id of the activity.
@@ -184,8 +181,7 @@ class FeedbackOverview(APIView):
 class ActivityFeedbackList(generics.ListAPIView):
     """
     ActivityFeedbackList class is a subclass of ListAPIView. It allows users to view a list of feedback for an activity.
-    It implements caching to help with performance. It implements pagination to limit the number of
-    feedback items returned.
+    It implements pagination to limit the number of feedback items returned per page.
 
     It contains the following methods:
     - get_queryset (GET): A method that returns a list of feedback for an activity.
@@ -205,24 +201,17 @@ class ActivityFeedbackList(generics.ListAPIView):
         # Get the activity id from the URL
         activity_id = self.kwargs['activity_id']
 
-        # Check if the data is in the cache
-        cache_feedback = cache.get(f'feedback_{activity_id}')
+        # Grab feedback from the database
+        feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('feedback_id')
 
-        # If the cache does not exist, get the feedback from the database
-        if cache_feedback is None:
-            feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('feedback_id')
-            cache.set(f'feedback_{activity_id}', feedback, timeout=3600)
-        else:
-            # If the cache exists, use the cached data
-            feedback = cache_feedback
+        # Return the feedback
         return feedback
 
 
 class LeaderFeedbackList(generics.ListAPIView):
     """
     LeaderFeedbackList class is a subclass of ListAPIView. It allows users to view a list of feedback for a leader.
-    It implements caching to help with performance. It implements pagination to limit the number of
-    feedback items returned.
+    It implements pagination to limit the number of feedback items returned per page.
 
     It contains the following methods:
     - get_queryset (GET): A method that returns a list of feedback for a leader.
@@ -242,23 +231,16 @@ class LeaderFeedbackList(generics.ListAPIView):
         # Get the activity id from the URL
         activity_id = self.kwargs['activity_id']
 
-        # Check if the data is in the cache
-        cache_feedback = cache.get(f'feedback_{activity_id}')
+        # Grab feedback from the database
+        feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('-feedback_id')
 
-        # If the cache does not exist, get the feedback from the database
-        if cache_feedback is None:
-            feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('-feedback_id')
-            cache.set(f'feedback_{activity_id}', feedback, timeout=3600)
-        else:
-            # If the cache exists, use the cached data
-            feedback = cache_feedback
+        # Return the feedback
         return feedback
 
 
 class FeedbackSubmission(APIView):
     """
     FeedbackSubmission class is a subclass of APIView. It allows users to submit feedback for an activity.
-    TODO: Remove serializer.data, and add support for feedback questions and answers.
 
     It contains the following methods:
     - post (POST): A method that allows users to submit feedback for an activity.
@@ -298,8 +280,6 @@ class FeedbackSubmission(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# TODO: Return question answers lists in specific endpoints.
-
 class FeedbackQuestions(APIView):
     """
     FeedbackQuestions class is a subclass of APIView. It allows users to view feedback questions for an activity.
@@ -325,20 +305,13 @@ class FeedbackQuestions(APIView):
         # Get the activity id from the URL
         event_id = self.kwargs['event_id']
 
-        # Get the feedback questions from the cache
-        cache_key = f'feedback_questions_{event_id}'
-        questions = cache.get(cache_key)
+        # Get the feedback questions from the database
+        activity = Calendar.objects.get(event_id=event_id).activity
 
-        # If the cache does not exist, get the feedback questions from the database
-        if questions is None:
-            activity = Calendar.objects.get(event_id=event_id).activity
+        if activity is None:
+            return Response({"detail": "Feedback not found."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            if activity is None:
-                return Response({"detail": "Feedback not found."}, status=status.HTTP_404_NOT_FOUND)
-
-            questions = json.loads(activity.feedback_questions)
-            # Cache the feedback questions for 1 hour
-            cache.set(cache_key, questions, timeout=3600)
+        questions = json.loads(activity.feedback_questions)
 
         # Return the feedback questions
         print(questions)
