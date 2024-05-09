@@ -196,6 +196,7 @@ class FeedbackOverview(APIView):
             serializer = FeedbackOverviewSerializer(cache_data)
 
             # Return the data
+            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
 

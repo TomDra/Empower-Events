@@ -6,6 +6,9 @@ import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
 import Feedback from "./components/pages/feedback";
+import AdminPortal from "./components/pages/charityPortal";
+import AdminEvents from "./components/pages/viewFeedbackList";
+import AdminFeedback from "./components/pages/viewFeedbackDetail";
 import "./App.css";
 import EventDetailPage from "./components/pages/eventdetails";
 // src/App.js
@@ -42,6 +45,9 @@ const App = () => {
         <Route key="past" path="/events/past" element={<Events />} />
         <Route key="future" path="/events/future" element={<Events />} />
         <Route path="/feedback/:id" element={<Feedback />} />
+        <Route path="/admin/portal" element={<AdminPortal />} />
+        <Route path="/admin/events" element={<AdminEvents />} />
+        <Route path="/admin/feedback/:id" element={<AdminFeedback />} />
         {/* Add other routes as needed */}
       </Routes>
       </div>
