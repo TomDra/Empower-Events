@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Recorder from "mic-recorder-to-mp3";
-import { useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { red } from "@mui/material/colors";
 
 const recorder = new Recorder({
   bitRate: 128,
@@ -15,6 +16,7 @@ const FeedbackForm = ({ match }) => {
   const [recordingStatus, setRecordingStatus] = useState("inactive");
   const [audioBlob, setAudioBlob] = useState(null);
   const [permission, setPermission] = useState(false);
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -48,7 +50,9 @@ const FeedbackForm = ({ match }) => {
       .split("=")[1];
 
     const formData = new FormData();
-    formData.append("audio", audioBlob, `recording${id}.mp3`);
+    if (audioBlob !== null) {
+      formData.append("audio", audioBlob, `recording${id}.mp3`);
+    }
     formData.append("activity_id", id);
     formData.append("activityFeedback", activityFeedback);
     formData.append("leaderFeedback", leaderFeedback);
@@ -67,6 +71,8 @@ const FeedbackForm = ({ match }) => {
         }
       );
       console.log("Feedback submitted successfully");
+      alert("Feedback submitted successfully");
+      navigate(`/`);
     } catch (error) {
       console.error("Error submitting feedback:", error);
     }

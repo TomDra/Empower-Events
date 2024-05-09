@@ -41,6 +41,7 @@ const App = () => {
         <Route path="/events/:eventId" element={<EventDetailPage />} />
         <Route key="past" path="/events/past" element={<Events />} />
         <Route key="future" path="/events/future" element={<Events />} />
+        <Route path="/feedback/:id" element={<Feedback />} />
         {/* Add other routes as needed */}
       </Routes>
       </div>
