@@ -44,10 +44,10 @@ const App = () => {
         <Route path="/events/:eventId" element={<EventDetailPage />} />
         <Route key="past" path="/events/past" element={<Events />} />
         <Route key="future" path="/events/future" element={<Events />} />
-        <Route path="/feedback/:id" element={<Feedback />} />
+        <Route path="/feedback/:eventId" element={<Feedback />} />
         <Route path="/admin/portal" element={<AdminPortal />} />
         <Route path="/admin/events" element={<AdminEvents />} />
-        <Route path="/admin/feedback/:id" element={<AdminFeedback />} />
+        <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
         {/* Add other routes as needed */}
       </Routes>
       </div>

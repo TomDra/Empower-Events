@@ -18,7 +18,7 @@ const AdminFeedback = () => {
   const [activityFeedback, setActivityFeedback] = useState([]);
   const [leaderFeedback, setLeaderFeedback] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const { id } = useParams();
+  const { eventId } = useParams();
   const [sentimentData, setSentimentData] = useState({});
 
   useEffect(() => {
@@ -30,21 +30,21 @@ const AdminFeedback = () => {
           responseLeader,
           responseQuestions,
         ] = await Promise.all([
-          axios.get(`http://localhost:8000/api/feedback/${id}/overview`),
+          axios.get(`http://localhost:8000/api/feedback/${eventId}/overview`),
           axios.get(
-            `http://localhost:8000/api/feedback/${id}/activity-feedback-list`
+            `http://localhost:8000/api/feedback/${eventId}/activity-feedback-list`
           ),
           axios.get(
-            `http://localhost:8000/api/feedback/${id}/leader-feedback-list`
+            `http://localhost:8000/api/feedback/${eventId}/leader-feedback-list`
           ),
           axios.get(
-            `http://localhost:8000/api/feedback/${id}/feedback-questions-list`
+            `http://localhost:8000/api/feedback/${eventId}/feedback-questions-list`
           ),
         ]);
 
         setResponseData(responseOverview.data);
         setActivityFeedback(responseActivity.data.results);
-        setLeaderFeedback(responseLeader.data);
+        setLeaderFeedback(responseLeader.data.results);
         setQuestions(responseQuestions.data);
 
         const sentimentData = {
@@ -92,7 +92,6 @@ const AdminFeedback = () => {
             negativeCount,
           };
         });
-        console.log("Counts data:", countsData);
         setCounts(countsData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -100,9 +99,9 @@ const AdminFeedback = () => {
     };
 
     getData();
-  }, [id, counts]);
+  }, [eventId, counts, sentimentData]);
 
-  console.log("Counts:", counts);
+  
   if (
     !responseData ||
     !sentimentData ||
@@ -132,6 +131,16 @@ const AdminFeedback = () => {
             <div className="card mb-3 text-start">
               <div className="card-body">
                 {activityFeedback.map((response, index) => (
+                  <div key={index}>
+                    <p>{response.activity_feedback_text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <h3>Leader responses</h3>
+            <div className="card mb-3 text-start">
+              <div className="card-body">
+                {leaderFeedback.map((response, index) => (
                   <div key={index}>
                     <p>{response.activity_feedback_text}</p>
                   </div>

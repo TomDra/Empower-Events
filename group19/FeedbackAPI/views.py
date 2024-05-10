@@ -60,7 +60,7 @@ class FeedbackOverview(APIView):
         """
 
         # Get the feedback for the activity
-        feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id)
+        feedback = Feedback.objects.filter(calendar_event=activity_id)
 
         # Check if feedback is not None
         if feedback is not None:
@@ -202,7 +202,7 @@ class ActivityFeedbackList(generics.ListAPIView):
         activity_id = self.kwargs['activity_id']
 
         # Grab feedback from the database
-        feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('feedback_id')
+        feedback = Feedback.objects.filter(calendar_event=activity_id).order_by('feedback_id')
         # Return the feedback
         return feedback
 
@@ -231,7 +231,7 @@ class LeaderFeedbackList(generics.ListAPIView):
         activity_id = self.kwargs['activity_id']
 
         # Grab feedback from the database
-        feedback = Feedback.objects.filter(calendar_event__activity_id=activity_id).order_by('-feedback_id')
+        feedback = Feedback.objects.filter(calendar_event=activity_id).order_by('feedback_id')
 
         # Return the feedback
         return feedback
@@ -259,7 +259,7 @@ class FeedbackSubmission(APIView):
         data = request.data
         serializer_data = {}
         serializer_data['user'] = get_object_or_404(User, pk=request.user.id).id
-        serializer_data['calendar_event'] = get_object_or_404(Calendar, activity_id=event_id).event_id
+        serializer_data['calendar_event'] = get_object_or_404(Calendar, pk=event_id).event_id
         serializer_data['activity_feedback_text'] = data.get('activityFeedback')
         serializer_data['leader_feedback_text'] = data.get('leaderFeedback')
         serializer_data['activity_feedback_question_answers'] = data.get('questionAnswers')
