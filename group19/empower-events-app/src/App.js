@@ -17,7 +17,6 @@ import "./App.css";
 
 
 
-import CharityLogin2 from "./components/pages/charityLogIn copy";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -40,7 +39,7 @@ const App = () => {
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
               <Route path="/register" element={<SignUp />} />
-              <Route path="/charity/login" element={<CharityLogin2 onLogin={handleLogin}/>} />
+              <Route path="/charity/login" element={<CharityLogin onLogin={handleLogin}/>} />
               <Route path="/test" element={<HomePage />} />
               <Route path="/events/:eventId" element={<EventDetailPage />} />
               <Route key="past" path="/events/past" element={<Events />} />
