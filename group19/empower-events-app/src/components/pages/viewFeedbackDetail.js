@@ -20,23 +20,22 @@ const AdminFeedback = () => {
   const { eventId } = useParams();
   const [sentimentData, setSentimentData] = useState({});
 
-  const countsData = questions.map((question, index) => {
-    const answers = activityFeedback.map(
-      (activityFeedback) =>
-        JSON.parse(activityFeedback.activity_feedback_question_answers)[index]
-    );
-    const positiveCount = answers.filter(
-      (answer) => answer === "positive"
-    ).length;
-    const negativeCount = answers.filter(
-      (answer) => answer === "negative"
-    ).length;
-    return {
-      question: question.question,
-      positiveCount,
-      negativeCount,
-    };
-  });
+const countsData = questions.map((question, index) => {
+  const answers = activityFeedback.map(
+    (activity) => JSON.parse(activity.activity_feedback_question_answers)[index]
+  );
+  const positiveCount = answers.filter(
+    (answer) => answer === "positive"
+  ).length;
+  const negativeCount = answers.filter(
+    (answer) => answer === "negative"
+  ).length;
+  return {
+    question: question.question,
+    positiveCount,
+    negativeCount,
+  };
+});
 
   useEffect(() => {
     const getData = async () => {
@@ -112,7 +111,6 @@ const AdminFeedback = () => {
   } else {
     return (
       <div className="container mt-4">
-        <div>{"fsdgjs" + feedbackCounts.length}</div>
         <h1>Feedback</h1>
         <div className="row">
           <div className="col">
