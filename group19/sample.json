@@ -165,8 +165,8 @@
     {
       "user": "john_doe",
       "calendar_event_title": "Outdoor Sports Event",
-      "activity_feedback_text": "Great event, very well organized!",
-      "leader_feedback_text": "The leader was very knowledgeable and engaging.",
+      "activity_feedback_text": "Great event. Loved the activities!",
+      "leader_feedback_text": "The leader was very good.",
       "activity_feedback_question_answers": {
         "0": "positive",
         "1": "negative",
