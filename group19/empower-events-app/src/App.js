@@ -9,6 +9,7 @@ import Feedback from "./components/pages/feedback";
 import AdminPortal from "./components/pages/charityPortal";
 import AdminEvents from "./components/pages/viewFeedbackList";
 import AdminFeedback from "./components/pages/viewFeedbackDetail";
+import CharityLogin from "./components/pages/charityLogIn";
 import "./App.css";
 import EventDetailPage from "./components/pages/eventdetails";
 // src/App.js
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/register" element={<SignUp />} />
+        <Route path="/charity/login" element={<CharityLogin/>} />
         <Route path="/test" element={<HomePage />} />
         <Route path="/events/:eventId" element={<EventDetailPage />} />
         <Route key="past" path="/events/past" element={<Events />} />
