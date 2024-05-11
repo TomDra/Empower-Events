@@ -12,30 +12,13 @@ import { PolarArea } from "react-chartjs-2";
 ChartJS.register(ArcElement, CategoryScale, RadialLinearScale, Tooltip);
 
 const AdminFeedback = () => {
-  const [feedbackCounts, setFeedbackCounts] = useState({});
+  const [feedbackCounts, setFeedbackCounts] = useState([]);
   const [responseData, setResponseData] = useState("");
   const [activityFeedback, setActivityFeedback] = useState([]);
   const [leaderFeedback, setLeaderFeedback] = useState([]);
   const [questions, setQuestions] = useState([]);
   const { eventId } = useParams();
   const [sentimentData, setSentimentData] = useState({});
-
-const countsData = questions.map((question, index) => {
-  const answers = activityFeedback.map(
-    (activity) => JSON.parse(activity.activity_feedback_question_answers)[index]
-  );
-  const positiveCount = answers.filter(
-    (answer) => answer === "positive"
-  ).length;
-  const negativeCount = answers.filter(
-    (answer) => answer === "negative"
-  ).length;
-  return {
-    question: question.question,
-    positiveCount,
-    negativeCount,
-  };
-});
 
   useEffect(() => {
     const getData = async () => {
@@ -89,14 +72,12 @@ const countsData = questions.map((question, index) => {
         };
 
         setSentimentData(sentimentData);
-        setFeedbackCounts(countsData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     
     getData();
-    console.log("questions", questions);
   }, [eventId]);
   
   if (
@@ -105,7 +86,7 @@ const countsData = questions.map((question, index) => {
     !activityFeedback ||
     !leaderFeedback ||
     !questions ||
-    !feedbackCounts.length == questions.length
+    !feedbackCounts
   ) {
     return <div>Loading...</div>;
   } else {
@@ -144,12 +125,19 @@ const countsData = questions.map((question, index) => {
                 </div>
               </div>
               <h3>Question responses</h3>
-              {feedbackCounts.map((response, index) => (
-                <div key={index} className="card mb-3 text-start">
-                  <h5 className="card-title">{response.question}</h5>
+              {questions.map((question, index1) => (
+                <div key={index1} className="card mb-3 text-start">
+                  <h5 className="card-title">{question.question}</h5>
                   <div className="card-body">
-                    <p>Positive: {response.positiveCount}</p>
-                    <p>Negative: {response.negativeCount}</p>
+                    {activityFeedback.map((response, index2) => (
+                      <div key={index2}>
+                        <p>
+                          {JSON.parse(
+                            response.activity_feedback_question_answers
+                          )[index1]}
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ))}
