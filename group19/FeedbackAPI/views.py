@@ -14,7 +14,7 @@ from textblob import TextBlob
 import nltk
 from collections import Counter
 
-from .permissions import IsCharityOrActivityLeader
+from .permissions import IsCharityOrActivityLeader, IsCharity
 from .serializers import FeedbackOverviewSerializer, ActivityFeedbackListSerializer, LeaderFeedbackListSerializer, \
     FeedbackSubmissionSerializer, FeedbackQuestionsSerializer
 from myapi.models import Activity, Feedback, Calendar, User
@@ -37,7 +37,7 @@ class FeedbackOverview(APIView):
     It contains the following methods:
     - get: A method that analyses the feedback for a specific activity and returns the aforementioned data.
     """
-    permission_classes = [permissions.IsAuthenticated, IsCharityOrActivityLeader]
+    permission_classes = [permissions.IsAuthenticated, IsCharity]
 
     def get(self, request, activity_id):
         """
@@ -187,7 +187,7 @@ class ActivityFeedbackList(generics.ListAPIView):
     - get_queryset (GET): A method that returns a list of feedback for an activity.
     """
 
-    permission_classes = [permissions.IsAuthenticated, IsCharityOrActivityLeader]
+    permission_classes = [permissions.IsAuthenticated, IsCharity]#OrActivityLeader]
     pagination_class = pagination.PageNumberPagination
     serializer_class = ActivityFeedbackListSerializer
 
@@ -216,7 +216,7 @@ class LeaderFeedbackList(generics.ListAPIView):
     - get_queryset (GET): A method that returns a list of feedback for a leader.
     """
 
-    permission_classes = [permissions.IsAuthenticated, IsCharityOrActivityLeader]
+    permission_classes = [permissions.IsAuthenticated, IsCharity]
     pagination_class = pagination.PageNumberPagination
     serializer_class = LeaderFeedbackListSerializer
 
