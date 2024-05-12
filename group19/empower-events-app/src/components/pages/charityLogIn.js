@@ -37,7 +37,7 @@ function CharityLogin() {
       // handleLogin();  ## todo: handlelogin knows if its  a charity or user
 
       // Redirect to the dashboard or wherever needed
-      navigate("/charity/home");
+      navigate("/admin/portal");
     } catch (error) {
       console.error('Login error:', error);
       setError(error.message);

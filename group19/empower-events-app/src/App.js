@@ -5,8 +5,11 @@ import Login from "./components/pages/login";
 import SignUp from "./components/pages/signup";
 import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
-import CharityLogin from "./components/pages/charityLogIn";
 import Feedback from "./components/pages/feedback";
+import AdminPortal from "./components/pages/charityPortal";
+import AdminEvents from "./components/pages/viewFeedbackList";
+import AdminFeedback from "./components/pages/viewFeedbackDetail";
+import CharityLogin from "./components/pages/charityLogIn";
 import "./App.css";
 import EventDetailPage from "./components/pages/eventdetails";
 // src/App.js
@@ -43,7 +46,10 @@ const App = () => {
         <Route path="/events/:eventId" element={<EventDetailPage />} />
         <Route key="past" path="/events/past" element={<Events />} />
         <Route key="future" path="/events/future" element={<Events />} />
-        <Route path="/feedback/:id" element={<Feedback />} />
+        <Route path="/feedback/:eventId" element={<Feedback />} />
+        <Route path="/admin/portal" element={<AdminPortal />} />
+        <Route path="/admin/events" element={<AdminEvents />} />
+        <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
         {/* Add other routes as needed */}
       </Routes>
       </div>
