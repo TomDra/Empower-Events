@@ -261,9 +261,6 @@ class AddEventPhoto(APIView):
             # Return the file name in the response
             return Response({'file_name': file_name}, status=status.HTTP_201_CREATED)
 
-            # Return the added event
-            return Response(data, status=status.HTTP_201_CREATED)
-
         # Return errors if the request method is not POST or no file is provided
         return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
 
