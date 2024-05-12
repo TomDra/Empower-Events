@@ -9,6 +9,7 @@ import CharityLogin from "./components/pages/charityLogIn";
 import Feedback from "./components/pages/feedback";
 import "./App.css";
 import EventDetailPage from "./components/pages/eventdetails";
+import ContactUs from './components/pages/contactus';
 // src/App.js
 import React, { useEffect, useState } from 'react';
 //import { Routes, Route, BrowserRouter } from 'react-router-dom';
@@ -44,7 +45,7 @@ const App = () => {
         <Route key="past" path="/events/past" element={<Events />} />
         <Route key="future" path="/events/future" element={<Events />} />
         <Route path="/feedback/:id" element={<Feedback />} />
-        {/* Add other routes as needed */}
+        <Route path="/contact" element={<ContactUs />} />  {/* New Contact Us route */}
       </Routes>
       </div>
       <Footer />
