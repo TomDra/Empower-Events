@@ -9,10 +9,11 @@ def submit_contact_form(request):
         data = json.loads(request.body)
         name = data.get('name', '')
         email = data.get('email')
-        subject = data.get('subject', '')
         message = data.get('message')
-
-        ContactMessage.objects.create(name=name, email=email, subject=subject, message=message)
+        if request.user.is_authenticated:
+            ContactMessage.objects.create(name=name, email=email, message=message, user=request.user)
+        else:
+            ContactMessage.objects.create(name=name, email=email, message=message)
         return JsonResponse({"status": "success", "message": "Thank you for your message."})
 
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)

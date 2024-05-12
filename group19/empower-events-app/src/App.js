@@ -45,7 +45,7 @@ const App = () => {
         <Route key="past" path="/events/past" element={<Events />} />
         <Route key="future" path="/events/future" element={<Events />} />
         <Route path="/feedback/:id" element={<Feedback />} />
-        <Route path="/contact" element={<ContactUs />} />  {/* New Contact Us route */}
+        <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
       </Routes>
       </div>
       <Footer />
