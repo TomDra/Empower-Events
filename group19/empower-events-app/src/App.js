@@ -1,21 +1,25 @@
+// src/App.js
 //import React from "react";
 import axios from "axios";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Login from "./components/pages/login";
-import SignUp from "./components/pages/signup";
-import HomePage from "./components/pages/homePage";
-import Events from "./components/pages/events";
-import CharityLogin from "./components/pages/charityLogIn";
-import Feedback from "./components/pages/feedback";
-import "./App.css";
-import EventDetailPage from "./components/pages/eventdetails";
 import ContactUs from './components/pages/contactus';
-// src/App.js
 import React, { useEffect, useState } from 'react';
-//import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import AppNavbar from './components/navbar';
 import Footer from "./components/footer";
 import { UserProvider } from './contexts/userContext';
+import HomePage from "./components/pages/homePage";
+import Login from "./components/pages/login";
+import SignUp from "./components/pages/signup";
+import Events from "./components/pages/events";
+import Feedback from "./components/pages/feedback";
+import AdminPortal from "./components/pages/charityPortal";
+import AdminEvents from "./components/pages/viewFeedbackList";
+import AdminFeedback from "./components/pages/viewFeedbackDetail";
+import CharityLogin from "./components/pages/charityLogIn";
+import EventDetailPage from "./components/pages/eventdetails";
+import NavigationBar from "./components/NavigationBar";
+import "./App.css";
+
+
 
 
 const App = () => {
@@ -30,27 +34,31 @@ const App = () => {
   };
 
   return (
-  <div className="App">
-    <UserProvider>
-    <BrowserRouter>
-      <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-      <div className="content-wrapper">
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/register" element={<SignUp />} />
-        <Route path="/charity/login" element={<CharityLogin onLogin={handleLogin}/>} />
-        <Route path="/test" element={<HomePage />} />
-        <Route path="/events/:eventId" element={<EventDetailPage />} />
-        <Route key="past" path="/events/past" element={<Events />} />
-        <Route key="future" path="/events/future" element={<Events />} />
-        <Route path="/feedback/:id" element={<Feedback />} />
-        <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
-      </Routes>
-      </div>
-      <Footer />
-    </BrowserRouter>
-    </UserProvider>
+    <div className="App">
+      <UserProvider>
+        <BrowserRouter>
+          <NavigationBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+          <div className="content-wrapper">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<Login onLogin={handleLogin} />} />
+              <Route path="/register" element={<SignUp />} />
+              <Route path="/charity/login" element={<CharityLogin onLogin={handleLogin}/>} />
+              <Route path="/test" element={<HomePage />} />
+              <Route path="/events/:eventId" element={<EventDetailPage />} />
+              <Route key="past" path="/events/past" element={<Events />} />
+              <Route key="future" path="/events/future" element={<Events />} />
+              <Route path="/feedback/:eventId" element={<Feedback />} />
+              <Route path="/admin/portal" element={<AdminPortal />} />
+              <Route path="/admin/events" element={<AdminEvents />} />
+              <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
+              <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
+              {/* Add other routes as needed */}
+            </Routes>
+          </div>
+          <Footer />
+        </BrowserRouter>
+      </UserProvider>
     </div>
   );
 };

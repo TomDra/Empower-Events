@@ -50,7 +50,7 @@ class ActivityFeedbackListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ['activity_feedback_text', 'activity_feedback_audio']
+        fields = ['activity_feedback_text', 'activity_feedback_audio', 'activity_feedback_question_answers']
 
 
 class LeaderFeedbackListSerializer(serializers.ModelSerializer):

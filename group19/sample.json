@@ -140,19 +140,51 @@
 	  }
 	],
 	"feedback_entries": [
-	  {
-		"user": "john_doe",
-		"calendar_event_title": "Outdoor Sports Event",
-		"activity_feedback_text": "Great event, very well organized!",
-		"leader_feedback_text": "The leader was very knowledgeable and engaging."
-	  },
-	  {
-		"user": "jane_smith",
-		"calendar_event_title": "Art Workshop",
-		"activity_feedback_text": "Loved the creativity involved.",
-		"leader_feedback_text": "Inspirational leader, made the session fun."
-	  }
-	],
+    {
+      "user": "john_doe",
+      "calendar_event_title": "Outdoor Sports Event",
+      "activity_feedback_text": "I had a lot of fun",
+      "leader_feedback_text": "The leader was very good, they made the day enjoyable",
+      "activity_feedback_question_answers": {
+        "0": "positive",
+        "1": "positive",
+        "2": "positive"
+      }
+    },
+    {
+      "user": "jane_smith",
+      "calendar_event_title": "Outdoor Sports Event",
+      "activity_feedback_text": "Great event, very well organized!",
+      "leader_feedback_text": "The leader was very knowledgeable and engaging.",
+      "activity_feedback_question_answers": {
+        "0": "negative",
+        "1": "negative",
+        "2": "positive"
+      }
+    },
+    {
+      "user": "john_doe",
+      "calendar_event_title": "Outdoor Sports Event",
+      "activity_feedback_text": "Great event. Loved the activities!",
+      "leader_feedback_text": "The leader was very good.",
+      "activity_feedback_question_answers": {
+        "0": "positive",
+        "1": "negative",
+        "2": "negative"
+      }
+    },
+    {
+      "user": "jane_smith",
+      "calendar_event_title": "Art Workshop",
+      "activity_feedback_text": "Loved the creativity involved.",
+      "leader_feedback_text": "Inspirational leader, made the session fun.",
+      "activity_feedback_question_answers": {
+        "0": "positive",
+        "1": "positive",
+        "2": "negative"
+      }
+    }
+  ],
 	"feedback_questions": [
 	  {
 		"question": "How satisfied were you with the event?"
