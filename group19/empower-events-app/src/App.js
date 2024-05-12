@@ -1,5 +1,9 @@
+// src/App.js
+//import React from "react";
+import axios from "axios";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import ContactUs from './components/pages/contactus';
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Footer from "./components/footer";
 import { UserProvider } from './contexts/userContext';
 import HomePage from "./components/pages/homePage";
@@ -48,6 +52,7 @@ const App = () => {
               <Route path="/admin/portal" element={<AdminPortal />} />
               <Route path="/admin/events" element={<AdminEvents />} />
               <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
+              <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
               {/* Add other routes as needed */}
             </Routes>
           </div>

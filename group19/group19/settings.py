@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'EventsAPI.apps.EventsapiConfig',  # FOR DRF API
     'CharityAPI.apps.CharityapiConfig',  # FOR DRF API
     'WeatherAPI',
+    'Contact',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
