@@ -47,14 +47,17 @@ const AddEvents = () => {
         e.preventDefault();
         const formData = new FormData();
 
-        // Append nested age_group object as JSON string
         formData.append('activity', JSON.stringify({
-            ...eventData,
-            age_group: undefined,  // Remove age_group from the main object
-            compatible_disabilities: JSON.stringify(eventData.compatible_disabilities),
-            photo_file_path: undefined  // Remove photo_file_path to append it as File
+            title: eventData.title,
+            description: eventData.description,
+            latitude: eventData.latitude,
+            longitude: eventData.longitude,
+            age_group_id: eventData.age_group_id,
+            compatible_disabilities: eventData.compatible_disabilities,
+            charity: eventData.charity,
+            feedback_questions: eventData.feedback_questions
         }));
-        formData.append('activity[photo_file_path]', eventData.photo_file_path);
+        formData.append('photo', eventData.photo);
         formData.append('time', eventData.time);
         formData.append('activity_leader_id', eventData.activity_leader_id);
 
@@ -68,24 +71,21 @@ const AddEvents = () => {
             });
             if (response.status === 201) {
                 alert('Event added successfully!');
+                // Reset form
                 setEventData({
-                    activity: {
-                        title: "",
-                        description: "",
-                        latitude: "",
-                        longitude: "",
-                        age_group: {
-                          age_range_lower: "",
-                          age_range_higher: "",
-                          group_title: ""
-                        },
-                        compatible_disabilities: [
-                          ""
-                        ],
-                        photo_file_path: ""
-                      },
-                      time: "",
-                      activity_leader_id: ''
+                    title: '',
+                    description: '',
+                    latitude: '',
+                    longitude: '',
+                    age_group: {
+                        age_range_lower: '',
+                        age_range_higher: '',
+                        group_title: ''
+                    },
+                    compatible_disabilities: [],
+                    photo_file_path: null,
+                    time: '',
+                    activity_leader_id: ''
                 });
             }
         } catch (error) {
