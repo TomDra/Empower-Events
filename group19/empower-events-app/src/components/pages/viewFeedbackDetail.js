@@ -155,33 +155,58 @@ const AdminFeedback = () => {
           </div>
           <div>
             <div className="row justify-content-center">
-              <h3>General activity responses</h3>
-              <div className="card mb-3 text-start">
-                <div className="card-body">
-                  {activityFeedback.map((response, index) => (
-                    <div key={index}>
-                      <p>{response.activity_feedback_text}</p>
+              <div className="col-md-6"> {/* Column for General activity responses */}
+                <h3>General activity responses</h3>
+                <div className="card mb-3 text-start">
+                  <div className="card-body">
+                    {activityFeedback.map((response, index) => (
+                      <div key={index} class="">
+                        <p>{response.activity_feedback_text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-6"> {/* Column for Leader responses */}
+                <h3>Leader responses</h3>
+                <div className="card mb-3 text-start">
+                  <div className="card-body">
+                    {leaderFeedback.map((response, index) => (
+                      <div key={index} class="">
+                        <p>{response.leader_feedback_text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row justify-content-center">
+            <div className="col-md-6"> {/* Column for Audio responses */}
+                <h3>Audio responses</h3>
+                <div className="card mb-3 text-start">
+                  <div className="card-body d-flex flex-column align-items-center">
+                    {activityFeedback.map((response, index) => (
+                      <div key={index} className="text-center mb-2">
+                        {response.activity_feedback_audio ? (
+                          <audio
+                            src={response.activity_feedback_audio}
+                            controls
+                            className="mb-2">
+                          </audio>
+                      ) : null}
                     </div>
                   ))}
                 </div>
               </div>
-              <h3>Leader responses</h3>
-              <div className="card mb-3 text-start">
-                <div className="card-body">
-                  {leaderFeedback.map((response, index) => (
-                    <div key={index}>
-                      <p>{response.leader_feedback_text}</p>
-                    </div>
-                  ))}
-                </div>
               </div>
-              <h3>Question responses</h3>
-              <div className="card mb-3 text-start">
-                <div className="card-body">
-                  <Bar
-                      data={questionChartData}
-                      width={100}
 
+              <div className="col-md-"> {/* Column for Question responses */}
+                <h3>Question responses</h3>
+                <div className="card mb-3 text-start">
+                  <div className="card-body">
+                    <Bar
+                      data={questionChartData}
+                      width={200}
                       height={200}
                       options={{
                         maintainAspectRatio: false,
@@ -192,33 +217,21 @@ const AdminFeedback = () => {
                           },
                           y: {
                             type: 'linear',
-                            stacked: false
+                            stacked: false,
+                            ticks: {
+                              precision: 0 // to remove decimals
+                            }
                           }
                         }
                       }}
                     />
+                  </div>
+                </div>
 
-                </div>
-              </div>
-              <h3>Audio responses</h3>
-              <div className="card mb-3 text-start">
-                <div className="card-body d-flex flex-column align-items-center">
-                  {activityFeedback.map((response, index) => (
-                    <div key={index} className="text-center mb-2">
-                      {response.activity_feedback_audio ? (
-                        <audio
-                          src={response.activity_feedback_audio}
-                          controls
-                          className="mb-2"
-                        ></audio>
-                      ) : null}
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
         </div>
+      </div>
       </div>
     );
   }
