@@ -50,9 +50,9 @@ const EventDetailPage = () => {
 
   
   if (!event) {
-    return <div>Loading...</div>;
+    return <div>ERROR Please refresh</div>;
   }
-  const dateString = event.timeDate;
+  const dateString = event.timeDate_readable;
   //console.log(new Date(dateString).toString());
   //const formattedDate = new Date(dateString).toString();
   return (
@@ -79,9 +79,16 @@ const EventDetailPage = () => {
           <p><strong>Age Group:</strong> {event.activity.age_group.title} ({event.activity.age_group.lower} - {event.activity.age_group.higher} years old)</p> {/* Updated to access activity age group */}
         </div>
       </div>
-
-      <button className="btn-primary">Book Now</button>
-
+      {new Date(event.timeDate) < new Date() ? (
+        <a href={"/feedback/" + eventId} className="btn-primary">
+          Give Feedback
+        </a>
+      ) : (
+        <a href={"/register-interest/" + eventId} className="btn-primary">
+          Register your Interest
+        </a>
+      )}
+       <br/>
       <div ref={mapRef} className="map" />
 
     </div>
