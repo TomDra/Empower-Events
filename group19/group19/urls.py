@@ -28,4 +28,5 @@ urlpatterns = [
     path('api/events/', include('EventsAPI.urls')),
     path('api/charity/', include('CharityAPI.urls')),
     path('api/contact/', include('Contact.urls')),
+    path('api/leader-vote/', include('Leader.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
