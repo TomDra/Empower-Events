@@ -8,7 +8,7 @@ const Portal = () => {
       {/* Hero Banner */}
       <div className="hero-banner position-relative">
         <img
-          src="/static/images/freeroyaltyunsplash.jpg"
+          src="/static/images/conference.jpg"
           alt="Empower Events"
           className="col-12 w-full cover"
           style={{ height: "400px", objectFit: "cover" }}
@@ -29,10 +29,10 @@ const Portal = () => {
       {/* Event Previews */}
       <div className="px-4">
         <div className="event-previews row mt-4 justify-content-center">
-          <Link to="/events/past" className="col-md-4 text-decoration-none">
+          <Link to="/admin/add-event" className="col-md-4 text-decoration-none">
             <div className="card hover-effect" id="homePageCard">
               <img
-                src="/static/images/random.jpg"
+                src="/static/images/freeroyaltyunsplash.jpg"
                 className="card-img-top"
                 alt="Past Event"
               />
@@ -46,7 +46,7 @@ const Portal = () => {
           <Link to="/admin/events" className="col-md-4 text-decoration-none">
             <div className="card hover-effect" id="homePageCard">
               <img
-                src="/static/images/conference.jpg"
+                src="/static/images/mic.jpg"
                 className="card-img-top"
                 alt="Future Event"
               />
