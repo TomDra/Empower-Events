@@ -120,16 +120,7 @@ const AdminFeedback = () => {
               hoverBackgroundColor: "rgba(255,99,132,0.6)",
               hoverBorderColor: "rgba(255,99,132,1)",
               data: questionData.map((data) => data.negative)
-            },
-            {
-              label: "Midpoint",
-              backgroundColor: "rgba(255,205,86,0.4)",
-              borderColor: "rgba(255,205,86,1)",
-              borderWidth: 1,
-              hoverBackgroundColor: "rgba(255,205,86,0.6)",
-              hoverBorderColor: "rgba(255,205,86,1)",
-              data: questionData.map((data) => data.midpoint)
-            },
+            }
           ]
         });
       } catch (error) {
