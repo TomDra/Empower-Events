@@ -99,8 +99,10 @@ const Events = () => {
                       onClick={() => handleSpeak(event)}
                       variant="contained"
                       sx={{ mt: 1, mb: 1 }}
+                       title="Read Details"
+                       size="lg"
                     >
-                  Read Details
+                  <strong>Read Details</strong>
                   <img src="/static/images/text_to_speech_icon.png" alt="Speech Icon" />
                 </Button>
             </div>
