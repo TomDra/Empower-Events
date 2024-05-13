@@ -1,4 +1,18 @@
 {
+	"leader_votes":[
+		{
+			"leader_name": "John Doe",
+			"user_username": "john_doe"
+		},
+		{
+			"leader_name": "John Doe",
+			"user_username": "jane_smith"
+		},
+		{
+			"leader_name": "John Doe",
+			"user_username": "alex_taylor"
+		}
+	],
 	"users": [
 	  {
 		"username": "john_doe",

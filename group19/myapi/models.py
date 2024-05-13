@@ -124,3 +124,4 @@ class AgeGroup(models.Model):
     age_range_lower = models.IntegerField()
     age_range_higher = models.IntegerField()
     group_title = models.CharField(max_length=20)
+
