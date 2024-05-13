@@ -41,7 +41,7 @@ const AppNavbar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <NavLink className="nav-link" to="/admin/add-event">Add Event</NavLink>
-            <NavLink className="nav-link" to="/admin/events">View Feedback</NavLink>
+            <NavLink className="nav-link" to="/admin/events">View Event Feedback</NavLink>
           </Nav>
           <Nav className="ms-auto">
             <NavLink className="nav-link" to="#" onClick={onLogout}>Logout</NavLink>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Button, TextField, Typography, Container, Box } from '@mui/material';
+import { Button, TextField, Typography, Container, Box } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
+import { speak } from "../../utils/CheckSpeech";
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
@@ -14,6 +15,11 @@ const SignUp = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+
+    const handleSpeak = () => {
+    // Reading out the welcome message and input field descriptions
+    speak("Welcome to the sign up page. Please enter your username, email address and password twice to create an account.");
+  };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -48,6 +54,14 @@ const SignUp = () => {
                     alignItems: 'center',
                 }}
             >
+            <Button
+          onClick={handleSpeak}
+          variant="contained"
+          sx={{ mt: 1, mb: 1 }}
+        >
+          Read Instructions
+          <img src="/static/images/text_to_speech_icon.png" alt="Speech Icon" />
+        </Button>
                 <Typography component="h1" variant="h5">
                     Sign Up
                 </Typography>

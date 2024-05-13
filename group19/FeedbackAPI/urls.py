@@ -12,4 +12,8 @@ urlpatterns = [
          name='feedback_submission'),
     path('<int:event_id>/feedback-questions-list', views.FeedbackQuestions.as_view(),
          name='feedback_questions'),
+
+    # more data
+    path('<int:event_id>/feedback-questions-details', views.FeedbackQuestionDetails.as_view(),
+         name='feedback_question_detail'),
 ]
