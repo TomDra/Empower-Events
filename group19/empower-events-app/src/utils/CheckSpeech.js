@@ -6,5 +6,6 @@ export const speak = (text) => {
 	  speechSynthesis.speak(utterance);
 	} else {
 	  console.error("Speech synthesis not supported in this browser.");
+	  alert("Speech synthesis not supported in this browser");
 	}
   };
