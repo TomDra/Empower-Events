@@ -15,7 +15,10 @@ FROM node:${NODE_VERSION}-alpine as base
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
 
-
+COPY . .
+COPY public/ /empower-events-app/public/
+COPY src/ /empower-events-app/src/
+COPY package.json /empower-events-app/
 ################################################################################
 # Create a stage for installing production dependecies.
 FROM base as deps
