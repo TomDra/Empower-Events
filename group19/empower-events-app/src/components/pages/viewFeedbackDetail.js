@@ -1,14 +1,29 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { ArcElement, RadialLinearScale } from 'chart.js';
+import { PolarArea } from 'react-chartjs-2';
+
+
 import {
   Chart as ChartJS,
-  ArcElement,
   CategoryScale,
-  RadialLinearScale,
-  Tooltip,
-} from "chart.js";
-import { PolarArea } from "react-chartjs-2";
+  LinearScale,
+  Title,
+  BarElement,
+  Tooltip
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  Title,
+  BarElement,
+  Tooltip
+);
+
+
 ChartJS.register(ArcElement, CategoryScale, RadialLinearScale, Tooltip);
 
 const AdminFeedback = () => {
@@ -16,9 +31,10 @@ const AdminFeedback = () => {
   const [responseData, setResponseData] = useState("");
   const [activityFeedback, setActivityFeedback] = useState([]);
   const [leaderFeedback, setLeaderFeedback] = useState([]);
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState({});
   const { eventId } = useParams();
   const [sentimentData, setSentimentData] = useState({});
+  const [questionChartData, setQuestionChartData] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -37,14 +53,14 @@ const AdminFeedback = () => {
             `http://localhost:8000/api/feedback/${eventId}/leader-feedback-list`
           ),
           axios.get(
-            `http://localhost:8000/api/feedback/${eventId}/feedback-questions-list`
+            `http://localhost:8000/api/feedback/${eventId}/feedback-questions-details`
           ),
         ]);
 
         setResponseData(responseOverview.data);
         setActivityFeedback(responseActivity.data.results);
         setLeaderFeedback(responseLeader.data.results);
-        setQuestions(responseQuestions.data);
+        setQuestions(responseQuestions.data.questions);
 
         const sentimentData = {
           labels: [
@@ -72,14 +88,49 @@ const AdminFeedback = () => {
         };
 
         setSentimentData(sentimentData);
+
+        // Prepare data for question chart
+        const questionLabels = Object.keys(responseQuestions.data.questions);
+        const questionData = questionLabels.map((label) => {
+          const { positive, negative } = responseQuestions.data.questions[label];
+          return {
+            label,
+            positive: positive,
+            negative: negative
+          };
+        });
+
+        setQuestionChartData({
+          labels: questionLabels,
+          datasets: [
+            {
+              label: "Positive",
+              backgroundColor: "rgba(75,192,192,0.4)",
+              borderColor: "rgba(75,192,192,1)",
+              borderWidth: 1,
+              hoverBackgroundColor: "rgba(75,192,192,0.6)",
+              hoverBorderColor: "rgba(75,192,192,1)",
+              data: questionData.map((data) => data.positive)
+            },
+            {
+              label: "Negative",
+              backgroundColor: "rgba(255,99,132,0.4)",
+              borderColor: "rgba(255,99,132,1)",
+              borderWidth: 1,
+              hoverBackgroundColor: "rgba(255,99,132,0.6)",
+              hoverBorderColor: "rgba(255,99,132,1)",
+              data: questionData.map((data) => data.negative)
+            }
+          ]
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    
+
     getData();
   }, [eventId]);
-  
+
   if (
     !responseData ||
     !sentimentData ||
@@ -104,62 +155,83 @@ const AdminFeedback = () => {
           </div>
           <div>
             <div className="row justify-content-center">
-              <h3>General activity responses</h3>
-              <div className="card mb-3 text-start">
-                <div className="card-body">
-                  {activityFeedback.map((response, index) => (
-                    <div key={index}>
-                      <p>{response.activity_feedback_text}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <h3>Leader responses</h3>
-              <div className="card mb-3 text-start">
-                <div className="card-body">
-                  {leaderFeedback.map((response, index) => (
-                    <div key={index}>
-                      <p>{response.leader_feedback_text}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <h3>Question responses</h3>
-              {questions.map((question, index1) => (
-                <div key={index1} className="card mb-3 text-start">
-                  <h5 className="card-title">{question.question}</h5>
+              <div className="col-md-6"> {/* Column for General activity responses */}
+                <h3>General activity responses</h3>
+                <div className="card mb-3 text-start">
                   <div className="card-body">
-                    {activityFeedback.map((response, index2) => (
-                      <div key={index2}>
-                        <p>
-                          {JSON.parse(
-                            response.activity_feedback_question_answers
-                          )[index1]}
-                        </p>
+                    {activityFeedback.map((response, index) => (
+                      <div key={index} class="">
+                        <p>{response.activity_feedback_text}</p>
                       </div>
                     ))}
                   </div>
                 </div>
-              ))}
-              <h3>Audio responses</h3>
-              <div className="card mb-3 text-start">
-                <div className="card-body d-flex flex-column align-items-center">
-                  {activityFeedback.map((response, index) => (
-                    <div key={index} className="text-center mb-2">
-                      {response.activity_feedback_audio ? (
-                        <audio
-                          src={response.activity_feedback_audio}
-                          controls
-                          className="mb-2"
-                        ></audio>
+              </div>
+              <div className="col-md-6"> {/* Column for Leader responses */}
+                <h3>Leader responses</h3>
+                <div className="card mb-3 text-start">
+                  <div className="card-body">
+                    {leaderFeedback.map((response, index) => (
+                      <div key={index} class="">
+                        <p>{response.leader_feedback_text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row justify-content-center">
+            <div className="col-md-6"> {/* Column for Audio responses */}
+                <h3>Audio responses</h3>
+                <div className="card mb-3 text-start">
+                  <div className="card-body d-flex flex-column align-items-center">
+                    {activityFeedback.map((response, index) => (
+                      <div key={index} className="text-center mb-2">
+                        {response.activity_feedback_audio ? (
+                          <audio
+                            src={response.activity_feedback_audio}
+                            controls
+                            className="mb-2">
+                          </audio>
                       ) : null}
                     </div>
                   ))}
                 </div>
               </div>
+              </div>
+
+              <div className="col-md-"> {/* Column for Question responses */}
+                <h3>Question responses</h3>
+                <div className="card mb-3 text-start">
+                  <div className="card-body">
+                    <Bar
+                      data={questionChartData}
+                      width={200}
+                      height={200}
+                      options={{
+                        maintainAspectRatio: false,
+                        scales: {
+                          x: {
+                            type: 'category',
+                            stacked: false
+                          },
+                          y: {
+                            type: 'linear',
+                            stacked: false,
+                            ticks: {
+                              precision: 0 // to remove decimals
+                            }
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+
             </div>
           </div>
         </div>
+      </div>
       </div>
     );
   }

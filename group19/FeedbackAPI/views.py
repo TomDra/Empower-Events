@@ -314,3 +314,75 @@ class FeedbackQuestions(APIView):
 
         # Return the feedback questions
         return Response(questions, status=status.HTTP_200_OK)
+
+
+class FeedbackQuestionDetails(generics.ListAPIView):
+    """
+    ActivityFeedbackList class is a subclass of ListAPIView. It allows users to view a list of feedback for an activity.
+    It implements pagination to limit the number of feedback items returned per page.
+
+    It contains the following methods:
+    - get_queryset (GET): A method that returns a list of feedback for an activity.
+    """
+
+    permission_classes = [permissions.IsAuthenticated, IsCharity]
+
+    def get(self, request, event_id):
+        """
+        A method that returns feedback questions for an activity.
+
+        :param request: The request object.
+        :param activity_id: The id of the activity.
+
+        :return: A list of feedback questions for an activity.
+        """
+        try:
+            # Get the activity id from the URL
+            event_id = self.kwargs['event_id']
+
+            # Get the feedback questions from the database
+            feedbacks = Feedback.objects.filter(calendar_event=event_id)
+            activity = Calendar.objects.get(event_id=event_id).activity
+
+            if feedbacks is None:
+                return Response({"detail": "No feedback found."}, status=status.HTTP_204_NO_CONTENT)
+
+            question_counts = {}
+            questions = json.loads(activity.feedback_questions)
+
+            for feedback in feedbacks:
+                if feedback.activity_feedback_question_answers:
+                    answers = json.loads(feedback.activity_feedback_question_answers)
+                    for question_id, answer in answers.items():
+                        question_text = questions[int(question_id)]['question']
+                        if answer == 'positive':
+                            if question_text in question_counts:
+                                question_counts[question_text]['positive'] = question_counts[question_text]['positive'] + 1
+                            else:
+                                question_counts[question_text] = {'positive': 1, 'negative': 0}
+                        else:
+                            if question_text in question_counts:
+                                question_counts[question_text]['negative'] = question_counts[question_text]['negative'] + 1
+                            else:
+                                question_counts[question_text] = {'positive': 0, 'negative': 1}
+
+
+            # Calculate the total counts of positive and negative answers
+            for question, counts in question_counts.items():
+                positive_total = counts["positive"]
+                negative_total = counts["negative"]
+
+                question_counts[question]["midpoint"] = positive_total - negative_total
+
+            question_detail = {'questions': question_counts}
+
+            if question_counts == {}:
+                return Response({'questions': question_counts, "detail": "No feedback found."}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+            # Return the feedback questions
+            return Response(question_detail, status=status.HTTP_200_OK)
+
+        except Calendar.DoesNotExist:
+            return Response({"detail": "Activity not found."}, status=status.HTTP_404_NOT_FOUND)
