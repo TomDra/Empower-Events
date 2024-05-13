@@ -3,11 +3,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Loader } from "@googlemaps/js-api-loader";
 import './eventdetails.css';  // Import the stylesheet
+import { speak } from "../../utils/CheckSpeech";
+import { Button, TextField, Typography, Container, Box } from "@mui/material";
 
 const EventDetailPage = () => {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const mapRef = useRef(null);
+
+
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/events/detail/${eventId}/`)
@@ -19,6 +23,14 @@ const EventDetailPage = () => {
       })
       .catch(error => console.error('Error fetching event details:', error));
   }, [eventId]);
+
+  const handleSpeak = () => {
+    // Reading out the welcome message and input field descriptions
+    speak("Title: "+event.activity.title+". DESCRIPTION: "+event.activity.description+". Date and time: "+event.timeDate.split('|')[0]+", at "+event.timeDate.split('|')[1]);
+    speak(". This event is compatible with these disabilities: "+event.activity.compatible_disabilities.join(", ")+". The age group is "+event.activity.age_group.title+" ("+event.activity.age_group.lower+" - "+event.activity.age_group.higher+" years old)");
+    speak(". This event is run by: "+event.event_leader.name+", with Charity:"+event.charity.name)
+    speak(". The location of the event is ")
+  };
 
   const loadMap = (activityData) => { // Updated to receive activityData
     const lat = parseFloat(activityData.latitude);
@@ -65,6 +77,14 @@ const EventDetailPage = () => {
           <p className="event-time">{dateString}</p>
         </div>
       </div>
+      <Button
+          onClick={handleSpeak}
+          variant="contained"
+          sx={{ mt: 1, mb: 1 }}
+        >
+          Read Event Details
+          <img src="/static/images/text_to_speech_icon.png" alt="Speech Icon" />
+        </Button>
 
       <div className="event-info-containers">
         <div className="event-info-card">
