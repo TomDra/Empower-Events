@@ -1,6 +1,8 @@
 """
 The views module for the EventsAPI app
 """
+import os
+
 from django.utils import timezone
 from rest_framework import permissions, generics, pagination, status, renderers
 from EventsAPI.serializers import CalendarSerializer, CalendarSerializerAddEvent, ActivityLeaderSerializer
@@ -217,3 +219,48 @@ def calander_details(self, event_id):
 
     }
     return JsonResponse(data)
+
+
+class AddEventPhoto(APIView):
+
+
+    permission_classes = [permissions.IsAuthenticated, IsCharity]
+
+    def post(self, request):
+        """
+        A method to add an activity photo.
+
+        :param request: The request object.
+
+        :return: A response containing the event photo file path or the errors if the data is invalid.
+        """
+        if request.FILES.get('photo'):
+            photo = request.FILES['photo']
+
+            # Assuming you have a 'media' directory in your project root
+            media_path = 'media/activity_images/'
+            if not os.path.exists(media_path):
+                os.makedirs(media_path)
+
+            # Generate a unique file name
+            file_name = photo.name
+            file_name_and_path = os.path.join(media_path, file_name)
+
+            # Check if file already exists
+            count = 1
+            while os.path.exists(file_name_and_path):
+                file_name = f"{os.path.splitext(file_name)[0]}_{count}{os.path.splitext(file_name)[1]}"
+                file_name_and_path = os.path.join(media_path, file_name)
+                count += 1
+
+            # Save the image file
+            with open(file_name_and_path, 'wb+') as destination:
+                for chunk in photo.chunks():
+                    destination.write(chunk)
+
+            # Return the file name in the response
+            return Response({'file_name': file_name}, status=status.HTTP_201_CREATED)
+
+        # Return errors if the request method is not POST or no file is provided
+        return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
