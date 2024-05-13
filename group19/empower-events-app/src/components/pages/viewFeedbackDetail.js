@@ -16,7 +16,7 @@ const AdminFeedback = () => {
   const [responseData, setResponseData] = useState("");
   const [activityFeedback, setActivityFeedback] = useState([]);
   const [leaderFeedback, setLeaderFeedback] = useState([]);
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState({});
   const { eventId } = useParams();
   const [sentimentData, setSentimentData] = useState({});
 
@@ -37,14 +37,17 @@ const AdminFeedback = () => {
             `http://localhost:8000/api/feedback/${eventId}/leader-feedback-list`
           ),
           axios.get(
-            `http://localhost:8000/api/feedback/${eventId}/feedback-questions-list`
+            `http://localhost:8000/api/feedback/${eventId}/feedback-questions-details`
           ),
         ]);
 
         setResponseData(responseOverview.data);
         setActivityFeedback(responseActivity.data.results);
         setLeaderFeedback(responseLeader.data.results);
-        setQuestions(responseQuestions.data);
+        //setQuestions(responseQuestions.data.questions);
+        setQuestions(responseQuestions.data.questions);
+        console.log(responseQuestions.data.questions);
+
 
         const sentimentData = {
           labels: [
@@ -76,10 +79,10 @@ const AdminFeedback = () => {
         console.error("Error fetching data:", error);
       }
     };
-    
+
     getData();
   }, [eventId]);
-  
+
   if (
     !responseData ||
     !sentimentData ||
@@ -125,19 +128,19 @@ const AdminFeedback = () => {
                 </div>
               </div>
               <h3>Question responses</h3>
-              {questions.map((question, index1) => (
-                <div key={index1} className="card mb-3 text-start">
-                  <h5 className="card-title">{question.question}</h5>
+              {Object.keys(questions).map((question) => (
+                <div className="card mb-3 text-start">
+                  <h5 className="card-title">{question}</h5>
                   <div className="card-body">
-                    {activityFeedback.map((response, index2) => (
-                      <div key={index2}>
-                        <p>
-                          {JSON.parse(
-                            response.activity_feedback_question_answers
-                          )[index1]}
-                        </p>
-                      </div>
-                    ))}
+                    <p>
+                      Positive: {questions[question].positive}
+                    </p>
+                    <p>
+                      Negative: {questions[question].negative}
+                    </p>
+                    <p>
+                      Midpoint: {questions[question].midpoint}
+                    </p>
                   </div>
                 </div>
               ))}
