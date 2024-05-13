@@ -24,9 +24,9 @@ from rest_framework.authentication import SessionAuthentication
 from django.shortcuts import get_object_or_404
 
 # Download the stopwords
-nltk.download('stopwords')
-nltk.download('punkt')
-download_all()
+#nltk.download('stopwords')
+#nltk.download('punkt')
+#download_all()
 
 
 class FeedbackOverview(APIView):
