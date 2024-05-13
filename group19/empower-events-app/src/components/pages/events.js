@@ -33,7 +33,7 @@ const Events = () => {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, [location]);
@@ -66,14 +66,7 @@ const Events = () => {
                   <h6 className="card-title">{event.description}</h6>
                   <p className="card-text">Age group: {event.age_group}</p>
                   <p className="card-text">{Date(event.date).toLocaleString()}</p>
-                  <Button
-                      onClick={() => handleSpeak(event)}
-                      variant="contained"
-                      sx={{ mt: 1, mb: 1 }}
-                    >
-                  Read Details
-                  <img src="/static/images/text_to_speech_icon.png" alt="Speech Icon" />
-                </Button>
+
                   <a href={"/events/" + event.event_id} className="btn btn-primary">
                     View More
                   </a>
@@ -87,6 +80,7 @@ const Events = () => {
                       Resister your interest
                     </a>
                    ) : null}
+
                 </div>
               </div>
               <div className="col-md-2 d-flex justify-content-center align-items-center">
@@ -101,6 +95,14 @@ const Events = () => {
                   />
                 </div>
               </div>
+                   <Button
+                      onClick={() => handleSpeak(event)}
+                      variant="contained"
+                      sx={{ mt: 1, mb: 1 }}
+                    >
+                  Read Details
+                  <img src="/static/images/text_to_speech_icon.png" alt="Speech Icon" />
+                </Button>
             </div>
           </div>
         </div>
