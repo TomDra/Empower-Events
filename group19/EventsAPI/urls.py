@@ -12,4 +12,5 @@ urlpatterns = [
     path('detail/<int:event_id>/', views.calander_details),
     # add events
     path('add-event', views.AddEvent.as_view(), name='add_event'),
+    path('add-event-photo/', views.AddEventPhoto.as_view(), name='add_event_photo'),
 ]
