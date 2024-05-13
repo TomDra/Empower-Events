@@ -8,6 +8,7 @@ const EventDetailPage = () => {
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const mapRef = useRef(null);
+  const [geoapifyData, setGeoapifyData] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/events/detail/${eventId}/`)
@@ -19,6 +20,19 @@ const EventDetailPage = () => {
       })
       .catch(error => console.error('Error fetching event details:', error));
   }, [eventId]);
+
+  var requestOptions = {
+      method: 'GET',
+    };
+
+    useEffect(() => {
+      if (event) {
+        fetch("https://api.geoapify.com/v1/geocode/reverse?lat=" + event.activity.latitude + "&lon=" + event.activity.longitude + "&apiKey=e523fb9420a94cd4a8b01dcc407e6164", requestOptions)
+          .then(response => response.json())
+          .then(result => setGeoapifyData(result))
+          .catch(error => console.log(error + 'error', error));
+      }
+    }, [event]);
 
   const loadMap = (activityData) => { // Updated to receive activityData
     const lat = parseFloat(activityData.latitude);
@@ -35,16 +49,30 @@ const EventDetailPage = () => {
     });
 
     loader.load().then(() => {
-      const center = { lat, lng };
-      const map = new google.maps.Map(mapRef.current, {
-        center,
-        zoom: 10,
-      });
-      new google.maps.Marker({
-        position: center,
-        map,
-      });
+        const center = { lat, lng };
+        const map = new google.maps.Map(mapRef.current, {
+            center,
+            zoom: 10,
+        });
+        new google.maps.Marker({
+            position: center,
+            map,
+            title: activityData.title,
+        });
+        const infoWindow = new google.maps.InfoWindow({
+            content: `<div>
+                        <h2>${activityData.title}</h2>
+                        <p>${activityData.description}</p>
+                        <p><strong>Charity:</strong> ${activityData.charityName}</p>
+                        <p><strong>Compatible Disabilities:</strong> ${activityData.compatible_disabilities.join(", ")}</p>
+                        <p><strong>Age Group:</strong> ${activityData.age_group.title} (${activityData.age_group.lower} - ${activityData.age_group.higher} years old)</p>
+                     </div>`,
+        });
+        map.addListener("click", () => {
+            infoWindow.open(map);
+        });
     });
+
   };
 
 
@@ -69,14 +97,25 @@ const EventDetailPage = () => {
       <div className="event-info-containers">
         <div className="event-info-card">
           <p><strong>Charity:</strong> {event.charity.name}</p> {/* Updated to access charity name */}
+          {event && event.event_leader && (
+            <>
+              <p><strong>Event leader:</strong> {event.event_leader.name} </p>
+              <p><strong>leader's email:</strong> {event.event_leader.email} </p>
+            </>
+          )}
         </div>
 
         <div className="event-info-card">
           <p><strong>Compatible Disabilities:</strong> {event.activity.compatible_disabilities.join(", ")}</p> {/* Updated to access activity compatible disabilities */}
+          <p><strong>Age Group:</strong> {event.activity.age_group.title} ({event.activity.age_group.lower} - {event.activity.age_group.higher} years old)</p> {/* Updated to access activity age group */}
         </div>
 
         <div className="event-info-card">
-          <p><strong>Age Group:</strong> {event.activity.age_group.title} ({event.activity.age_group.lower} - {event.activity.age_group.higher} years old)</p> {/* Updated to access activity age group */}
+          {geoapifyData && (
+          <>
+          <p><strong>Location:</strong> {geoapifyData.features[0].properties.formatted}</p>
+          </>
+          )}
         </div>
       </div>
       {new Date(event.timeDate) < new Date() ? (
