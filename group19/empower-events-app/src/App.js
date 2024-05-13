@@ -54,7 +54,7 @@ const App = () => {
               <Route path="/admin/events" element={<AdminEvents />} />
               <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
               <Route path="/contact-us" element={<ContactUs />} />
-              <Route path="/add-event" element={<AddEvents />} /> {/* New route for adding events */}
+              <Route path="/admin/add-event" element={<AddEvents />} /> {/* New route for adding events */}
               {/* Add other routes as needed */}
             </Routes>
           </div>
