@@ -15,6 +15,13 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# For images:
+# STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -24,7 +31,7 @@ SECRET_KEY = 'django-insecure-o=+w-^#hx$y)zf=_s*#(t4xdl6^739wf8jun2=y#pcsf4mz9-2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 # Application definition
 
@@ -34,7 +41,9 @@ INSTALLED_APPS = [
     'myapi',  # FOR DJANGO-REACT
     'UserAPI.apps.UserapiConfig',  # FOR DRF API
     'EventsAPI.apps.EventsapiConfig',  # FOR DRF API
+    'CharityAPI.apps.CharityapiConfig',  # FOR DRF API
     'WeatherAPI',
+    'Contact',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -127,21 +136,40 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # In your settings.py
 AUTH_USER_MODEL = 'myapi.User'
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'Empowerevents@gmail.com'
+EMAIL_HOST_PASSWORD = 'OsaWifjs_Sdfs-sd'
+
 # FOR DJANGO-REACT
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',  # Or other domains allowed to make requests
 ]
-
-# FOR DRF API
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+# Ensure all necessary headers are allowed
+CORS_ALLOW_HEADERS = [
+    'Content-Type',
+    'X-CSRFToken',
+    # other headers as needed...
+]
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',] 
+# FOR DRF API   
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
@@ -152,3 +180,9 @@ REST_FRAMEWORK = {
         'user': '1000/hour',  # TODO: Change this to 5/minute in production
     }
 }
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Django's built-in backend
+    'CharityAPI.backends.CharityNameBackend',  # For Charity Portal
+]

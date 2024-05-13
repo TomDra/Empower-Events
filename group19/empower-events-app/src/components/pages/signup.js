@@ -1,97 +1,127 @@
-// Importing necessary modules and components from React and Axios
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Button, TextField, Typography, Container, Box } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
+import { speak } from "../../utils/CheckSpeech";
 
-// Setting Axios defaults for CSRF protection and enabling credentials
 axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.withCredentials = true;
 
-// Defining the SignUp component
 const SignUp = () => {
-    // Initializing state variables using the useState hook
-    const [email, setEmail] = useState(''); // To store the entered email
-    const [password, setPassword] = useState(''); // To store the entered password
-    const [confirmPassword, setConfirmPassword] = useState(''); // To store the confirmed password
-    const [username, setUsername] = useState(''); // To store the entered username
-    const [errorMessage, setErrorMessage] = useState(''); // To store error messages during sign-up
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
 
-    // Handling form submission
+    const handleSpeak = () => {
+    // Reading out the welcome message and input field descriptions
+    speak("Welcome to the sign up page. Please enter your username, email address and password twice to create an account.");
+  };
+
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Preventing default form submission behavior
-        
-        // Checking if passwords match
+        e.preventDefault();
+
         if (password !== confirmPassword) {
             setErrorMessage('Passwords do not match.');
             return;
         }
-        
+
         try {
-            // Sending a POST request to the backend API for sign-up
             const response = await axios.post('http://localhost:8000/api/auth/register/', {
-                username, // Sending username entered by the user
-                email, // Sending email entered by the user
-                password, // Sending password entered by the user
+                username,
+                email,
+                password,
             });
-    
-            console.log('Sign-up successful:', response.data); // Logging successful sign-up response
-            // Redirecting user to the login page or automatically logging them in after signing up
+            console.log('Sign-up successful:', response.data);
+            navigate('/login'); // Redirecting to the login page after successful sign-up
         } catch (error) {
-            // Error handling
             const detailedError = error.response ? (error.response.data.detail || JSON.stringify(error.response.data)) : error.message;
-            console.error('Sign-up failed:', detailedError); // Logging error message if sign-up fails
-            setErrorMessage('An error occurred during sign-up: ' + detailedError); // Setting error message state
+            console.error('Sign-up failed:', detailedError);
+            setErrorMessage('An error occurred during sign-up: ' + detailedError);
         }
     };
 
-    // Rendering the sign-up form
     return (
-        <div>
-            <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
+        <Container maxWidth="xs">
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+            <Button
+          onClick={handleSpeak}
+          variant="contained"
+          sx={{ mt: 1, mb: 1 }}
+        >
+          Read Instructions
+          <img src="/static/images/text_to_speech_icon.png" alt="Speech Icon" />
+        </Button>
+                <Typography component="h1" variant="h5">
+                    Sign Up
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
                         id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
+                        autoFocus
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)} // Handling username input change
+                        onChange={(e) => setUsername(e.target.value)}
                     />
-                </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
                         id="email"
+                        label="Email Address"
+                        name="email"
+                        autoComplete="email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)} // Handling email input change
+                        onChange={(e) => setEmail(e.target.value)}
                     />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
                         type="password"
                         id="password"
+                        autoComplete="new-password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)} // Handling password input change
+                        onChange={(e) => setPassword(e.target.value)}
                     />
-                </div>
-                <div>
-                    <label htmlFor="confirmPassword">Confirm Password:</label>
-                    <input
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="confirmPassword"
+                        label="Confirm Password"
                         type="password"
                         id="confirmPassword"
+                        autoComplete="new-password"
                         value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)} // Handling confirm password input change
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                     />
-                </div>
-                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Displaying error message if exists */}
-                <button type="submit">Sign Up</button> {/* Submit button */}
-            </form>
-            <a href="/login">Login instead</a>
-        </div>
+                    {errorMessage && <Typography variant="body2" color="error">{errorMessage}</Typography>}
+                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                        Sign Up
+                    </Button>
+                </Box>
+                <a href="/login">Already have an account? Sign In</a>
+            </Box>
+        </Container>
     );
 }
 
-// Exporting the SignUp component as the default export
 export default SignUp;
