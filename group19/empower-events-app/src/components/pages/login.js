@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Button, TextField, Typography, Container, Box } from '@mui/material';
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Button, TextField, Typography, Container, Box } from "@mui/material";
+import { speak } from "../../utils/CheckSpeech"; // Adjust the path based on your actual file structure
 import { UserContext } from '../../contexts/userContext';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -14,6 +15,11 @@ const Login = () => {
   const navigate = useNavigate();
   const { handleLogin } = useContext(UserContext);
 
+  const handleSpeak = () => {
+    // Reading out the welcome message and input field descriptions
+    speak("Welcome to the login page. Please enter your username and password to sign in.");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -25,6 +31,7 @@ const Login = () => {
 
       console.log('Login successful:', response.data);
       handleLogin(); // Update the global state
+
       navigate("/");
     } catch (error) {
       console.error('Login failed:', error.message);
@@ -42,6 +49,16 @@ const Login = () => {
           alignItems: 'center',
         }}
       >
+
+
+        <Button
+          onClick={handleSpeak}
+          variant="contained"
+          sx={{ mt: 1, mb: 1 }}
+        >
+          Read Instructions
+          <img src="/static/images/text_to_speech_icon.png" alt="Speech Icon" />
+        </Button>
         <Typography component="h1" variant="h5">Sign in</Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField

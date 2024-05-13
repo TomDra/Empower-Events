@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
+import { Button, TextField, Typography, Container, Box } from "@mui/material";
+import { speak } from "../../utils/CheckSpeech";
 window.google = window.google ? window.google : {};
+
 
 const Events = () => {
   const [responseData, setResponseData] = useState("");
@@ -30,13 +33,18 @@ const Events = () => {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, [location]);
 
+  const handleSpeak = (event) => {
+    speak(""+event.title+"... "+event.description+". Date and time: "+Date(event.date).toLocaleString());
+    speak("The event age group is for"+event.age_group);
+  };
+
   if (!isLoaded) return "Loading maps";
-  if (!responseData) return <div>Loading...</div>;
+  if (!responseData) return <div>ERROR please refresh</div>;
   return (
     <div className="Events">
       <div className="justify-content-center mt-5">
@@ -58,6 +66,7 @@ const Events = () => {
                   <h6 className="card-title">{event.description}</h6>
                   <p className="card-text">Age group: {event.age_group}</p>
                   <p className="card-text">{Date(event.date).toLocaleString()}</p>
+
                   <a href={"/events/" + event.event_id} className="btn btn-primary">
                     View More
                   </a>
@@ -71,6 +80,7 @@ const Events = () => {
                       Resister your interest
                     </a>
                    ) : null}
+
                 </div>
               </div>
               <div className="col-md-2 d-flex justify-content-center align-items-center">
@@ -85,6 +95,16 @@ const Events = () => {
                   />
                 </div>
               </div>
+                   <Button
+                      onClick={() => handleSpeak(event)}
+                      variant="contained"
+                      sx={{ mt: 1, mb: 1 }}
+                       title="Read Details"
+                       size="lg"
+                    >
+                  <strong>Read Details</strong>
+                  <img src="/static/images/text_to_speech_icon.png" alt="Speech Icon" />
+                </Button>
             </div>
           </div>
         </div>

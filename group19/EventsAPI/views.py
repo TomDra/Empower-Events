@@ -207,7 +207,8 @@ def calander_details(self, event_id):
             'photo_file_path': activity.photo_file_path
             
         },
-        'timeDate': time_readable,
+        'timeDate': calendar_event.time,
+        'timeDate_readable': time_readable,
         'event_leader':{
             "name": activity_leader.name,
             "email": activity_leader.email,
