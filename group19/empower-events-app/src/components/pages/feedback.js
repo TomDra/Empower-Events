@@ -17,14 +17,14 @@ const FeedbackForm = ({ match }) => {
   const [audioBlob, setAudioBlob] = useState(null);
   const [permission, setPermission] = useState(false);
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { eventId } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         let response;
         response = await axios.get(
-          `http://localhost:8000/api/feedback/${id}/feedback-questions-list`
+          `http://localhost:8000/api/feedback/${eventId}/feedback-questions-list`
         );
         setResponseData(response.data);
       } catch (error) {
@@ -33,7 +33,7 @@ const FeedbackForm = ({ match }) => {
     };
 
     fetchData();
-  }, [id]);
+  }, [eventId]);
 
   const handleOptionChange = (questionIndex, optionValue) => {
     setRadioOptions((radioOptions) => ({
@@ -51,17 +51,16 @@ const FeedbackForm = ({ match }) => {
 
     const formData = new FormData();
     if (audioBlob !== null) {
-      formData.append("audio", audioBlob, `recording${id}.mp3`);
+      formData.append("audio", audioBlob, `recording${eventId}.mp3`);
     }
-    formData.append("activity_id", id);
+    formData.append("activity_id", eventId);
     formData.append("activityFeedback", activityFeedback);
     formData.append("leaderFeedback", leaderFeedback);
     formData.append("questionAnswers", JSON.stringify(radioOptions));
-    formData.append("feedbackQuestions", JSON.stringify(responseData));
-
+    console.log("Form data:", formData);
     try {
       await axios.post(
-        `http://localhost:8000/api/feedback/${id}/feedback-submission`,
+        `http://localhost:8000/api/feedback/${eventId}/feedback-submission`,
         formData,
         {
           headers: {
@@ -123,7 +122,7 @@ const FeedbackForm = ({ match }) => {
 
   return (
     <div className="Feedback pt-4 container">
-      <h1>Feedback for {responseData.description}</h1>
+      <h1>Feedback{responseData.description}</h1>
       <form onSubmit={handleSubmit}>
         {responseData.map((question, index) => (
           <div className="row justify-content-center">

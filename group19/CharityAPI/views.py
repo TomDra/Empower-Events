@@ -80,7 +80,7 @@ class CharityLogout(APIView):
     """
 
     # Allow only authenticated users to logout
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = []#permissions.IsAuthenticated, IsCharity]
 
     def post(self, request):
         """
