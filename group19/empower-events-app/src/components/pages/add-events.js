@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState,  useEffect} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Container, Typography, Grid } from '@mui/material';
+import { TextField, Button, Container, Typography, Grid, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import Cookies from 'js-cookie';  // Make sure js-cookie is installed
 
 const AddEvents = () => {
     const navigate = useNavigate();
+    const [activityLeaders, setActivityLeaders] = useState([]);
+    const [selectedLeader, setSelectedLeader] = useState('');
+
+
+
     const [eventData, setEventData] = useState({
         title: '',
         description: '',
@@ -15,10 +20,30 @@ const AddEvents = () => {
         age_range_higher: '',
         group_title: '',
         compatible_disabilities: '',
-        photo_file_path: null,
+        photo_file_path: '',
         time: '',
-        activity_leader_id: ''
+        activity_leader: ''
     });
+
+    useEffect(() => {
+        async function fetchActivityLeaders() {
+            try {
+                const csrfToken = Cookies.get('csrftoken');
+                const response = await axios.get('http://localhost:8000/api/events/add-event', {
+                    headers: {
+                        'X-CSRFToken': csrfToken
+                    }
+                });
+                if (response.status === 200) {
+                    setActivityLeaders(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching activity leaders:', error);
+            }
+        }
+        fetchActivityLeaders();
+    }, []);
+
 
     const handleChange = (e) => {
         const name = e.target.name;
@@ -30,15 +55,50 @@ const AddEvents = () => {
     };
 
 
-    const handleFileChange = (e) => {
+    const handleFileChange = async (e) => {
         const file = e.target.files[0];
+        try {
+            const csrfToken = Cookies.get('csrftoken');
+            const formData = new FormData();
+            formData.append('photo', file); // Corrected to use file directly
+            const response = await axios.post('http://localhost:8000/api/events/add-event-photo/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'X-CSRFToken': csrfToken
+                }
+            });
+            if (response.status === 201) {
+                alert('Photo added successfully!');
+                const photo_path_name = response.data.file_name; // corrected to get file_name from response
+                // Do something with photo_path_name if needed
+                setEventData(prevState => ({
+                    ...prevState,
+                    photo_file_path: photo_path_name
+                }));
+            }
+        } catch (error) {
+            console.error('Error adding photo:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+            }
+            alert('Failed to add the photo. Please check the console for more details.');
+        }
+        };
+
+     const handleLeaderChange = (e) => {
+        const leaderId = e.target.value;
+        setSelectedLeader(leaderId);
         setEventData(prevState => ({
             ...prevState,
-            photo_file_path: file
+            activity_leader_id: leaderId
         }));
     };
 
+
+
+
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         const formData = {
             activity: {
@@ -52,7 +112,7 @@ const AddEvents = () => {
                     group_title: eventData.group_title
                 },
                 compatible_disabilities: eventData.compatible_disabilities.split(',').map(disability => disability.trim()), // Convert to array of strings
-                photo_file_path: eventData.photo_file_path ? eventData.photo_file_path.name : '/defalt'
+                photo_file_path: eventData.photo_file_path ? eventData.photo_file_path : '/defalt'
             },
             time: eventData.time,
             activity_leader_id: parseInt(eventData.activity_leader_id)
@@ -142,8 +202,8 @@ const AddEvents = () => {
                                     fullWidth
                                     type="file"
                                     label="Event Photo"
-                                    name={'photo_file_path'}
-                                    key={'photo_file_path'}
+                                    name={'photo'}
+                                    key={'photo'}
                                     onChange={handleFileChange}
                                     inputProps={{ accept: 'image/*' }}
                                 />
@@ -159,11 +219,21 @@ const AddEvents = () => {
                                     helperText="Comma-separated values" />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField fullWidth label="Activity Leader ID" type="number" name="activity_leader_id"  required
-                                    value={eventData['activity_leader_id']}
-                                    onChange={handleChange}
-                                    key={'activity_leader_id'}
-                                    helperText="Comma-separated values" />
+                        <FormControl fullWidth>
+                            <InputLabel id="activity-leader-select-label">Activity Leader</InputLabel>
+                            <Select
+                                labelId="activity-leader-select-label"
+                                id="activity-leader-select"
+                                value={selectedLeader}
+                                onChange={handleLeaderChange}
+                            >
+                                {activityLeaders.map((leader) => (
+                                    <MenuItem key={leader.activity_leader_id} value={leader.activity_leader_id}>
+                                        {leader.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     {/* Submit button */}
                     <Grid item xs={12}>
