@@ -98,3 +98,25 @@ position: absolute;
     width: 90%;  /* Wider for smaller screens */
   }
 }
+
+
+.event-info-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.event-info-card p {
+  margin: 0;
+}
+
+.event-info-card p strong {
+  font-weight: bold;
+  color: #333;
+}
+
+.event-info-card p:last-child {
+  margin-bottom: 0;
+}
