@@ -42,6 +42,7 @@ const AppNavbar = () => {
           <Nav className="me-auto">
             <NavLink className="nav-link" to="/admin/add-event">Add Event</NavLink>
             <NavLink className="nav-link" to="/admin/events">View Event Feedback</NavLink>
+            <NavLink className="nav-link" to="/admin/leader-votes">View Activity leader votes</NavLink>
           </Nav>
           <Nav className="ms-auto">
             <NavLink className="nav-link" to="#" onClick={onLogout}>Logout</NavLink>

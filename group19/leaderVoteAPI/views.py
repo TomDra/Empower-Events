@@ -1,6 +1,6 @@
 from django.shortcuts import render
 import os
-
+from collections import Counter
 from django.utils import timezone
 from rest_framework import permissions, generics, pagination, status, renderers
 from .serializers import ActivityLeaderVoteSerializer
@@ -57,6 +57,8 @@ class results(APIView):
         # Convert year and month to integers
         year = int(year)
         month = int(month)
+        charity = Charity.objects.get(charity_name=request.user.charity_name)
+        print(year, month)
 
         # Get the first and last moments of the month
         start_date = timezone.datetime(year, month, 1, 0, 0, 0, tzinfo=timezone.utc)
@@ -64,15 +66,19 @@ class results(APIView):
 
         # Filter ActivityLeaderVotes for the specified year and month
         activity_leader_votes = ActivityLeaderVote.objects.filter(
-            date_submitted__gte=start_date,
-            date_submitted__lt=end_date
+            date_submited__gte=start_date,
+            date_submited__lt=end_date,
+            activity_leader__charity = charity
         )
 
+        leader_counter = Counter(vote.activity_leader.name for vote in activity_leader_votes)
+        print(leader_counter)
+
         # Serialize the queryset
-        serializer = ActivityLeaderVoteSerializer(activity_leader_votes, many=True)  # Assuming you have a serializer
+        #serializer = ActivityLeaderVoteSerializer(activity_leader_votes, many=True)  # Assuming you have a serializer
 
         # Return the serialized data
-        return Response(serializer.data)
+        return Response(leader_counter)
 
 
 class leadersList(APIView):
