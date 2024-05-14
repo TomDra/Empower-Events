@@ -16,7 +16,11 @@
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.2",
     "cra-template": "^1.2.0",
+<<<<<<< HEAD
     "date-fns": "^3.6.0",
+=======
+    "fast-deep-equal": "^3.1.3",
+>>>>>>> 589947dc901297cb428295885ddda20abcfabcd8
     "js-cookie": "^3.0.5",
     "mic-recorder-to-mp3": "^2.2.2",
     "package-lock.json": "^1.0.0",
