@@ -39,9 +39,10 @@ const EventDetailPage = () => {
           .catch(error => console.log(error + 'error', error));
       }
     }, [event]);
+
   const handleSpeak = () => {
     // Reading out the welcome message and input field descriptions
-    speak("Title: "+event.activity.title+". DESCRIPTION: "+event.activity.description+". Date and time: "+event.timeDate.split('|')[0]+", at "+event.timeDate.split('|')[1]);
+    speak("Title: "+event.activity.title+". DESCRIPTION: "+event.activity.description+". Date and time: "+event.timeDate_readable.split('|')[0]+", at "+event.timeDate_readable.split('|')[1]);
     speak(". This event is compatible with these disabilities: "+event.activity.compatible_disabilities.join(", ")+". The age group is "+event.activity.age_group.title+" ("+event.activity.age_group.lower+" - "+event.activity.age_group.higher+" years old)");
     speak(". This event is run by: "+event.event_leader.name+", with Charity:"+event.charity.name)
     speak(". The location of the event is "+ geoapifyData.features[0].properties.formatted)
