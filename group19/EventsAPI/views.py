@@ -15,8 +15,9 @@ from django.http import JsonResponse
 from myapi.models import Activity, Feedback, Calendar, ActivityLeader, Charity, EventInterest
 from django.shortcuts import get_object_or_404
 from datetime import datetime
-
-
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.core.mail import send_mail
 
 class UpcomingEventsList(generics.ListAPIView):
     """
@@ -266,10 +267,18 @@ class AddEventPhoto(APIView):
         return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
 
 class RegisterInterestView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
     def post(self, request, event_id):
         user = request.user
         event = get_object_or_404(Calendar, event_id=event_id)
         EventInterest.objects.create(user=user, event=event)
+
+        # Send email to the user
+        subject = f"Registration Confirmation for {event.activity.title}"
+        html_message = render_to_string('registration_email.html', {'user': user, 'event': event})
+        plain_message = strip_tags(html_message)
+        from_email = 'from@yourdomain.com'
+        to = user.email
+
+        send_mail(subject, plain_message, from_email, [to], html_message=html_message)
+
         return Response({"message": "Interest registered successfully"}, status=status.HTTP_201_CREATED)

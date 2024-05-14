@@ -1,6 +1,5 @@
 // src/App.js
 import React, { useState } from 'react';
-import axios from "axios";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ContactUs from './components/pages/contactus';
 import HomePage from "./components/pages/homePage";
@@ -13,17 +12,14 @@ import AdminEvents from "./components/pages/viewFeedbackList";
 import AdminFeedback from "./components/pages/viewFeedbackDetail";
 import CharityLogin from "./components/pages/charityLogIn";
 import EventDetailPage from "./components/pages/eventdetails";
-import AddEvents from "./components/pages/add-events"; // Import AddEvents component
+import AddEvents from "./components/pages/add-events";
 import NavigationBar from "./components/NavigationBar";
 import LeaderVote from "./components/pages/leaderVote";
 import ViewLeaderVote from "./components/pages/viewLeaderVote";
 import Footer from "./components/footer";
 import { UserProvider } from './contexts/userContext';
+import WeatherNotification from './components/Weather'; // Import the WeatherNotification component
 import "./App.css";
-
-// axios.defaults.xsrfCookieName = 'csrftoken';
-// axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,6 +31,9 @@ const App = () => {
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
+
+  const userLatitude = "51.5074"; // Example latitude (London)
+  const userLongitude = "-0.1278"; // Example longitude (London)
 
   return (
     <div className="App">
@@ -55,14 +54,15 @@ const App = () => {
               <Route path="/admin/portal" element={<AdminPortal />} />
               <Route path="/admin/events" element={<AdminEvents />} />
               <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
-              <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
+              <Route path="/contact-us" element={<ContactUs />} />
               <Route path="/leader-vote" element={<LeaderVote />} />
               <Route path="/admin/leader-votes" element={<ViewLeaderVote />} />
-              <Route path="/admin/add-event" element={<AddEvents />} /> {/* New route for adding events */}
+              <Route path="/admin/add-event" element={<AddEvents />} />
               {/* Add other routes as needed */}
             </Routes>
           </div>
           <Footer />
+          <WeatherNotification lat={userLatitude} lon={userLongitude} /> {/* Include the WeatherNotification component */}
         </BrowserRouter>
       </UserProvider>
     </div>

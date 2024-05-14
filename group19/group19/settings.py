@@ -35,6 +35,10 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 # Application definition
 
+# settings.py
+
+
+
 INSTALLED_APPS = [
     'rest_framework',  # FOR DJANGO-REACT
     'corsheaders',  # FOR DJANGO-REACT
@@ -138,12 +142,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'myapi.User'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Example: using Gmail SMTP server
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'Empowerevents@gmail.com'
-EMAIL_HOST_PASSWORD = 'OsaWifjs_Sdfs-sd'
+EMAIL_HOST_USER = 'your-email@gmail.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'
+
 
 # FOR DJANGO-REACT
 CORS_ALLOW_CREDENTIALS = True
@@ -186,4 +192,27 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Django's built-in backend
     'CharityAPI.backends.CharityNameBackend',  # For Charity Portal
+]
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
 ]

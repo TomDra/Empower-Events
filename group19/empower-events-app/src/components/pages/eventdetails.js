@@ -2,7 +2,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Loader } from "@googlemaps/js-api-loader";
-import './eventdetails.css';  // Import the stylesheet
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './eventdetails.css';
 import { speak } from "../../utils/CheckSpeech";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
 import axios from "axios";
@@ -15,16 +17,25 @@ const EventDetailPage = () => {
   const [geoapifyData, setGeoapifyData] = useState(null);
 
 
+  const notificationTimer = useRef(null);
 
   useEffect(() => {
     fetch(`http://localhost:8000/api/events/detail/${eventId}/`)
       .then(response => response.json())
       .then((data) => {
-        console.log("Fetched event data:", data);
         setEvent(data);
-        loadMap(data.activity); // Updated to pass activity data to loadMap
+        loadMap(data.activity);
       })
-      .catch(error => console.error('Error fetching event details:', error));
+      .catch(error => {
+        console.error('Error fetching event details:', error);
+        toast.error('Failed to fetch event details.');
+      });
+
+    return () => {
+      if (notificationTimer.current) {
+        clearTimeout(notificationTimer.current);
+      }
+    };
   }, [eventId]);
 
   var requestOptions = {
@@ -55,6 +66,7 @@ const EventDetailPage = () => {
 
     if (isNaN(lat) || isNaN(lng)) {
       console.error("Invalid coordinates:", activityData.latitude, activityData.longitude);
+      toast.error('Invalid coordinates provided.');
       return;
     }
 
@@ -121,6 +133,7 @@ const EventDetailPage = () => {
   //const formattedDate = new Date(dateString).toString();
   return (
     <div className="event-detail-page">
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <div className="photo-container">
         <img src={`http://localhost:8000/media/activity_images/${event.activity.photo_file_path}`} alt="Event Cover" className="event-image" />
         <div className="text-overlay">
@@ -179,7 +192,6 @@ const EventDetailPage = () => {
       )}
        <br/>
       <div ref={mapRef} className="map" />
-
     </div>
   );
 };

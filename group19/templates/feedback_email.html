@@ -1,0 +1,14 @@
+<!-- templates/feedback_email.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Feedback Request</title>
+</head>
+<body>
+    <h1>We Value Your Feedback!</h1>
+    <p>Dear Participant,</p>
+    <p>Thank you for attending the event: <strong>{{ event.activity.title }}</strong>.</p>
+    <p>We would love to hear your thoughts and feedback. Please take a moment to share your experience.</p>
+    <a href="http://yourdomain.com/feedback/{{ event.event_id }}">Leave Feedback</a>
+</body>
+</html>
