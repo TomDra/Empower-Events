@@ -1,15 +1,11 @@
 project_name: Empower Events
 
 project_description: |
-  Short description (100 words) about the web app proposed and developed. You can provide a brief overview of the project here, including which UN's SDGs this project is tackling.
-
-  Events page for members of the charity.
+  Create a platform for disabled adults to find accessible events for them and leave feedback for a charity to make improvements.
 
   Allow the members to give feedback on each event, in the form of text or speech.
-  Possible email the members that have registed their interest a day before reminding them.
+  Email users to remind them of upcoming events and provide live weather updates
 
-  Send list of members registed their intrest to the event leader.
-  Send follow up email after asking for feedback.
 
 
 group_members:
