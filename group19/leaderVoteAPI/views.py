@@ -11,6 +11,8 @@ from myapi.models import ActivityLeader
 from .models import ActivityLeaderVote
 from django.db.models import Count
 
+from EventsAPI.serializers import ActivityLeaderSerializer
+from myapi.models import Charity
 
 
 class vote(APIView):
@@ -35,6 +37,7 @@ class vote(APIView):
             )
 
         # Proceed with the vote submission process
+        print(request.data)
         activity_leader_name = request.data.get("activity_leader_name")
         activity_leader = ActivityLeader.objects.get(name=activity_leader_name)
 
@@ -69,4 +72,27 @@ class results(APIView):
         serializer = ActivityLeaderVoteSerializer(activity_leader_votes, many=True)  # Assuming you have a serializer
 
         # Return the serialized data
+        return Response(serializer.data)
+
+
+class leadersList(APIView):
+    """
+    AddEvent class is a subclass of APIView. It is used to add an event.
+
+    It contains the following methods:
+    - get (get): A method to get the list of all activity leaders and their user id's for the subsequent post request.
+    - post (post): A method to add an event.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        """
+        A method to get the list of all activity leaders and their user id's for the subsequent post request.
+
+        :param request: The request object.
+
+        :return: A response containing the list of all activity leaders and their user id's.
+        """
+        activity_leaders = ActivityLeader.objects.filter()
+        serializer = ActivityLeaderSerializer(activity_leaders, many=True)
         return Response(serializer.data)

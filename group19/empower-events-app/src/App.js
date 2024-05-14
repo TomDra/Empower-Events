@@ -17,6 +17,7 @@ import AdminFeedback from "./components/pages/viewFeedbackDetail";
 import CharityLogin from "./components/pages/charityLogIn";
 import EventDetailPage from "./components/pages/eventdetails";
 import NavigationBar from "./components/NavigationBar";
+import LeaderVote from "./components/pages/leaderVote";
 import "./App.css";
 
 
@@ -53,6 +54,7 @@ const App = () => {
               <Route path="/admin/events" element={<AdminEvents />} />
               <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
               <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
+              <Route path="/leader-vote" element={<LeaderVote />} />
               {/* Add other routes as needed */}
             </Routes>
           </div>
