@@ -1,7 +1,8 @@
 import json
 from django.core.management.base import BaseCommand
 from myapi.models import User, Charity, ActivityLeader, Activity, AgeGroup, Calendar, Feedback
-
+from leaderVoteAPI.models import ActivityLeaderVote
+from django.utils import timezone
 
 class Command(BaseCommand):
 	help = 'Seeds the database with sample data'
@@ -76,11 +77,15 @@ class Command(BaseCommand):
 			charity = Charity.objects.get(charity_name=activity_data['charity'])
 			# Create the activity
 			activity, created = Activity.objects.get_or_create(
+				title = activity_data['title'],
 				description=activity_data['description'],
 				latitude=activity_data['latitude'],
 				longitude=activity_data['longitude'],
 				age_group=age_group,
-				charity=charity
+				charity=charity,
+				# feedback_questions=data['feedback_questions']
+				feedback_questions=json.dumps(data['feedback_questions']),
+				photo_file_path = activity_data['photo_file_path'],
 			)
 
 
@@ -93,7 +98,7 @@ class Command(BaseCommand):
 
 			# If the activity was just created, print a message
 			if created:
-				print(f"Activity '{activity.description}' created.")
+				print(f"Activity '{activity.title}' created.")
 
 		# Seed Activity Leaders
 		for leader_data in data['activity_leaders']:
@@ -127,9 +132,9 @@ class Command(BaseCommand):
 			# Ensure the Activity exists
 			try:
 				activity = Activity.objects.get(
-					description=event_data['activity_description'])
+					title=event_data['activity_title'])
 			except Activity.DoesNotExist:
-				print(f"Activity '{event_data['activity_description']}' not found. Skipping calendar event creation.")
+				print(f"Activity '{event_data['activity_title']}' not found. Skipping calendar event creation.")
 				continue
 			# Ensure the ActivityLeader exists
 			try:
@@ -148,7 +153,7 @@ class Command(BaseCommand):
 			)
 
 			if created:
-				print(f"Calendar event for '{activity.description}' at {event.time} created.")
+				print(f"Calendar event for '{activity.title}' at {event.time} created.")
 
 		# Seed Feedback
 		for feedback_data in data.get('feedback_entries', []):
@@ -162,9 +167,9 @@ class Command(BaseCommand):
 			# Find the calendar event by description (this assumes you have a way to uniquely identify events by description)
 			try:
 				calendar_event = Calendar.objects.get(
-					activity__description=feedback_data['calendar_event_description'])
+					activity__title=feedback_data['calendar_event_title'])
 			except Calendar.DoesNotExist:
-				print(f"Calendar event '{feedback_data['calendar_event_description']}' not found. Skipping feedback entry.")
+				print(f"Calendar event '{feedback_data['calendar_event_title']}' not found. Skipping feedback entry.")
 				continue
 
 			# Create or update the feedback entry
@@ -175,20 +180,42 @@ class Command(BaseCommand):
 					'activity_feedback_text': feedback_data.get('activity_feedback_text'),
 					'leader_feedback_text': feedback_data.get('leader_feedback_text'),
 					'activity_feedback_question_answers': json.dumps(feedback_data.get('activity_feedback_question_answers', '')),
-					'leader_feedback_question_answers': json.dumps(feedback_data.get('leader_feedback_question_answers', '')),
 				}
 			)
 
- 				# Handling feedback questions
-			if 'feedback_questions' in data:
-				# Serialize feedback questions and save them in the Feedback model
-				feedback.set_feedback_questions(json.dumps(data['feedback_questions']))
-				feedback.save()
+			if created:
+				print(f"Feedback for '{calendar_event.activity.title}' by '{user.username}' created.")
+			else:
+				print(f"Feedback for '{calendar_event.activity.title}' by '{user.username}' updated.")
 
+		#seed leader votes
+		for leader_vote in data['leader_votes']:
+			try:
+				user = User.objects.get(username=leader_vote['user_username'])
+			except User.DoesNotExist:
+				print(f"User '{leader_vote['user_username']}' not found. Skipping leader vote entry.")
+				continue
+
+			# Find the activity leader by name
+			try:
+				activity_leader = ActivityLeader.objects.get(name=leader_vote['leader_name'])
+			except ActivityLeader.DoesNotExist:
+				print(f"Activity Leader '{leader_vote['leader_name']}' not found. Skipping leader vote entry.")
+				continue
+
+			# Create the activity leader vote
+			leader_vote, created = ActivityLeaderVote.objects.get_or_create(
+				user=user,
+				activity_leader=activity_leader,
+				# You may want to adjust this based on your data
+			)
 
 			if created:
-				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' created.")
+				print(f"Leader vote for '{activity_leader.name}' by '{user.username}' created.")
 			else:
-				print(f"Feedback for '{calendar_event.activity.description}' by '{user.username}' updated.")
+				print(f"Leader vote for '{activity_leader.name}' by '{user.username}' already exists.")
+
+
+
 
 		self.stdout.write(self.style.SUCCESS('Database seeded successfully'))

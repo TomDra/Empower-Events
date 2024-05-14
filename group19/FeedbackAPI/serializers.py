@@ -3,7 +3,7 @@ Serializers for the FeedbackAPI.
 """
 from rest_framework import serializers
 
-from myapi.models import Feedback
+from myapi.models import Activity, Feedback
 
 
 class FeedbackOverviewSerializer(serializers.Serializer):
@@ -50,7 +50,7 @@ class ActivityFeedbackListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ['activity_feedback_text', 'activity_feedback_audio']
+        fields = ['activity_feedback_text', 'activity_feedback_audio', 'activity_feedback_question_answers']
 
 
 class LeaderFeedbackListSerializer(serializers.ModelSerializer):
@@ -64,7 +64,7 @@ class LeaderFeedbackListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Feedback
-        fields = ['leader_feedback_text', 'leader_feedback_audio']
+        fields = ['leader_feedback_text']
 
 
 class FeedbackSubmissionSerializer(serializers.ModelSerializer):
@@ -76,7 +76,7 @@ class FeedbackSubmissionSerializer(serializers.ModelSerializer):
     - user (ForeignKey): The user submitting the feedback.
     - calendar_event (ForeignKey): The calendar event associated with the feedback.
     - activity_feedback_text (CharField): The text feedback about the activity.
-    - activity_feedback_audio (BinaryField): The audio feedback about the activity.
+    - activity_feedback_audio (FileField): The audio feedback about the activity.
     - leader_feedback_text (CharField): The text feedback about the leader.
     - leader_feedback_audio (BinaryField): The audio feedback about the leader.
     """
@@ -84,5 +84,11 @@ class FeedbackSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
         fields = ['feedback_id', 'user', 'calendar_event', 'activity_feedback_text', 'activity_feedback_audio',
-                  'leader_feedback_text', 'leader_feedback_audio']
+                  'leader_feedback_text', 'activity_feedback_question_answers']
         read_only_fields = ['feedback_id']
+
+
+class FeedbackQuestionsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = ['feedback_questions']

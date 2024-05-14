@@ -1,148 +1,347 @@
 {
-	"users": [
-	  {
-		"username": "john_doe",
-		"password": "password123",
-		"email": "john@example.com",
-		"disabilities": ["blind"]
-	  },
-	  {
-		"username": "jane_smith",
-		"password": "password456",
-		"email": "jane@example.com",
-		"disabilities": ["deaf", "wheelchair user"]
-	  },
-	  {
-		"username": "alex_taylor",
-		"password": "password789",
-		"email": "alex@example.com",
-		"disabilities": ["blind"]
-	  }   
-	],
-	"charities": [
-	  {
-		"charity_name": "Charity A",
-		"email": "charitya@example.com",
-		"user": "john_doe",
-		"password": "charityAPassword123"
-	  },
-	  {
-		"charity_name": "Charity B",
-		"email": "charityb@example.com",
-		"user": "jane_smith",
-		"password": "charityBPassword123"
-	  }
-	],
-	"activity_leaders": [
-	  {
-		"user": "john_doe",
-		"name": "John Doe",
-		"birth_date": "1990-05-15T08:00:00Z",
-		"charity": "Charity A",
-		"email": "john_leader@example.com"
-	  },
-	  {
-		"user": "thomas_l",
-		"name": "Thomas Leader",
-		"birth_date": "1990-06-15T08:00:00Z",
-		"charity": "Charity B",
-		"email": "thomas_leader@example.com"
-	  }
-	],
-	"activities": [
-	  {
-		"description": "Outdoor Sports Event",
-		"latitude": 40.7128,
-		"longitude": -74.0060,
-		"age_group": "Kids",
-		"compatible_disabilities": ["deaf"],
-		"charity": "Charity A"
-	  },
-	  {
-		"description": "Art Workshop",
-		"latitude": 34.0522,
-		"longitude": -118.2437,
-		"age_group": "Teens",
-		"compatible_disabilities": ["blind"],
-		"charity": "Charity B"
-	  },
-	  {
-		"description": "Music Therapy Session",
-		"latitude": 51.234271,
-		"longitude": -0.572400,
-		"age_group": "Teens",
-		"compatible_disabilities": ["deaf", "wheelchair user"],
-		"charity": "Charity A"
-	  },
-	  {
-		"description": "Activity Test",
-		"latitude": 42.817669,
-		"longitude": -72.575256,
-		"age_group": "Teens",
-		"compatible_disabilities": ["wheelchair user"],
-		"charity": "Charity B"
-	  }
-	],
-	"age_groups": [
-	  {
-		"age_range_lower": 5,
-		"age_range_higher": 10,
-		"group_title": "Kids"
-	  },
-	  {
-		"age_range_lower": 11,
-		"age_range_higher": 18,
-		"group_title": "Teens"
-	  },
-	  {
-		"age_range_lower": 19,
-		"age_range_higher": 60,
-		"group_title": "Adults"
-	  }
-	  
-	],
-	"calendar_events": [
-	  {
-		"activity_description": "Outdoor Sports Event",
-		"time": "2024-04-15T10:00:00Z",
-		"activity_leader_name": "John Doe"
-	  },
-	  {
-		"activity_description": "Art Workshop",
-		"time": "2024-04-20T14:00:00Z",
-		"activity_leader_name": "John Doe"
-	  },
-	  {
-		"activity_description": "Activity Test",
-		"time": "2025-12-20T14:00:00Z",
-		"activity_leader_name": "Thomas Leader"
-	  }
-	],
-	"feedback_entries": [
-	  {
-		"user": "john_doe",
-		"calendar_event_description": "Outdoor Sports Event",
-		"activity_feedback_text": "Great event, very well organized!",
-		"leader_feedback_text": "The leader was very knowledgeable and engaging."
-	  },
-	  {
-		"user": "jane_smith",
-		"calendar_event_description": "Art Workshop",
-		"activity_feedback_text": "Loved the creativity involved.",
-		"leader_feedback_text": "Inspirational leader, made the session fun."
-	  }
-	],
-	"feedback_questions": [
-	  {
-		"question": "How satisfied were you with the event?"
-	  },
-	  {
-		"question": "Was the event accessible and accommodating to your needs?"
-	  },
-	  {
-		"question": "How do you rate the leader's engagement with the audience?"
-	  }
-	]
-  }
-  
-
+	"leader_votes": [
+		{
+            "leader_name": "John Doe",
+            "user_username": "john_doe"
+        },
+        {
+            "leader_name": "John Doe2",
+            "user_username": "jane_smith"
+        },
+        {
+            "leader_name": "John Doe",
+            "user_username": "alex_taylor"
+        },
+        {
+            "leader_name": "Jacob Jones",
+            "user_username": "jacob_jones"
+        },
+        {
+            "leader_name": "Jacob Jones",
+            "user_username": "sophia_williams"
+        },
+        {
+            "leader_name": "Sophia Williams",
+            "user_username": "emily_brown"
+        }
+    ],
+    "users": [
+        {
+            "username": "john_doe",
+            "password": "password123",
+            "email": "john@example.com",
+            "disabilities": [
+                "blind"
+            ]
+        },
+        {
+            "username": "jane_smith",
+            "password": "password456",
+            "email": "jane@example.com",
+            "disabilities": [
+                "deaf",
+                "wheelchair user"
+            ]
+        },
+        {
+            "username": "alex_taylor",
+            "password": "password789",
+            "email": "alex@example.com",
+            "disabilities": [
+                "blind"
+            ]
+        },
+        {
+            "username": "drapt002",
+            "password": "Thomas33",
+            "email": "drapt002@gmail.com",
+            "disabilities": []
+        },
+        {
+            "username": "jacob_jones",
+            "password": "jacob123",
+            "email": "jacob@example.com",
+            "disabilities": [
+                "deaf"
+            ]
+        },
+        {
+            "username": "sophia_williams",
+            "password": "sophia456",
+            "email": "sophia@example.com",
+            "disabilities": [
+                "blind"
+            ]
+        },
+        {
+            "username": "emily_brown",
+            "password": "emily789",
+            "email": "emily@example.com",
+            "disabilities": [
+                "wheelchair user"
+            ]
+        },
+        {
+            "username": "adam_smith",
+            "password": "adam123",
+            "email": "adam@example.com",
+            "disabilities": []
+        }
+    ],
+    "charities": [
+        {
+            "charity_name": "Charity A",
+            "email": "charitya@example.com",
+            "user": "john_doe",
+            "password": "charityAPassword123"
+        },
+        {
+            "charity_name": "Charity B",
+            "email": "charityb@example.com",
+            "user": "jane_smith",
+            "password": "charityBPassword123"
+        }
+    ],
+    "activity_leaders": [
+        {
+            "user": "john_doe",
+            "name": "John Doe",
+            "birth_date": "1990-05-15T08:00:00Z",
+            "charity": "Charity A",
+            "email": "john_leader@example.com"
+        },
+        {
+            "user": "john_doe2",
+            "name": "John Doe2",
+            "birth_date": "1990-05-15T08:00:00Z",
+            "charity": "Charity A",
+            "email": "john_leader2@example.com"
+        },
+        {
+            "user": "thomas_l",
+            "name": "Thomas Leader",
+            "birth_date": "1990-06-15T08:00:00Z",
+            "charity": "Charity B",
+            "email": "thomas_leader@example.com"
+        },
+        {
+            "user": "jacob_jones",
+            "name": "Jacob Jones",
+            "birth_date": "1995-08-20T08:00:00Z",
+            "charity": "Charity A",
+            "email": "jacob_leader@example.com"
+        },
+        {
+            "user": "sophia_williams",
+            "name": "Sophia Williams",
+            "birth_date": "1993-03-10T08:00:00Z",
+            "charity": "Charity A",
+            "email": "sophia_leader@example.com"
+        },
+        {
+            "user": "emily_brown",
+            "name": "Emily Brown",
+            "birth_date": "1991-12-05T08:00:00Z",
+            "charity": "Charity B",
+            "email": "emily_leader@example.com"
+        }
+    ],
+    "activities": [
+        {
+            "title": "Outdoor Sports Event",
+            "description": "Join us for our Outdoor Sports Event, bring wellies!",
+            "latitude": 40.7128,
+            "longitude": -74.006,
+            "age_group": "Kids",
+            "compatible_disabilities": [
+                "deaf"
+            ],
+            "charity": "Charity A",
+            "photo_file_path": "activity2.jpg"
+        },
+        {
+            "title": "Art Workshop",
+            "description": "Join us for our Outdoor Sports Event, bring wellies!",
+            "latitude": 34.0522,
+            "longitude": -118.2437,
+            "age_group": "Teens",
+            "compatible_disabilities": [
+                "blind"
+            ],
+            "charity": "Charity B",
+            "photo_file_path": "activity1.jpg"
+        },
+        {
+            "title": "Music Therapy Session",
+            "description": "Join us for our Outdoor Sports Event, bring wellies!",
+            "latitude": 51.234271,
+            "longitude": -0.5724,
+            "age_group": "Teens",
+            "compatible_disabilities": [
+                "deaf",
+                "wheelchair user"
+            ],
+            "charity": "Charity A",
+            "photo_file_path": "defalt.jpg"
+        },
+        {
+            "title": "Activity Test",
+            "description": "TESTING Join us for our Outdoor Sports Event, bring wellies!",
+            "latitude": 42.817669,
+            "longitude": -72.575256,
+            "age_group": "Teens",
+            "compatible_disabilities": [
+                "wheelchair user"
+            ],
+            "charity": "Charity B",
+            "photo_file_path": "defalt.jpg"
+        },
+        {
+            "title": "Nature Walk",
+            "description": "Enjoy a peaceful nature walk in the park.",
+            "latitude": 37.7749,
+            "longitude": -122.4194,
+            "age_group": "Adults",
+            "compatible_disabilities": [
+                "wheelchair user"
+            ],
+            "charity": "Charity A",
+            "photo_file_path": "defalt.jpg"
+        },
+        {
+            "title": "Cooking Class",
+            "description": "Learn to cook delicious meals with professional chefs.",
+            "latitude": 51.5074,
+            "longitude": -0.1278,
+            "age_group": "Teens",
+            "compatible_disabilities": [
+                "deaf"
+            ],
+            "charity": "Charity B",
+            "photo_file_path": "defalt.jpg"
+        }
+    ],
+    "age_groups": [
+        {
+            "age_range_lower": 5,
+            "age_range_higher": 10,
+            "group_title": "Kids"
+        },
+        {
+            "age_range_lower": 11,
+            "age_range_higher": 18,
+            "group_title": "Teens"
+        },
+        {
+            "age_range_lower": 19,
+            "age_range_higher": 60,
+            "group_title": "Adults"
+        }
+    ],
+    "calendar_events": [
+        {
+            "activity_title": "Outdoor Sports Event",
+            "time": "2024-04-15T10:00:00Z",
+            "activity_leader_name": "John Doe"
+        },
+        {
+            "activity_title": "Art Workshop",
+            "time": "2024-04-20T14:00:00Z",
+            "activity_leader_name": "John Doe"
+        },
+        {
+            "activity_title": "Activity Test",
+            "time": "2025-12-20T14:00:00Z",
+            "activity_leader_name": "Thomas Leader"
+        },
+        {
+            "activity_title": "Nature Walk",
+            "time": "2024-06-10T09:00:00Z",
+            "activity_leader_name": "Jacob Jones"
+        },
+        {
+            "activity_title": "Cooking Class",
+            "time": "2024-06-15T15:00:00Z",
+            "activity_leader_name": "Emily Brown"
+        }
+    ],
+    "feedback_entries": [
+        {
+            "user": "john_doe",
+            "calendar_event_title": "Outdoor Sports Event",
+            "activity_feedback_text": "I had a lot of fun",
+            "leader_feedback_text": "The leader was very good, they made the day enjoyable",
+            "activity_feedback_question_answers": {
+                "0": "positive",
+                "1": "positive",
+                "2": "positive"
+            }
+        },
+        {
+            "user": "jane_smith",
+            "calendar_event_title": "Outdoor Sports Event",
+            "activity_feedback_text": "Great event, very well organized!",
+            "leader_feedback_text": "The leader was very knowledgeable and engaging.",
+            "activity_feedback_question_answers": {
+                "0": "negative",
+                "1": "negative",
+                "2": "positive"
+            }
+        },
+        {
+            "user": "john_doe",
+            "calendar_event_title": "Outdoor Sports Event",
+            "activity_feedback_text": "Great event. Loved the activities!",
+            "leader_feedback_text": "The leader was very good.",
+            "activity_feedback_question_answers": {
+                "0": "positive",
+                "1": "negative",
+                "2": "negative"
+            }
+        },
+        {
+            "user": "jane_smith",
+            "calendar_event_title": "Art Workshop",
+            "activity_feedback_text": "Loved the creativity involved.",
+            "leader_feedback_text": "Inspirational leader, made the session fun.",
+            "activity_feedback_question_answers": {
+                "0": "positive",
+                "1": "positive",
+                "2": "negative"
+            }
+        },
+        {
+            "user": "adam_smith",
+            "calendar_event_title": "Nature Walk",
+            "activity_feedback_text": "Had a relaxing time amidst nature.",
+            "leader_feedback_text": "The leader was very knowledgeable about the flora and fauna.",
+            "activity_feedback_question_answers": {
+                "0": "positive",
+                "1": "positive",
+                "2": "positive"
+            }
+        },
+        {
+            "user": "adam_smith",
+            "calendar_event_title": "Cooking Class",
+            "activity_feedback_text": "Learnt some amazing recipes!",
+            "leader_feedback_text": "Emily was a fantastic instructor, very patient and helpful.",
+            "activity_feedback_question_answers": {
+                "0": "positive",
+                "1": "positive",
+                "2": "positive"
+            }
+        }
+    ],
+    "feedback_questions": [
+        {
+            "question": "How satisfied were you with the event?"
+        },
+        {
+            "question": "Was the event accessible and accommodating to your needs?"
+        },
+        {
+            "question": "How do you rate the leader's engagement with the audience?"
+        }
+    ]
+}

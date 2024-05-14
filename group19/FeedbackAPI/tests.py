@@ -1,8 +1,10 @@
 """
 Test cases for the Feedback API.
 """
+
 import json
 
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -17,6 +19,9 @@ User = get_user_model()
 
 # TODO: Implement more tests for the Feedback API
 # Base test case for the Feedback API
+
+
+
 class FeedbackAPITest(TestCase):
     def setUp(self):
         """
@@ -43,7 +48,7 @@ class FeedbackAPITest(TestCase):
                                                              birth_date=timezone.now(), charity=self.charity)
 
         # Create an activity
-        self.activity = Activity.objects.create(description='Test Activity', latitude=0.0, longitude=0.0,
+        self.activity = Activity.objects.create(title="test activity title", description='Test Activity', latitude=0.0, longitude=0.0,
                                                 charity=self.charity, age_group=self.age_group)
         self.activity.set_compatible_disabilities(["Test Disability 1", "Test Disability 2"])
         self.activity.save()
@@ -78,58 +83,39 @@ class FeedbackAPITest(TestCase):
                                     activity_feedback_text=feedback['activity_feedback_text'],
                                     leader_feedback_text=feedback['leader_feedback_text'])
 
-    # def test_feedback_overview(self):
-    #     """
-    #     Test the feedback overview API endpoint.
-    #     """
-    #
-    #     # Log in a user
-    #     self.client.force_authenticate(user=self.user1)
-    #
-    #     # Assuming user_profile is the field representing the relationship with users
-    #     if ActivityLeader.objects.filter(user_profile=self.user1).exists():
-    #         # GET request to the feedback overview endpoint
-    #         response = self.client.get(reverse('feedback_overview', kwargs={'activity_id': self.activity.activity_id}))
-    #
-    #         # Print the JSON response
-    #         print(json.dumps(response.data, indent=4))
-    #
-    #         # Assert that the status code is 200 OK
-    #         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     else:
-    #         # If the user is not associated with any activity leaders, you can choose to skip the test or perform some other action
-    #         self.skipTest("User is not associated with any activity leaders")
-    #
-    # def test_leader_feedback_list(self):
-    #     """
-    #     Test the leader feedback list API endpoint.
-    #     """
-    #
-    #     # Log in a user
-    #     self.client.force_authenticate(user=self.user1)
-    #
-    #     # Assuming user_profile is the field representing the relationship with users
-    #     if ActivityLeader.objects.filter(user_profile=self.user1).exists():
-    #         # GET request to the leader feedback list endpoint
-    #         response = self.client.get(reverse('leader_feedback_list', kwargs={'leader_id': self.leader.leader_id}),
-    #                                    {'page': 1})
-    #
-    #         self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #
-    #         # Assert that the response data is a list
-    #         self.assertIsInstance(response.data['results'], list)
-    #
-    #         # Assert that the list is not empty
-    #         self.assertGreater(len(response.data['results']), 0)
-    #
-    #         # Assert that each item in the list contains the expected keys
-    #         for item in response.data['results']:
-    #             self.assertIn('leader_feedback_text', item)
-    #             self.assertIn('leader_feedback_audio', item)
-    #     else:
-    #         # If the user is not an activity leader, you can choose to skip the test or perform some other action
-    #         self.skipTest("User is not an activity leader")
+    def test_feedback_overview(self):
+        """
+        Test the feedback overview API endpoint.
+        """
 
+        # Log in as a charity
+        self.client.force_authenticate(user=self.charity)
+
+        # GET request to the feedback overview endpoint
+        response = self.client.get(reverse('feedback_overview', kwargs={'activity_id': self.activity.activity_id}))
+
+        # Print the JSON response
+        #print(json.dumps(response.data, indent=4))
+
+        # Assert that the status code is 200 OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_leader_feedback_list(self):
+        """
+        Test the leader feedback list API endpoint.
+        """
+
+        # Log in as a charity
+        self.client.force_authenticate(user=self.charity)
+
+        # GET request to the leader feedback list endpoint
+        response = self.client.get(reverse('leader_feedback_list', kwargs={'activity_id': self.activity.activity_id}))
+
+        # Print the JSON response
+        #print(json.dumps(response.data, indent=4))
+
+        # Assert that the status code is 200 OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_feedback_submission(self):
         """
@@ -142,20 +128,22 @@ class FeedbackAPITest(TestCase):
         # Feedback data
         feedback_data = {
             "calendar_event": self.calendar.event_id,
-            "activity_feedback_text": "This event was amazing! I had a great time.",
+            "activityFeedback": "This event was amazing! I had a great time.",
             "activity_feedback_audio": None,
-            "leader_feedback_text": "The activity leader was fantastic! Very engaging and supportive.",
+            "leaderFeedback": "The activity leader was fantastic! Very engaging and supportive.",
             "leader_feedback_audio": None
         }
 
         # POST request to the feedback submission endpoint
         response = self.client.post(reverse('feedback_submission',
-                                            kwargs={'activity_id': self.activity.activity_id}), feedback_data,
+                                            kwargs={'event_id': self.calendar.event_id}), feedback_data,
                                     format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Assert that the feedback is stored in the database
-        feedback = Feedback.objects.get(feedback_id=response.data['feedback_id'])
-        self.assertEqual(feedback.activity_feedback_text, feedback_data['activity_feedback_text'])
-        self.assertEqual(feedback.leader_feedback_text, feedback_data['leader_feedback_text'])
+        #feedback = Feedback.objects.get(feedback_id=response.data['feedback_id'])
+        feedback = get_object_or_404(Feedback, feedback_id=response.data['feedback_id'])
+        print(feedback.activity_feedback_text)
+        self.assertEqual(feedback.activity_feedback_text, feedback_data['activityFeedback'])
+        self.assertEqual(feedback.leader_feedback_text, feedback_data['leaderFeedback'])

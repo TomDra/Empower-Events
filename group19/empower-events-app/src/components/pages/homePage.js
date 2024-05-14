@@ -31,7 +31,7 @@ const HomePage = () => {
       <div className="px-4">
         <div className="event-previews row mt-4 justify-content-center">
           <Link to="/events/past" className="col-md-4 text-decoration-none">
-            <div className="card hover-effect">
+            <div className="card hover-effect" id="homePageCard">
               <img
                 src="/static/images/random.jpg"
                 className="card-img-top"
@@ -45,7 +45,7 @@ const HomePage = () => {
           </Link>
 
           <Link to="/events/future" className="col-md-4 text-decoration-none">
-            <div className="card hover-effect">
+            <div className="card hover-effect" id="homePageCard">
               <img
                 src="/static/images/conference.jpg"
                 className="card-img-top"
@@ -57,26 +57,6 @@ const HomePage = () => {
               </div>
             </div>
           </Link>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <div className="footer row mt-5 bg-light py-3">
-        <div className="col-md-4">
-          <h5>Contact Us</h5>
-          <p>Email: contact@empowerevents.com</p>
-          <p>Phone: (123) 456-7890</p>
-        </div>
-        <div className="col-md-4">
-          <h5>Follow Us</h5>
-          <a href="https://twitter.com/empowerevents" className="me-2">
-            Twitter
-          </a>
-          <a href="https://facebook.com/empowerevents">Facebook</a>
-        </div>
-        <div className="col-md-4">
-          <h5>About Us</h5>
-          <p>Miles Write Something Here.</p>
         </div>
       </div>
     </div>

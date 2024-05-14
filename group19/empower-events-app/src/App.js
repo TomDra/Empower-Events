@@ -1,19 +1,28 @@
-//import React from "react";
+// src/App.js
+import React, { useState } from 'react';
 import axios from "axios";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ContactUs from './components/pages/contactus';
+import HomePage from "./components/pages/homePage";
 import Login from "./components/pages/login";
 import SignUp from "./components/pages/signup";
-import HomePage from "./components/pages/homePage";
 import Events from "./components/pages/events";
-import "./App.css";
-import EventDetailPage from "./components/pages/eventdetails"; // Import the EventDetailPage component
-//import { useEffect, useState } from "react";
-// src/App.js
-import React, { useEffect, useState } from 'react';
-//import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import AppNavbar from './components/navbar';
+import Feedback from "./components/pages/feedback";
+import AdminPortal from "./components/pages/charityPortal";
+import AdminEvents from "./components/pages/viewFeedbackList";
+import AdminFeedback from "./components/pages/viewFeedbackDetail";
+import CharityLogin from "./components/pages/charityLogIn";
+import EventDetailPage from "./components/pages/eventdetails";
+import AddEvents from "./components/pages/add-events"; // Import AddEvents component
+import NavigationBar from "./components/NavigationBar";
+import LeaderVote from "./components/pages/leaderVote";
+import ViewLeaderVote from "./components/pages/viewLeaderVote";
+import Footer from "./components/footer";
 import { UserProvider } from './contexts/userContext';
+import "./App.css";
 
+// axios.defaults.xsrfCookieName = 'csrftoken';
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 
 const App = () => {
@@ -28,26 +37,35 @@ const App = () => {
   };
 
   return (
-
-
-  <div className="App">
-    <UserProvider>
-    <BrowserRouter>
-      <AppNavbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="/register" element={<SignUp />} />
-        <Route path="/test" element={<HomePage />} />
-        <Route path="/events/:eventId" element={<EventDetailPage />} />
-        <Route path="/events/past" element={<Events />} />
-        <Route path="/events/future" element={<Events />} />
-        {/* Add other routes as needed */}
-      </Routes>
-    </BrowserRouter>
-    </UserProvider>
+    <div className="App">
+      <UserProvider>
+        <BrowserRouter>
+          <NavigationBar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+          <div className="content-wrapper">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<Login onLogin={handleLogin} />} />
+              <Route path="/register" element={<SignUp />} />
+              <Route path="/charity/login" element={<CharityLogin onLogin={handleLogin}/>} />
+              <Route path="/test" element={<HomePage />} />
+              <Route path="/events/:eventId" element={<EventDetailPage />} />
+              <Route key="past" path="/events/past" element={<Events />} />
+              <Route key="future" path="/events/future" element={<Events />} />
+              <Route path="/feedback/:eventId" element={<Feedback />} />
+              <Route path="/admin/portal" element={<AdminPortal />} />
+              <Route path="/admin/events" element={<AdminEvents />} />
+              <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
+              <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
+              <Route path="/leader-vote" element={<LeaderVote />} />
+              <Route path="/admin/leader-votes" element={<ViewLeaderVote />} />
+              <Route path="/admin/add-event" element={<AddEvents />} /> {/* New route for adding events */}
+              {/* Add other routes as needed */}
+            </Routes>
+          </div>
+          <Footer />
+        </BrowserRouter>
+      </UserProvider>
     </div>
-
   );
 };
 
