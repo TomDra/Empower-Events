@@ -125,3 +125,7 @@ class AgeGroup(models.Model):
     age_range_higher = models.IntegerField()
     group_title = models.CharField(max_length=20)
 
+class EventInterest(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    event = models.ForeignKey('Calendar', on_delete=models.CASCADE)
+    registered_at = models.DateTimeField(auto_now_add=True)
