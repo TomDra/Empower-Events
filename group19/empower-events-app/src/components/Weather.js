@@ -1,11 +1,10 @@
-// src/components/WeatherNotification.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const WeatherNotification = ({ lat, lon }) => {
-  const [previousWeather, setPreviousWeather] = useState(null);
+  const previousWeather = useRef(null);
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -24,11 +23,11 @@ const WeatherNotification = ({ lat, lon }) => {
             description: weatherDescription,
           };
 
-          if (!previousWeather || 
-              (Math.abs(previousWeather.temperature - newWeather.temperature) >= 0.01 || 
-              previousWeather.description !== newWeather.description)) {
+          if (!previousWeather.current || 
+              (Math.abs(previousWeather.current.temperature - newWeather.temperature) >= 0.01 || 
+              previousWeather.current.description !== newWeather.description)) {
             toast.info(`Current temperature: ${newWeather.temperature}°C. Weather: ${newWeather.description}`);
-            setPreviousWeather(newWeather);
+            previousWeather.current = newWeather;
           }
         } else {
           toast.error('Failed to fetch weather data');
@@ -47,7 +46,7 @@ const WeatherNotification = ({ lat, lon }) => {
 
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
-  }, [lat, lon, previousWeather]);
+  }, [lat, lon]);
 
   return <ToastContainer />;
 };
