@@ -13,4 +13,6 @@ urlpatterns = [
     # add events
     path('add-event', views.AddEvent.as_view(), name='add_event'),
     path('add-event-photo/', views.AddEventPhoto.as_view(), name='add_event_photo'),
+	path('register-interest/<int:event_id>/',views.RegisterInterestView.as_view(), name='register-interest'),
+
 ]

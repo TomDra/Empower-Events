@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
 import { speak } from "../../utils/CheckSpeech";
+import Cookies from 'js-cookie';
+
 window.google = window.google ? window.google : {};
 
 
@@ -33,6 +35,29 @@ const Events = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  const registerInterest = async (eventId) => {
+    const csrfToken = Cookies.get('csrftoken');
+  
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/events/register-interest/${eventId}/`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+        }
+      );
+      alert("Interest registered successfully");
+    } catch (error) {
+      console.error("Error registering interest:", error);
+      alert("Error registering interest");
+    }
+  };
+  
+  
 
   useEffect(() => {
     fetchData();
@@ -76,10 +101,15 @@ const Events = () => {
                     </a>
                   ) : null}
                   {currentURL.includes("future") ? (
-                  <a href={"/register-interest/" + event.event_id} className="btn btn-primary">
-                      Resister your interest
-                    </a>
-                   ) : null}
+                    <Button
+                      onClick={() => registerInterest(event.event_id)}
+                      variant="contained"
+                      sx={{ mt: 1, mb: 1 }}
+                      title="Register your interest"
+                    >
+                      Register your interest
+                    </Button>
+                  ) : null}
 
                 </div>
               </div>

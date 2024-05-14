@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from .permissions import IsCharity
 from EventsAPI.serializers import CalendarSerializer
 from django.http import JsonResponse
-from myapi.models import Activity, Feedback, Calendar, ActivityLeader, Charity
+from myapi.models import Activity, Feedback, Calendar, ActivityLeader, Charity, EventInterest
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 
@@ -265,3 +265,11 @@ class AddEventPhoto(APIView):
         # Return errors if the request method is not POST or no file is provided
         return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
 
+class RegisterInterestView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, request, event_id):
+        user = request.user
+        event = get_object_or_404(Calendar, event_id=event_id)
+        EventInterest.objects.create(user=user, event=event)
+        return Response({"message": "Interest registered successfully"}, status=status.HTTP_201_CREATED)
