@@ -5,6 +5,8 @@ import { Loader } from "@googlemaps/js-api-loader";
 import './eventdetails.css';  // Import the stylesheet
 import { speak } from "../../utils/CheckSpeech";
 import { Button, TextField, Typography, Container, Box } from "@mui/material";
+import axios from "axios";
+import Cookies from 'js-cookie';
 
 const EventDetailPage = () => {
   const { eventId } = useParams();
@@ -87,6 +89,27 @@ const EventDetailPage = () => {
 
   };
 
+  const registerInterest = async (eventId) => {
+    const csrfToken = Cookies.get('csrftoken');
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8000/api/events/register-interest/${eventId}/`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+        }
+      );
+      alert("Interest registered successfully");
+    } catch (error) {
+      console.error("Error registering interest:", error);
+      alert("Error registering interest");
+    }
+  };
+
 
   
   if (!event) {
@@ -143,9 +166,15 @@ const EventDetailPage = () => {
           Give Feedback
         </a>
       ) : (
-        <a href={"/register-interest/" + eventId} className="btn-primary">
-          Register your Interest
-        </a>
+        <Button
+                      onClick={() => registerInterest(eventId)}
+                      variant="contained"
+                      sx={{ mt: 1, mb: 1 }}
+                      title="Register your interest"
+                      className="btn-primary"
+                    >
+                      Register your interest
+                    </Button>
       )}
        <br/>
       <div ref={mapRef} className="map" />
