@@ -6,9 +6,16 @@ Running
 
 To run the project:
 
-execute `docker-compose up` in the root directory for windows
-execute `docker compose up` in the root directory for linux
+execute `docker-compose up --build` in the root directory for windows
+execute `docker compose up --build` in the root directory for linux
 
+Login information for regular user:
+Username: john_doe
+Password: password123
+
+Login information for regular user:
+Username Charity A
+Password: charityAPassword123
 
 Roles/ Specialitys
 ---------------
