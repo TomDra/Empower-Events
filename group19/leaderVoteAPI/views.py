@@ -37,7 +37,6 @@ class vote(APIView):
             )
 
         # Proceed with the vote submission process
-        print(request.data)
         activity_leader_name = request.data.get("activity_leader_name")
         activity_leader = ActivityLeader.objects.get(name=activity_leader_name)
 
@@ -58,7 +57,6 @@ class results(APIView):
         year = int(year)
         month = int(month)
         charity = Charity.objects.get(charity_name=request.user.charity_name)
-        print(year, month)
 
         # Get the first and last moments of the month
         start_date = timezone.datetime(year, month, 1, 0, 0, 0, tzinfo=timezone.utc)
@@ -72,7 +70,6 @@ class results(APIView):
         )
 
         leader_counter = Counter(vote.activity_leader.name for vote in activity_leader_votes)
-        print(leader_counter)
 
         # Serialize the queryset
         #serializer = ActivityLeaderVoteSerializer(activity_leader_votes, many=True)  # Assuming you have a serializer

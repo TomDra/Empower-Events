@@ -73,7 +73,7 @@ const LeaderVote = () => {
     return (
         <Container>
             <Typography variant="h4" gutterBottom>
-                Vote for Activity Leader
+                Vote for Activity Leader of the month
             </Typography>
             <form onSubmit={handleSubmit}>
                 {activityLeaders.map((leader) => (

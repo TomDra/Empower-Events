@@ -54,7 +54,7 @@ const LeaderVote = () => {
     return (
         <Container>
             <Typography variant="h4" gutterBottom>
-                Activity Leader Votes
+                Monthly Activity Leader Votes
             </Typography>
             <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12} sm={6}>
@@ -83,6 +83,14 @@ const LeaderVote = () => {
                             legend: {
                                 display: true,
                                 position: 'top'
+                            },
+                            scales: {
+                                y: [{
+                                    ticks: {
+                                        beginAtZero: true,
+                                        precision: 0 // This ensures removes decilas from y axis
+                                    }
+                                }]
                             }
                         }}
                     />
