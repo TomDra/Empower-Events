@@ -3,6 +3,7 @@ The views module for the EventsAPI app
 """
 import os
 
+from rest_framework.parsers import MultiPartParser
 from django.utils import timezone
 from rest_framework import permissions, generics, pagination, status, renderers
 from EventsAPI.serializers import CalendarSerializer, CalendarSerializerAddEvent, ActivityLeaderSerializer
@@ -223,8 +224,7 @@ def calander_details(self, event_id):
 
 
 class AddEventPhoto(APIView):
-
-
+    parser_classes = [MultiPartParser]
     permission_classes = [permissions.IsAuthenticated, IsCharity]
 
     def post(self, request):

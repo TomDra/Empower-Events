@@ -1,11 +1,8 @@
 // src/App.js
-//import React from "react";
+import React, { useState } from 'react';
 import axios from "axios";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ContactUs from './components/pages/contactus';
-import React, { useEffect, useState } from 'react';
-import Footer from "./components/footer";
-import { UserProvider } from './contexts/userContext';
 import HomePage from "./components/pages/homePage";
 import Login from "./components/pages/login";
 import SignUp from "./components/pages/signup";
@@ -16,12 +13,16 @@ import AdminEvents from "./components/pages/viewFeedbackList";
 import AdminFeedback from "./components/pages/viewFeedbackDetail";
 import CharityLogin from "./components/pages/charityLogIn";
 import EventDetailPage from "./components/pages/eventdetails";
+import AddEvents from "./components/pages/add-events"; // Import AddEvents component
 import NavigationBar from "./components/NavigationBar";
 import LeaderVote from "./components/pages/leaderVote";
 import ViewLeaderVote from "./components/pages/viewLeaderVote";
+import Footer from "./components/footer";
+import { UserProvider } from './contexts/userContext';
 import "./App.css";
 
-
+// axios.defaults.xsrfCookieName = 'csrftoken';
+// axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 
 
 const App = () => {
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
               <Route path="/leader-vote" element={<LeaderVote />} />
               <Route path="/admin/leader-votes" element={<ViewLeaderVote />} />
+              <Route path="/admin/add-event" element={<AddEvents />} /> {/* New route for adding events */}
               {/* Add other routes as needed */}
             </Routes>
           </div>
