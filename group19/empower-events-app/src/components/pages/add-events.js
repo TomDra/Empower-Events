@@ -48,6 +48,24 @@ const AddEvents = () => {
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
+
+        // Validate if it's a date or time field
+        if (name === 'time') {
+            const selectedDateTime = new Date(value).getTime();
+            const currentDateTime = new Date().getTime();
+            if (selectedDateTime <= currentDateTime) {
+                // If selected date/time is in the past, set it to the current date/time
+                alert('The date has to be in the future.')
+                const now = new Date();
+                const currentISOString = now.toISOString().slice(0, -8); // Remove milliseconds and timezone offset
+                setEventData(prevState => ({
+                    ...prevState,
+                    [name]: currentISOString // Set to current date/time
+                }));
+                return;
+            }
+        }
+
         setEventData(prevState => ({
             ...prevState,
             [name]: value
@@ -129,7 +147,7 @@ const AddEvents = () => {
             });
             if (response.status === 201) {
                 alert('Event added successfully!');
-                navigate('/admin/home')
+                navigate('/admin/portal')
             }
         } catch (error) {
             console.error('Error adding event:', error);

@@ -4,15 +4,10 @@ Welcome to your repo for COM2027, Group 19!
 Running
 --------------
 
-To run the server:
+To run the project:
 
-You need python and nodejs installed
-
-- ``pip install Django``
-- ``pip install djangorestframework django-cors-headers``
-- ``npm install axios``
-
-(Add to this list as each package is added)
+execute `docker-compose up` in the root directory for windows
+execute `docker compose up` in the root directory for linux
 
 
 Roles/ Specialitys

@@ -1,0 +1,12 @@
+services:
+  frontend:
+    image: frontend
+    build: ./group19/empower-events-app
+    ports:
+      - "3000:3000"
+
+  backend:
+    image: backend
+    build: ./group19
+    ports:
+      - "8000:8000" 

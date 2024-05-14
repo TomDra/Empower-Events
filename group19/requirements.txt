@@ -7,3 +7,4 @@ nltk
 textblob
 scikit-learn
 pandas
+gunicorn
