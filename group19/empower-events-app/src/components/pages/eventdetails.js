@@ -22,7 +22,6 @@ const EventDetailPage = () => {
       .then(response => response.json())
       .then((data) => {
         setEvent(data);
-        scheduleNotification(data.time); // Assuming 'data.time' is ISO string of event datetime
         loadMap(data.activity);
       })
       .catch(error => {
