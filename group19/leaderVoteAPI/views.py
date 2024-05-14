@@ -59,16 +59,15 @@ class results(APIView):
         charity = Charity.objects.get(charity_name=request.user.charity_name)
 
         # Get the first and last moments of the month
-        start_date = timezone.datetime(year, month, 1, 0, 0, 0, tzinfo=timezone.utc)
-        end_date = timezone.datetime(year, month, 1, 0, 0, 0, tzinfo=timezone.utc) + timezone.timedelta(days=32)
+        start_date = timezone.datetime(year, month, 1, 0, 0, 0)
+        end_date = timezone.datetime(year, month, 1, 0, 0, 0) + timezone.timedelta(days=32)
 
         # Filter ActivityLeaderVotes for the specified year and month
         activity_leader_votes = ActivityLeaderVote.objects.filter(
             date_submited__gte=start_date,
             date_submited__lt=end_date,
-            activity_leader__charity = charity
+            activity_leader__charity=charity
         )
-
         leader_counter = Counter(vote.activity_leader.name for vote in activity_leader_votes)
 
         # Serialize the queryset
