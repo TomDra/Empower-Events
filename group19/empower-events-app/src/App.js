@@ -15,6 +15,8 @@ import CharityLogin from "./components/pages/charityLogIn";
 import EventDetailPage from "./components/pages/eventdetails";
 import AddEvents from "./components/pages/add-events"; // Import AddEvents component
 import NavigationBar from "./components/NavigationBar";
+import LeaderVote from "./components/pages/leaderVote";
+import ViewLeaderVote from "./components/pages/viewLeaderVote";
 import Footer from "./components/footer";
 import { UserProvider } from './contexts/userContext';
 import "./App.css";
@@ -53,7 +55,9 @@ const App = () => {
               <Route path="/admin/portal" element={<AdminPortal />} />
               <Route path="/admin/events" element={<AdminEvents />} />
               <Route path="/admin/feedback/:eventId" element={<AdminFeedback />} />
-              <Route path="/contact-us" element={<ContactUs />} />
+              <Route path="/contact-us" element={<ContactUs />} />  {/* New Contact Us route */}
+              <Route path="/leader-vote" element={<LeaderVote />} />
+              <Route path="/admin/leader-votes" element={<ViewLeaderVote />} />
               <Route path="/admin/add-event" element={<AddEvents />} /> {/* New route for adding events */}
               {/* Add other routes as needed */}
             </Routes>

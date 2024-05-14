@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'CharityAPI.apps.CharityapiConfig',  # FOR DRF API
     'WeatherAPI',
     'Contact',
+    'leaderVoteAPI',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

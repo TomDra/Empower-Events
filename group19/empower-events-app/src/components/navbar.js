@@ -47,6 +47,7 @@ const AppNavbar = () => {
             {isLoggedIn ? (
               <>
                 <NavLink className="nav-link" to="/events/past">Give Feedback</NavLink>
+                <NavLink className="nav-link" to="/leader-vote">Vote Leader of the month</NavLink>
                 <NavLink className="nav-link" to="#" onClick={onLogout}>Logout</NavLink>
               </>
             ) : (

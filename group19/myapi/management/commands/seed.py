@@ -1,7 +1,8 @@
 import json
 from django.core.management.base import BaseCommand
 from myapi.models import User, Charity, ActivityLeader, Activity, AgeGroup, Calendar, Feedback
-
+from leaderVoteAPI.models import ActivityLeaderVote
+from django.utils import timezone
 
 class Command(BaseCommand):
 	help = 'Seeds the database with sample data'
@@ -186,5 +187,35 @@ class Command(BaseCommand):
 				print(f"Feedback for '{calendar_event.activity.title}' by '{user.username}' created.")
 			else:
 				print(f"Feedback for '{calendar_event.activity.title}' by '{user.username}' updated.")
+
+		#seed leader votes
+		for leader_vote in data['leader_votes']:
+			try:
+				user = User.objects.get(username=leader_vote['user_username'])
+			except User.DoesNotExist:
+				print(f"User '{leader_vote['user_username']}' not found. Skipping leader vote entry.")
+				continue
+
+			# Find the activity leader by name
+			try:
+				activity_leader = ActivityLeader.objects.get(name=leader_vote['leader_name'])
+			except ActivityLeader.DoesNotExist:
+				print(f"Activity Leader '{leader_vote['leader_name']}' not found. Skipping leader vote entry.")
+				continue
+
+			# Create the activity leader vote
+			leader_vote, created = ActivityLeaderVote.objects.get_or_create(
+				user=user,
+				activity_leader=activity_leader,
+				# You may want to adjust this based on your data
+			)
+
+			if created:
+				print(f"Leader vote for '{activity_leader.name}' by '{user.username}' created.")
+			else:
+				print(f"Leader vote for '{activity_leader.name}' by '{user.username}' already exists.")
+
+
+
 
 		self.stdout.write(self.style.SUCCESS('Database seeded successfully'))
