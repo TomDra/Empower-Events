@@ -1,0 +1,18 @@
+<!-- templates/registration_email.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Registration Confirmation</title>
+</head>
+<body>
+    <h1>Thank you for registering, {{ user.username }}!</h1>
+    <p>You have successfully registered for the event: <strong>{{ event.activity.title }}</strong>.</p>
+    <p>Event Details:</p>
+    <ul>
+        <li>Date and Time: {{ event.time }}</li>
+        <li>Description: {{ event.activity.description }}</li>
+        <li>Location: Latitude {{ event.activity.latitude }}, Longitude {{ event.activity.longitude }}</li>
+    </ul>
+    <p>We look forward to seeing you at the event!</p>
+</body>
+</html>
