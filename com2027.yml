@@ -1,10 +1,13 @@
 project_name: Empower Events
 
 project_description: |
-  Create a platform for disabled adults to find accessible events for them and leave feedback for a charity to make improvements.
+  We have created a platform for disabled users to find accessible events for them and to be able to leave feedback for to charity to make improvements. This will allow disabled people to have a voice in the activitys created for them.
 
-  Allow the members to give feedback on each event, in the form of text or speech.
-  Email users to remind them of upcoming events and provide live weather updates
+  Features:
+  - Show users future events.
+  - Allow the members to give feedback on each event, in the form of text, speech or question yes/no answers.
+  - Email users to remind them of the events they have registed for and email them after asking for feedback.
+  - Provide live weather updates for events users have registered for.
 
 
 
