@@ -5,7 +5,7 @@ merging:
      - "[[ \"$CI_MERGE_REQUEST_TARGET_BRANCH_NAME\" =~ ^release$ ]] && [[ ! \"$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME\" =~ ^trunk$ ]] && echo 'Only trunk can be merged to release' && exit 1"
      - exit 0
 
-image: python:latest
+image: python:3.9-alpine
 # caching for pip packages
 cache:
   paths:
