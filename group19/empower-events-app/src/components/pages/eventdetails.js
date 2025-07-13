@@ -71,7 +71,7 @@ const EventDetailPage = () => {
     }
 
     const loader = new Loader({
-      apiKey: "***REMOVED***", // Replace with your actual API key
+      apiKey: "REDACTED", // Replace with your actual API key
       version: "weekly",
     });
 

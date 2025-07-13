@@ -6,7 +6,7 @@ import datetime as dt
 import requests
 
 # stuff used to access the openweathermap api
-api_key = "***REMOVED***"
+api_key = "REDACTED"
 api_url = "https://api.openweathermap.org/data/2.5/weather?"
 
 # this class holds a method to get the weather in any city through an api request to openweathermap

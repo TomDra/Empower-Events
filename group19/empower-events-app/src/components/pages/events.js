@@ -13,7 +13,7 @@ const Events = () => {
   const [responseData, setResponseData] = useState("");
   const location = useLocation();
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "***REMOVED***",
+    googleMapsApiKey: "REDACTED",
   });
   const currentURL = window.location.href;
 
